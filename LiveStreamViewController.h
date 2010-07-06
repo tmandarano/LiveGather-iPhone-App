@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LiveGatherAPI.h"
 #import "EGORefreshTableHeaderView.h"
 
 @class EGORefreshTableHeaderView;
@@ -18,6 +19,8 @@
 	NSMutableArray				*streamArray;
 	EGORefreshTableHeaderView	*refreshHeaderView;
 	BOOL	_reloading;
+	UIImage *testImage;
+	LiveGatherAPI				*applicationAPI;
 }
 
 - (IBAction)goHome;

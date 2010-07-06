@@ -29,6 +29,8 @@
 		streamTableView.showsVerticalScrollIndicator = YES;
 		[refreshHeaderView release];
 	}
+	applicationAPI = [[LiveGatherAPI alloc] init];
+	testImage = [UIImage imageNamed:@"gray.jpg"];
 	
     [super viewDidLoad];
 }
@@ -42,59 +44,17 @@
 //Table View Delegate and Data Methods
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	static NSString *CellIdentifier = @"Cell";
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
+    }
+    
+    // Configure the cell...
 	
-	const NSInteger TOP_LABEL_TAG = 1001;
-	const NSInteger BOTTOM_LABEL_TAG = 1002;
-	UILabel *topLabel;
-	UILabel *bottomLabel;
-	
-	if (cell == nil)
-	{
-		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-		const CGFloat LABEL_HEIGHT = 20;
-		UIImage *image = [UIImage imageNamed:@"gray.png"];
-		
-		topLabel = [[[UILabel alloc]
-					 initWithFrame:
-					 CGRectMake(
-								image.size.width + 2.0 * cell.indentationWidth,
-								0.5 * (tableView.rowHeight - 2 * LABEL_HEIGHT),
-								tableView.bounds.size.width -
-								image.size.width - 4.0 * cell.indentationWidth,
-								LABEL_HEIGHT)]
-					autorelease];
-		[cell.contentView addSubview:topLabel];
-		
-		topLabel.tag = TOP_LABEL_TAG;
-		topLabel.backgroundColor = [UIColor clearColor];
-		topLabel.textColor = [UIColor colorWithRed:0.25 green:0.0 blue:0.0 alpha:1.0];
-		topLabel.highlightedTextColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.9 alpha:1.0];
-		topLabel.font = [UIFont systemFontOfSize:[UIFont labelFontSize]];
-		
-		bottomLabel =
-		[[[UILabel alloc]
-		  initWithFrame:
-		  CGRectMake(
-					 image.size.width + 2.0 * cell.indentationWidth,
-					 0.5 * (tableView.rowHeight - 2 * LABEL_HEIGHT) + LABEL_HEIGHT,
-					 tableView.bounds.size.width -
-					 image.size.width - 4.0 * cell.indentationWidth,
-					 LABEL_HEIGHT)]
-		 autorelease];
-		[cell.contentView addSubview:bottomLabel];
-		
-		//
-		// Configure the properties for the text that are the same on every row
-		//
-		bottomLabel.tag = BOTTOM_LABEL_TAG;
-		bottomLabel.backgroundColor = [UIColor clearColor];
-		bottomLabel.textColor = [UIColor colorWithRed:0.25 green:0.0 blue:0.0 alpha:1.0];
-		bottomLabel.highlightedTextColor = [UIColor colorWithRed:1.0 green:1.0 blue:0.9 alpha:1.0];
-		bottomLabel.font = [UIFont systemFontOfSize:[UIFont labelFontSize] - 2];
-	}
-	
-	return cell;
+	[cell setImage:testImage];
+    
+    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -106,7 +66,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 2;
+	return [[applicationAPI getLiveFeed:20] count];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {

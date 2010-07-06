@@ -7,16 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JSON.h"
 
 @interface LiveGatherAPI : NSObject {
-
+	NSArray *photosFeed;
 }
 
 - (BOOL)loginUser:(NSString *)usernameCredential withPassword:(NSString *)passwordCredential;
-- (void)getImageInfo:(NSString *)imageID;
 - (NSArray *)getLiveFeed:(int)numPhotos;
 - (NSArray *)getUserInformation;
-- (void)registerUser:(NSString *)desiredUsername withPassword:(NSString *)password andEmail:(NSString *)emailAddr andDateOfBirth:(NSString *)dob;
 - (void)editUser;
 - (UIImage *)getUserProfilePhoto:(NSString *)userID;
 - (NSArray *)getPhotoInformation:(NSString *)photoID;

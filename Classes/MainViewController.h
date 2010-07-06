@@ -54,6 +54,7 @@
 	ASINetworkQueue						*networkQueue;
 	IBOutlet UIProgressView				*progressView;
 	MBProgressHUD						*HUD;
+	LiveGatherAPI						*applicationAPI;
 }
 
 @property (nonatomic, retain) ResourceManager *appResourceManager;

@@ -1,7 +1,7 @@
 //
 //  LiveGatherAPI.m
 //  LiveGather
-//
+// 
 //  Created by Alexander on 4/13/10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
@@ -17,21 +17,23 @@
 @implementation LiveGatherAPI
 
 
-- (void)getImageInfo:(NSString *)imageID {
-	
-}
-
 - (NSArray *)getLiveFeed:(int)numPhotos {
-	/*RestConnection *getLiveStreamRestConnection;
-	getLiveStreamRestConnection = [RestConnection new];
-	getLiveStreamRestConnection.baseURLString = @"http://dev.livegather.com/photos/recent";
-	getLiveStreamRestConnection.delegate = self;
+	NSLog(@"GETTING");
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/recent/%d", numPhotos]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
 	
-	NSString *urlScheme = [NSString stringWithFormat:@"number=%d", numPhotos];
-	urlScheme = [urlScheme stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	NSDictionary *dictionary = [response JSONValue];
 	
-	[getLiveStreamRestConnection performRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlScheme]]];*/
-	
+	//po
 	NSArray *array;
 	return array;
 }
@@ -39,22 +41,6 @@
 - (NSArray *)getUserInformation {
 	NSArray *array;
 	return array;
-}
-
-- (void)registerUser:(NSString *)desiredUsername withPassword:(NSString *)password andEmail:(NSString *)emailAddr andDateOfBirth:(NSString *)dob {
-	/*RestConnection *registerUserRestConnection;
-	registerUserRestConnection = [RestConnection new];
-	registerUserRestConnection.baseURLString = @"http://dev.livegather.com/users/create";
-	registerUserRestConnection.delegate = self;
-	
-	NSString *usernameStringForServer = [desiredUsername stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSString *passwordStringForServer = [password stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSString *emailStringforServer = [emailAddr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSString *dateOfBirthStringForServer = [dob stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	
-	NSString *urlScheme = [NSString stringWithFormat:@"username=%@&password=%@&email=%@&date_of_birth=%@",usernameStringForServer, passwordStringForServer, emailStringforServer, dateOfBirthStringForServer];
-	
-	[registerUserRestConnection performRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlScheme]]];*/
 }
 
 - (void)editUser {
@@ -67,6 +53,21 @@
 }
 
 - (NSArray *)getPhotoInformation:(NSString *)photoID {
+	NSLog(@"GETTING");
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%@", photoID]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
+	
+	NSDictionary *dictionary = [response JSONValue];
+	
 	NSArray *array;
 	return array;
 }
@@ -81,21 +82,6 @@
 }
 
 - (BOOL)loginUser:(NSString *)usernameCredential withPassword:(NSString *)passwordCredential {
-	/*RestConnection *loginUserRestConnection;
-	loginUserRestConnection = [RestConnection new];
-	loginUserRestConnection.baseURLString = @"http://dev.livegather.com/sessions/create";
-	loginUserRestConnection.delegate = self;
-	
-	NSString *usernameStringForServer = [usernameCredential stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	NSString *passwordStringForServer = [passwordCredential stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-	
-	NSString *urlScheme = [NSString stringWithFormat:@"username=%@&password=%@",usernameStringForServer, passwordStringForServer];
-	
-	[loginUserRestConnection performRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlScheme]]];
-	
-	//BOOL success;	
-	return YES;*/
-	
 	NSMutableData *postData = [NSMutableData data];
 	NSString *email = @"alexander@xandernet.net";
 	NSString *location = @"";

@@ -15,6 +15,7 @@
 
 - (BOOL)loginUser:(NSString *)usernameCredential withPassword:(NSString *)passwordCredential;
 - (NSArray *)getLiveFeed:(int)numPhotos;
+- (NSArray *)getPhotosNear:(float)longitude andLatitude:(float)latitude;
 - (NSArray *)getUserInformation;
 - (void)editUser;
 - (UIImage *)getUserProfilePhoto:(NSString *)userID;

@@ -30,12 +30,33 @@
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
 	NSLog(@"%@", response);
+		
+	NSDictionary *dictionary = [response JSONValue];
+	
+	//po
+	NSArray *array = [NSArray arrayWithObjects:@"0", @"1", @"2", @"3", nil];
+	return array;
+}
+
+- (NSArray *)getPhotosNear:(float)longitude andLatitude:(float)latitude {
+	/*NSLog(@"GETTING");
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/recent/%d", numPhotos]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
 	
 	NSDictionary *dictionary = [response JSONValue];
 	
 	//po
 	NSArray *array;
-	return array;
+	return array;*/
 }
 
 - (NSArray *)getUserInformation {

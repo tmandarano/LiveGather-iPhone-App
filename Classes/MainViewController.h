@@ -12,9 +12,8 @@
 #import "AccountLoginViewController.h"
 #import "ResourceManager.h"
 #import "MBProgressHUD.h"
-#import "ASIHTTPRequest.h"
-#import "ASINetworkQueue.h"
 #import "LiveGatherAPI.h"
+#import "ASIHTTPRequest.h"
 
 @class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue;
 

@@ -24,7 +24,6 @@
 
 - (void)viewDidLoad {
 	imagePickerController = [[UIImagePickerController alloc] init];
-	imagePickerController.allowsImageEditing = NO;
 	imagePickerController.delegate = self;
 	if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 		capturePhotoButton.enabled = NO;

@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "JSON.h"
+#import "ASIHTTPRequest.h"
+#import "JRAuthenticate.h"
 
 @interface LiveGatherAPI : NSObject {
 	NSArray *photosFeed;

@@ -8,8 +8,17 @@
 
 #import "MainViewController.h"
 
-
 @implementation MainViewController
+
+#define kLiveStreamPreviewStartPoint_X 10
+#define kLiveStreamPreviewStartPoint_Y 12
+#define kLiveStreamPreviewLowerStartPoint_X 10
+#define kLiveStreamPreviewLowerStartPoint_Y 81
+#define kLiveStreamPreviewVerticalPadding 69
+#define kLiveStreamPreviewHorizontalPadding 69
+#define kLiveStreamPreviewImageWidth 61
+#define kLiveStreamPreviewImageHeight 61
+#define kLiveStreamPreviewStaticHeight 149
 
 @synthesize appResourceManager;
 
@@ -23,15 +32,9 @@
 
 
 - (void)viewDidLoad {
-	imagePickerController = [[UIImagePickerController alloc] init];
-	imagePickerController.delegate = self;
-	if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-		capturePhotoButton.enabled = NO;
-	}
 	appResourceManager = [[ResourceManager alloc] init];
 	uploadViewController = [[UploadPhotoViewController alloc] init];
 	liveStreamView = [[LiveStreamViewController alloc] init];
-	networkQueue = [[ASINetworkQueue alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
 	//Livestream Icons handling
@@ -41,21 +44,10 @@
 
 
 - (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
-    
 	[self dismissModalViewControllerAnimated:YES];
 }
 
 //Custom Methods for this Class
-
-- (IBAction)takePhoto {
-	imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-	[self presentModalViewController:imagePickerController animated:YES];
-}
-
-- (IBAction)choosePhoto {
-	imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-	[self presentModalViewController:imagePickerController animated:YES];
-}
 
 - (IBAction)viewLiveStream {
 	[self presentModalViewController:liveStreamView animated:YES];
@@ -63,17 +55,57 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo {
 	[[picker parentViewController] dismissModalViewControllerAnimated:NO];
-	[uploadViewController getPhotoForUpload:img];
-	[appResourceManager saveImageToDocuments:img withFilename:@"image_to_upload" andFileType:@"PNG"];
+	//[appResourceManager saveImageToDocuments:img withFilename:@"image_to_upload" andFileType:@"PNG"];
 	[self presentModalViewController:uploadViewController animated:YES];
 }
 
 - (void)updateLiveStreamPhotos {
-	
+	HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	HUD.delegate = self;
+	HUD.labelText = @"Loading";
+	HUD.detailsLabelText = @"Algorithm is Sorting ImageViews";
+	[HUD showWhileExecuting:@selector(newLiveStreamPhotosDownloaded) onTarget:self withObject:nil animated:YES];
 }
 
 - (void)newLiveStreamPhotosDownloaded {
+	int numImageViewsToPlace = 50;
+	int numRows = 2;
+	int numCols = 0;
+	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
 	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+	
+	[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		
+		if(row == 1)
+		{
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + 5) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else {
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + 5) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+		}
+		
+		[liveStreamPreviewScrollView addSubview:imageView];
+		
+		NSLog(@"row: %d", row);
+		NSLog(@"col: %d", col);
+	}
 }
 
 - (void)hudWasHidden {

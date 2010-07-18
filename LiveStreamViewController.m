@@ -11,6 +11,18 @@
 
 @implementation LiveStreamViewController
 
+#define kLiveStreamPreviewStartPoint_X 5
+#define kLiveStreamPreviewStartPoint_Y 5
+#define kLiveStreamPreviewMidStartPoint_X 5
+#define kLiveStreamPreviewMidStartPoint_Y 142
+#define kLiveStreamPreviewBottomStartPoint_X 5
+#define kLiveStreamPreviewBottomStartPoint_Y 279
+#define kLiveStreamPreviewVerticalPadding 5
+#define kLiveStreamPreviewHorizontalPadding 5
+#define kLiveStreamPreviewImageWidth 125
+#define kLiveStreamPreviewImageHeight 129
+#define kLiveStreamPreviewStaticHeight 415
+
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
@@ -22,101 +34,71 @@
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
-	if (refreshHeaderView == nil) {
-		refreshHeaderView = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - streamTableView.bounds.size.height, 320.0f, streamTableView.bounds.size.height)];
-		refreshHeaderView.backgroundColor = [UIColor colorWithRed:226.0/255.0 green:231.0/255.0 blue:237.0/255.0 alpha:1.0];
-		[streamTableView addSubview:refreshHeaderView];
-		streamTableView.showsVerticalScrollIndicator = YES;
-		[refreshHeaderView release];
-	}
 	applicationAPI = [[LiveGatherAPI alloc] init];
-	testImage = [UIImage imageNamed:@"gray.jpg"];
-	
+	[self updateLiveStreamPhotos];
     [super viewDidLoad];
 }
 
 //Custom Methods
 
+- (void)updateLiveStreamPhotos {
+	HUD = [[MBProgressHUD alloc] initWithView:self.view];
+	[self.view addSubview:HUD];
+	HUD.delegate = self;
+	HUD.labelText = @"Loading";
+	HUD.detailsLabelText = @"Algorithm is Sorting ImageViews";
+	[HUD showWhileExecuting:@selector(newLiveStreamPhotosDownloaded) onTarget:self withObject:nil animated:YES];
+}
+
+- (void)newLiveStreamPhotosDownloaded {
+	int numImageViewsToPlace = 1000;
+	int numRows = 3;
+	int numCols = 0;
+	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+	
+	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		
+		if(row == 0)
+		{
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 1) {
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 2) {
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		
+		[liveStreamScrollView addSubview:imageView];
+		
+		NSLog(@"row: %d", row);
+		NSLog(@"col: %d", col);
+	}
+}
+
 - (IBAction)goHome {
 	[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 
-//Table View Delegate and Data Methods
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
-    
-    // Configure the cell...
+- (void)hudWasHidden {
 	
-	[cell setImage:testImage];
-    
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-	return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return [[applicationAPI getLiveFeed:20] count];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-	
-}
-
-- (void)reloadTableViewDataSource{
-	//  should be calling your tableviews model to reload
-	//  put here just for demo
-	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:3.0];
-}
-
-
-- (void)doneLoadingTableViewData{
-	//  model should call this when its done loading
-	[self dataSourceDidFinishLoadingNewData];
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView{	
-	
-	if (scrollView.isDragging) {
-		if (refreshHeaderView.state == EGOOPullRefreshPulling && scrollView.contentOffset.y > -65.0f && scrollView.contentOffset.y < 0.0f && !_reloading) {
-			[refreshHeaderView setState:EGOOPullRefreshNormal];
-		} else if (refreshHeaderView.state == EGOOPullRefreshNormal && scrollView.contentOffset.y < -65.0f && !_reloading) {
-			[refreshHeaderView setState:EGOOPullRefreshPulling];
-		}
-	}
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	
-	if (scrollView.contentOffset.y <= - 65.0f && !_reloading) {
-		_reloading = YES;
-		[self reloadTableViewDataSource];
-		[refreshHeaderView setState:EGOOPullRefreshLoading];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:0.2];
-		streamTableView.contentInset = UIEdgeInsetsMake(60.0f, 0.0f, 0.0f, 0.0f);
-		[UIView commitAnimations];
-	}
-}
-
-- (void)dataSourceDidFinishLoadingNewData {
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-	[streamTableView setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, 0.0f)];
-	[UIView commitAnimations];
-	
-	[refreshHeaderView setState:EGOOPullRefreshNormal];
-	[refreshHeaderView setCurrentDate];  //  should check if data reload was successful 
 }
 
 //<!-- Custom Methods

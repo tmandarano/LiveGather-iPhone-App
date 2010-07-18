@@ -21,7 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	settings = [NSUserDefaults standardUserDefaults];
 	
-	if(![settings stringForKey:kUserSettingUserUsername])
+	/*if(![settings stringForKey:kUserSettingUserUsername])
 	{
 		/*No login information here, we're gonna have to popup the account view
 		AccountLoginViewController *aController = [[AccountLoginViewController alloc] initWithNibName:@"AccountLoginView" bundle:nil];
@@ -30,7 +30,7 @@
 		
 		accountViewController.view.frame = [UIScreen mainScreen].applicationFrame;
 		[window addSubview:[accountViewController view]];
-		[window makeKeyAndVisible];*/
+		[window makeKeyAndVisible];* /
 		
 		static NSString *authAppID = @"pefmjggfjdbdhjfibbjg";
 		static NSString *authTokenURL = @"<TOKEN_URL>";
@@ -48,15 +48,15 @@
 		mainViewController.view.frame = [UIScreen mainScreen].applicationFrame;
 		[window addSubview:[mainViewController view]];
 		[window makeKeyAndVisible];
-	}
+	}*/
     
-	/*MainViewController *aController = [[MainViewController alloc] initWithNibName:@"MainView" bundle:nil];
+	MainViewController *aController = [[MainViewController alloc] initWithNibName:@"MainView" bundle:nil];
 	self.mainViewController = aController;
 	[aController release];
 	
     mainViewController.view.frame = [UIScreen mainScreen].applicationFrame;
 	[window addSubview:[mainViewController view]];
-    [window makeKeyAndVisible];*/
+    [window makeKeyAndVisible];
 	
 	return YES;
 }

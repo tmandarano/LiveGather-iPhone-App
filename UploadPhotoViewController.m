@@ -26,15 +26,46 @@
 - (void)viewDidLoad {
 	mainViewController = [[MainViewController alloc] init];
     [super viewDidLoad];
+	[self showUserImageControlOption];
+}
+
+- (void)showUserImageControlOption {
+	if(![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+		UIActionSheet *userImagePickerType = [[UIActionSheet alloc] initWithTitle:@"Upload Photo From:"
+																		 delegate:self
+																cancelButtonTitle:@"Cancel"
+														   destructiveButtonTitle:nil
+																otherButtonTitles:nil];
+		[userImagePickerType addButtonWithTitle:@"Photo Library"];
+		[userImagePickerType addButtonWithTitle:@"Camera"];
+		[userImagePickerType showInView:self.view];
+	}
+	else {
+		UIActionSheet *userImagePickerType = [[UIActionSheet alloc] initWithTitle:@"Upload Photo From:"
+																		 delegate:self
+																cancelButtonTitle:@"Cancel"
+														   destructiveButtonTitle:nil
+																otherButtonTitles:nil];
+		[userImagePickerType addButtonWithTitle:@"Photo Library"];
+		[userImagePickerType showInView:self.view];
+	}
+}
+
+- (void)willPresentActionSheet:(UIActionSheet *)actionSheet {
+	
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+}
+	 
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo {
+	[imagePreview setImage:img];
+	[[picker parentViewController] dismissModalViewControllerAnimated:NO];
 }
 
 //Custom Methods
 
-- (void)getPhotoForUpload:(UIImage *)image {
-	[imagePreview setImage:image];
-}
-
-- (IBAction)cancel {
+- (IBAction)cancel {	
 	[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }
 

@@ -8,24 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "LiveGatherAPI.h"
-#import "EGORefreshTableHeaderView.h"
+#import "MBProgressHUD.h"
 
-@class EGORefreshTableHeaderView;
-
-@interface LiveStreamViewController : UIViewController <UITableViewDelegate, UITableViewDataSource> {
+@interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate> {
 	IBOutlet UIBarButtonItem	*homeBarButton;
-	IBOutlet UITableView		*streamTableView;
 	IBOutlet UILabel			*userNameLabel;
+	IBOutlet UIScrollView		*liveStreamScrollView;
 	NSMutableArray				*streamArray;
-	EGORefreshTableHeaderView	*refreshHeaderView;
-	BOOL	_reloading;
-	UIImage *testImage;
 	LiveGatherAPI				*applicationAPI;
+	MBProgressHUD				*HUD;
 }
 
 - (IBAction)goHome;
-- (void)reloadTableViewDataSource;
-- (void)doneLoadingTableViewData;
-- (void)dataSourceDidFinishLoadingNewData;
+- (void)updateLiveStreamPhotos;
+- (void)newLiveStreamPhotosDownloaded;
+
 
 @end

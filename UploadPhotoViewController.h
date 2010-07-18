@@ -13,7 +13,7 @@
 
 @class MainViewController, LiveGatherAPI;
 
-@interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UIAlertViewDelegate, UIActionSheetDelegate> {
+@interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate> {
 	IBOutlet UIImageView		*imagePreview;
 	IBOutlet UIImageView		*captionTextFieldBackground;
 	IBOutlet UIImageView		*tagsTextFieldBackground;
@@ -28,11 +28,12 @@
 	UIImage						*imageForUpload;
 	MainViewController			*mainViewController;
 	LiveGatherAPI				*livegatherController;
+	UIImagePickerController		*imagePickerController;
 }
 
 - (IBAction)cancel;
 - (IBAction)upload;
-- (void)getPhotoForUpload:(UIImage *)image;
 - (IBAction)privacySelectionButtonPressed;
+- (void)showUserImageControlOption;
 
 @end

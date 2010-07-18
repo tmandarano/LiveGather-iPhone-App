@@ -35,6 +35,8 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	applicationAPI = [[LiveGatherAPI alloc] init];
+	streamArray = [NSMutableArray new];
+	streamContainersArray = [NSMutableArray new];
 	[self updateLiveStreamPhotos];
     [super viewDidLoad];
 }
@@ -51,7 +53,7 @@
 }
 
 - (void)newLiveStreamPhotosDownloaded {
-	int numImageViewsToPlace = 1000;
+	int numImageViewsToPlace = 100;
 	int numRows = 3;
 	int numCols = 0;
 	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
@@ -73,20 +75,27 @@
 		int row = i % numRows;
 		int col = i / numRows;
 		
+		UIView *containerView = [[UIView alloc] init];
 		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
 		
 		if(row == 0)
 		{
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		else if(row == 1) {
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		else if(row == 2) {
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		
-		[liveStreamScrollView addSubview:imageView];
+		[streamArray addObject:imageView];
+		[streamContainersArray addObject:containerView];
+		[liveStreamScrollView addSubview:containerView];
+		[containerView addSubview:imageView];
 		
 		NSLog(@"row: %d", row);
 		NSLog(@"col: %d", col);
@@ -94,7 +103,17 @@
 }
 
 - (IBAction)refreshLiveStream {
-	
+	/*UIImageView *imageView = [streamArray objectAtIndex:3];
+	UIView *containerView = [streamContainersArray objectAtIndex:3];
+	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
+	[mapView setShowsUserLocation:YES];
+	NSLog(@"%f", imageView.frame.origin.x);
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:2.0];
+	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
+	[imageView removeFromSuperview];
+	[containerView addSubview:mapView];
+	[UIView commitAnimations];*/
 }
 
 - (IBAction)searchLiveSteam {

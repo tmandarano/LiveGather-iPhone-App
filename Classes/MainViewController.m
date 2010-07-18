@@ -37,7 +37,7 @@
 	liveStreamView = [[LiveStreamViewController alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
-	//Livestream Icons handling
+	[self updateLiveStreamPhotos];
 	
 	[super viewDidLoad];
 }

@@ -667,12 +667,12 @@
 			children = (
 				289233A80DB2D0DB0083E9F9 /* MainViewController.h */,
 				289233A90DB2D0DB0083E9F9 /* MainViewController.m */,
+				1191BF97117A0A29003DF9B8 /* LiveStreamViewController.h */,
+				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
 				1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */,
 				1191BF3E11798459003DF9B8 /* UploadPhotoViewController.m */,
 				1191BF8D117A0A0E003DF9B8 /* AccountLoginViewController.h */,
 				1191BF8E117A0A0E003DF9B8 /* AccountLoginViewController.m */,
-				1191BF97117A0A29003DF9B8 /* LiveStreamViewController.h */,
-				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -931,6 +931,7 @@
 					"\"$(SRCROOT)/JSON/macosx.sdk/usr/local/lib\"",
 					"\"$(SRCROOT)/../../../authenticate.iphone/JRAuthenticate/build/Debug-iphonesimulator\"",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = LiveGather;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53B586ED-C145-4640-BF6A-D8853E067325";
 				SDKROOT = iphonesimulator4.0;
@@ -961,6 +962,7 @@
 					"\"$(SRCROOT)/JSON/macosx.sdk/usr/local/lib\"",
 					"\"$(SRCROOT)/../../../authenticate.iphone/JRAuthenticate/build/Debug-iphonesimulator\"",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = LiveGather;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53B586ED-C145-4640-BF6A-D8853E067325";
 				SDKROOT = iphonesimulator4.0;

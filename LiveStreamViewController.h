@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LiveGatherAPI.h"
 #import "MBProgressHUD.h"
+#import <MapKit/MapKit.h>
 
 @interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate> {
 	IBOutlet UIButton			*backButton;
@@ -17,6 +18,7 @@
 	IBOutlet UIButton			*searchButton;
 	IBOutlet UIButton			*refreshButton;
 	NSMutableArray				*streamArray;
+	NSMutableArray				*streamContainersArray;
 	LiveGatherAPI				*applicationAPI;
 	MBProgressHUD				*HUD;
 }

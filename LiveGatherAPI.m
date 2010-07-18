@@ -30,8 +30,20 @@
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
 	NSLog(@"%@", response);
-		
-	NSDictionary *dictionary = [response JSONValue];
+	
+	NSArray *objects = (NSArray*)[response JSONValue];
+	
+	for(NSDictionary *dict in objects) {
+		NSString *ID = (NSString *) [dict objectForKey:@"id"];
+		NSString *name = (NSString *) [dict objectForKey:@"name"];
+		NSArray *tags = (NSArray *) [dict objectForKey: @"tags"];
+		//loop over tags here...
+		for(NSDictionary *tag in tags) {
+			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
+			NSString *tag_name = (NSString *) [tag objectForKey:@"tag"];
+		}
+		//...
+	}
 	
 	//po
 	NSArray *array = [NSArray arrayWithObjects:@"0", @"1", @"2", @"3", nil];

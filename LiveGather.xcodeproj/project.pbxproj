@@ -76,6 +76,8 @@
 		119597B311F27004006BD793 /* top_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597AB11F27004006BD793 /* top_toolbar.png */; };
 		119597B711F270A5006BD793 /* top_bar_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B611F270A5006BD793 /* top_bar_logo@2x.png */; };
 		119597B911F270AD006BD793 /* top_bar_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B811F270AD006BD793 /* top_bar_logo.png */; };
+		11BCFE6311F3A8E5000FA3DD /* CollageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFE6211F3A8E5000FA3DD /* CollageView.m */; };
+		11BCFEBF11F3B017000FA3DD /* CollageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFEBE11F3B017000FA3DD /* CollageItem.m */; };
 		11D1FCEC1175404D007B66EF /* choose_image_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FCE31175404D007B66EF /* choose_image_icon.png */; };
 		11D1FCED1175404D007B66EF /* livegather_home_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FCE41175404D007B66EF /* livegather_home_icon.png */; };
 		11D1FCEE1175404D007B66EF /* livegather_login_page.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FCE51175404D007B66EF /* livegather_login_page.png */; };
@@ -238,6 +240,10 @@
 		119597AB11F27004006BD793 /* top_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_toolbar.png; sourceTree = "<group>"; };
 		119597B611F270A5006BD793 /* top_bar_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_bar_logo@2x.png"; sourceTree = "<group>"; };
 		119597B811F270AD006BD793 /* top_bar_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_bar_logo.png; sourceTree = "<group>"; };
+		11BCFE6111F3A8E5000FA3DD /* CollageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollageView.h; sourceTree = "<group>"; };
+		11BCFE6211F3A8E5000FA3DD /* CollageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollageView.m; sourceTree = "<group>"; };
+		11BCFEBD11F3B017000FA3DD /* CollageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollageItem.h; sourceTree = "<group>"; };
+		11BCFEBE11F3B017000FA3DD /* CollageItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollageItem.m; sourceTree = "<group>"; };
 		11D1FCE31175404D007B66EF /* choose_image_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = choose_image_icon.png; sourceTree = "<group>"; };
 		11D1FCE41175404D007B66EF /* livegather_home_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = livegather_home_icon.png; sourceTree = "<group>"; };
 		11D1FCE51175404D007B66EF /* livegather_login_page.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = livegather_login_page.png; sourceTree = "<group>"; };
@@ -633,6 +639,10 @@
 				1171C2FF11EFB8C800E69829 /* JSON */,
 				112A018311E52ADB001B988A /* LiveGatherAPI.h */,
 				112A018411E52ADB001B988A /* LiveGatherAPI.m */,
+				11BCFE6111F3A8E5000FA3DD /* CollageView.h */,
+				11BCFE6211F3A8E5000FA3DD /* CollageView.m */,
+				11BCFEBD11F3B017000FA3DD /* CollageItem.h */,
+				11BCFEBE11F3B017000FA3DD /* CollageItem.m */,
 				11D1FD0B11755BBF007B66EF /* ResourceManager.h */,
 				11D1FD0C11755BBF007B66EF /* ResourceManager.m */,
 				11769AE3118384810036C548 /* Reachability.h */,
@@ -892,6 +902,8 @@
 				1171C42F11EFC3BA00E69829 /* ASIS3ObjectRequest.m in Sources */,
 				1171C43011EFC3BA00E69829 /* ASIS3Request.m in Sources */,
 				1171C43111EFC3BA00E69829 /* ASIS3ServiceRequest.m in Sources */,
+				11BCFE6311F3A8E5000FA3DD /* CollageView.m in Sources */,
+				11BCFEBF11F3B017000FA3DD /* CollageItem.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

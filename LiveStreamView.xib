@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="129"/>
+			<integer value="34"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -42,20 +42,6 @@
 				<int key="NSvFlags">274</int>
 				<object class="NSMutableArray" key="NSSubviews">
 					<bool key="EncodedWithXMLCoder">YES</bool>
-					<object class="IBUIScrollView" id="811693880">
-						<reference key="NSNextResponder" ref="883825266"/>
-						<int key="NSvFlags">268</int>
-						<string key="NSFrame">{{0, 45}, {320, 415}}</string>
-						<reference key="NSSuperview" ref="883825266"/>
-						<object class="NSColor" key="IBUIBackgroundColor">
-							<int key="NSColorSpace">1</int>
-							<bytes key="NSRGB">MCAwIDAAA</bytes>
-						</object>
-						<bool key="IBUIClipsSubviews">YES</bool>
-						<bool key="IBUIMultipleTouchEnabled">YES</bool>
-						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
-						<bool key="IBUIShowsVerticalScrollIndicator">NO</bool>
-					</object>
 					<object class="IBUIImageView" id="107548459">
 						<reference key="NSNextResponder" ref="883825266"/>
 						<int key="NSvFlags">292</int>
@@ -226,14 +212,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
-						<string key="label">liveStreamScrollView</string>
-						<reference key="source" ref="372490531"/>
-						<reference key="destination" ref="811693880"/>
-					</object>
-					<int key="connectionID">164</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">refreshButton</string>
 						<reference key="source" ref="372490531"/>
 						<reference key="destination" ref="408186845"/>
@@ -306,7 +284,6 @@
 							<reference ref="408186845"/>
 							<reference ref="805715688"/>
 							<reference ref="282179835"/>
-							<reference ref="811693880"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -340,14 +317,6 @@
 						<reference key="object" ref="282179835"/>
 						<reference key="parent" ref="883825266"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">129</int>
-						<reference key="object" ref="811693880"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-						</object>
-						<reference key="parent" ref="883825266"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -361,7 +330,6 @@
 					<string>126.IBPluginDependency</string>
 					<string>127.IBPluginDependency</string>
 					<string>128.IBPluginDependency</string>
-					<string>129.IBPluginDependency</string>
 					<string>34.IBEditorWindowLastContentRect</string>
 					<string>34.IBPluginDependency</string>
 					<string>78.IBPluginDependency</string>
@@ -370,7 +338,6 @@
 					<bool key="EncodedWithXMLCoder">YES</bool>
 					<string>LiveStreamViewController</string>
 					<string>UIResponder</string>
-					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
@@ -449,7 +416,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
-							<string>liveStreamScrollView</string>
 							<string>refreshButton</string>
 							<string>searchButton</string>
 							<string>userNameLabel</string>
@@ -457,7 +423,6 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIButton</string>
-							<string>UIScrollView</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
 							<string>UILabel</string>
@@ -468,7 +433,6 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
-							<string>liveStreamScrollView</string>
 							<string>refreshButton</string>
 							<string>searchButton</string>
 							<string>userNameLabel</string>
@@ -478,10 +442,6 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">backButton</string>
 								<string key="candidateClassName">UIButton</string>
-							</object>
-							<object class="IBToOneOutletInfo">
-								<string key="name">liveStreamScrollView</string>
-								<string key="candidateClassName">UIScrollView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">refreshButton</string>

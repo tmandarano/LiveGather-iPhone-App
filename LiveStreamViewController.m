@@ -93,6 +93,14 @@
 	}
 }
 
+- (IBAction)refreshLiveStream {
+	
+}
+
+- (IBAction)searchLiveSteam {
+	
+}
+
 - (IBAction)goHome {
 	[[self parentViewController] dismissModalViewControllerAnimated:YES];
 }

@@ -41,8 +41,6 @@
 		11769AF2118384C00036C548 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11769AF1118384C00036C548 /* Security.framework */; };
 		11769AF4118384C00036C548 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11769AF3118384C00036C548 /* SystemConfiguration.framework */; };
 		11769AFF118384E30036C548 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11769AFE118384E30036C548 /* MobileCoreServices.framework */; };
-		11769BC6118390F90036C548 /* MapView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11769BC5118390F90036C548 /* MapView.xib */; };
-		11769BCC118391120036C548 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11769BCB118391120036C548 /* MapViewController.m */; };
 		11769BD0118393510036C548 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11769BCF118393510036C548 /* MapKit.framework */; };
 		11769C3C11851B0C0036C548 /* gray.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 11769C3B11851B0C0036C548 /* gray.jpg */; };
 		1191BEFD11797F94003DF9B8 /* AccountLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */; };
@@ -201,9 +199,6 @@
 		11769AF1118384C00036C548 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		11769AF3118384C00036C548 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		11769AFE118384E30036C548 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		11769BC5118390F90036C548 /* MapView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MapView.xib; sourceTree = "<group>"; };
-		11769BCA118391120036C548 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
-		11769BCB118391120036C548 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		11769BCF118393510036C548 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		11769C3B11851B0C0036C548 /* gray.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = gray.jpg; sourceTree = "<group>"; };
 		1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountLoginView.xib; sourceTree = "<group>"; };
@@ -678,8 +673,6 @@
 				1191BF8E117A0A0E003DF9B8 /* AccountLoginViewController.m */,
 				1191BF97117A0A29003DF9B8 /* LiveStreamViewController.h */,
 				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
-				11769BCA118391120036C548 /* MapViewController.h */,
-				11769BCB118391120036C548 /* MapViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -719,7 +712,6 @@
 				1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */,
 				280E754C0DD40C5E005A515E /* MainWindow.xib */,
 				280E754A0DD40C5E005A515E /* FlipsideView.xib */,
-				11769BC5118390F90036C548 /* MapView.xib */,
 				8D1107310486CEB800E47090 /* LiveGather-Info.plist */,
 			);
 			name = Resources;
@@ -838,7 +830,6 @@
 				1191C145117A8F26003DF9B8 /* blackArrow.png in Resources */,
 				1191C146117A8F26003DF9B8 /* blueArrow.png in Resources */,
 				1191C147117A8F26003DF9B8 /* whiteArrow.png in Resources */,
-				11769BC6118390F90036C548 /* MapView.xib in Resources */,
 				11769C3C11851B0C0036C548 /* gray.jpg in Resources */,
 				1171C32C11EFB8C800E69829 /* SDKSettings.plist in Resources */,
 				1171C32E11EFB8C800E69829 /* SDKSettings.plist in Resources */,
@@ -881,7 +872,6 @@
 				1191C10F117A8CB4003DF9B8 /* EGORefreshTableHeaderView.m in Sources */,
 				11769A69118382F30036C548 /* MBProgressHUD.m in Sources */,
 				11769AE5118384810036C548 /* Reachability.m in Sources */,
-				11769BCC118391120036C548 /* MapViewController.m in Sources */,
 				112A018511E52ADB001B988A /* LiveGatherAPI.m in Sources */,
 				1171C3B811EFC2DB00E69829 /* ASIAuthenticationDialog.m in Sources */,
 				1171C3B911EFC2DB00E69829 /* ASIFormDataRequest.m in Sources */,

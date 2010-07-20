@@ -123,7 +123,7 @@
 /* Begin PBXFileReference section */
 		112A018311E52ADB001B988A /* LiveGatherAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveGatherAPI.h; sourceTree = "<group>"; };
 		112A018411E52ADB001B988A /* LiveGatherAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveGatherAPI.m; sourceTree = "<group>"; };
-		1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
+		1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
 		1171C30111EFB8C800E69829 /* SDKSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SDKSettings.plist; sourceTree = "<group>"; };
 		1171C30611EFB8C800E69829 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		1171C30711EFB8C800E69829 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };

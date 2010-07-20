@@ -11,6 +11,8 @@
 
 @implementation LiveStreamViewController
 
+@synthesize liveStreamScrollView;
+
 #define kLiveStreamPreviewStartPoint_X 5
 #define kLiveStreamPreviewStartPoint_Y 5
 #define kLiveStreamPreviewMidStartPoint_X 5
@@ -37,6 +39,9 @@
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	streamArray = [NSMutableArray new];
 	streamContainersArray = [NSMutableArray new];
+	liveStreamScrollView = [[CollageView alloc] initWithFrame:CGRectMake(0, 45, 320, 415)];
+	[liveStreamScrollView setBackgroundColor:[UIColor blackColor]];
+	[self.view addSubview:liveStreamScrollView];
 	[self updateLiveStreamPhotos];
     [super viewDidLoad];
 }
@@ -76,26 +81,28 @@
 		int col = i / numRows;
 		
 		UIView *containerView = [[UIView alloc] init];
-		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		CollageItem *collageItem = [[CollageItem alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		collageItem.userInteractionEnabled = YES;
+		[collageItem setArrayLocation:i];
 		
 		if(row == 0)
 		{
 			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		else if(row == 1) {
 			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		else if(row == 2) {
 			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[imageView setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		
-		[streamArray addObject:imageView];
+		[streamArray addObject:collageItem];
 		[streamContainersArray addObject:containerView];
 		[liveStreamScrollView addSubview:containerView];
-		[containerView addSubview:imageView];
+		[containerView addSubview:collageItem];
 		
 		NSLog(@"row: %d", row);
 		NSLog(@"col: %d", col);
@@ -103,6 +110,62 @@
 }
 
 - (IBAction)refreshLiveStream {
+	int numToAdd = 9;
+	int numCols = 0;
+	int numRows = 3;
+	
+	for (int i = 0; i < numToAdd; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeAddition = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+	
+	[liveStreamScrollView setContentSize:CGSizeMake((liveStreamScrollView.contentSize.width + contentSizeAddition), (liveStreamScrollView.contentSize.height))];
+	
+	for (int i = 0; i < [streamArray count]; i++) {
+		CollageItem *item = [streamArray objectAtIndex:i];
+		[item setFrame:CGRectMake((item.frame.origin.x + contentSizeAddition), item.frame.origin.y, item.frame.size.width, item.frame.size.height)];
+	}
+	
+	for (int i = 0; i < numToAdd; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		UIView *containerView = [[UIView alloc] init];
+		CollageItem *collageItem = [[CollageItem alloc] initWithImage:[UIImage imageNamed:@"icon.png"]];
+		collageItem.userInteractionEnabled = YES;
+		[collageItem setArrayLocation:i];
+		
+		if(row == 0)
+		{
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 1) {
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 2) {
+			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		
+		[streamArray addObject:collageItem];
+		[streamContainersArray addObject:containerView];
+		[liveStreamScrollView addSubview:containerView];
+		[containerView addSubview:collageItem];
+		
+		NSLog(@"row: %d", row);
+		NSLog(@"col: %d", col);
+	}
+	
+	[liveStreamScrollView setContentOffset:CGPointMake((contentSizeAddition - 15), 0.0) animated:NO];
+	
 	/*UIImageView *imageView = [streamArray objectAtIndex:3];
 	UIView *containerView = [streamContainersArray objectAtIndex:3];
 	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
@@ -114,6 +177,14 @@
 	[imageView removeFromSuperview];
 	[containerView addSubview:mapView];
 	[UIView commitAnimations];*/
+}
+
+- (void)userTouchedLiveStreamView:(float)x_coord andYCoord:(float)y_coord {
+	NSLog(@"%f %f", x_coord, y_coord);
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSLog(@"Touuuuuucccchhhhhhh");
 }
 
 - (IBAction)searchLiveSteam {

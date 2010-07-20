@@ -45,9 +45,9 @@
 		//...
 	}
 	
-	//po
-	NSArray *array = [NSArray arrayWithObjects:@"0", @"1", @"2", @"3", nil];
-	return array;
+	NSMutableArray *returnArray = [NSMutableArray new];
+	
+	return returnArray;
 }
 
 - (NSArray *)getPhotosNear:(float)longitude andLatitude:(float)latitude {

@@ -10,23 +10,31 @@
 #import "LiveGatherAPI.h"
 #import "MBProgressHUD.h"
 #import <MapKit/MapKit.h>
+#import "CollageView.h"
+#import "CollageItem.h"
+
+@class CollageView;
 
 @interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate> {
 	IBOutlet UIButton			*backButton;
 	IBOutlet UILabel			*userNameLabel;
-	IBOutlet UIScrollView		*liveStreamScrollView;
+	//IBOutlet UIScrollView		*liveStreamScrollView;
 	IBOutlet UIButton			*searchButton;
 	IBOutlet UIButton			*refreshButton;
 	NSMutableArray				*streamArray;
 	NSMutableArray				*streamContainersArray;
 	LiveGatherAPI				*applicationAPI;
 	MBProgressHUD				*HUD;
+	CollageView					*liveStreamScrollView;
 }
+
+@property (nonatomic, retain) CollageView *liveStreamScrollView;
 
 - (IBAction)goHome;
 - (void)updateLiveStreamPhotos;
 - (void)newLiveStreamPhotosDownloaded;
 - (IBAction)refreshLiveStream;
 - (IBAction)searchLiveSteam;
+- (void)userTouchedLiveStreamView:(float)x_coord andYCoord:(float)y_coord;
 
 @end

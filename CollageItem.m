@@ -11,8 +11,14 @@
 
 @implementation CollageItem
 
+@synthesize liveStreamViewController;
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	
+	NSLog(@"%d", photoLocationInCollage);
+}
+
+- (void)setArrayLocation:(int)num {
+	photoLocationInCollage = num;
 }
 
 @end

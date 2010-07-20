@@ -17,8 +17,7 @@
 	CGPoint coord = [[touches anyObject] locationInView:self];
 	float xCoord = coord.x;
 	float yCoord = coord.y;
-	NSLog(@"OMG");
-	NSLog(@"%f %f", xCoord, yCoord);
+	liveStreamViewController = [[LiveStreamViewController alloc] init];
 	[liveStreamViewController userTouchedLiveStreamView:xCoord andYCoord:yCoord];
 }
 

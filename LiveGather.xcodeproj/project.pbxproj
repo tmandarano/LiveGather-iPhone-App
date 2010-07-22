@@ -13,7 +13,6 @@
 		1171C32E11EFB8C800E69829 /* SDKSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1171C31011EFB8C800E69829 /* SDKSettings.plist */; };
 		1171C32F11EFB8C800E69829 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C31D11EFB8C800E69829 /* libjson.a */; };
 		1171C33011EFB8C800E69829 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C32B11EFB8C800E69829 /* libjson.a */; };
-		1171C34411EFB8EB00E69829 /* libJRAuthenticate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C2E411EFB70E00E69829 /* libJRAuthenticate.a */; };
 		1171C39A11EFC28100E69829 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C39911EFC28100E69829 /* QuartzCore.framework */; };
 		1171C3B811EFC2DB00E69829 /* ASIAuthenticationDialog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1171C3AA11EFC2DB00E69829 /* ASIAuthenticationDialog.m */; };
 		1171C3B911EFC2DB00E69829 /* ASIFormDataRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 1171C3AC11EFC2DB00E69829 /* ASIFormDataRequest.m */; };
@@ -76,6 +75,7 @@
 		119597B311F27004006BD793 /* top_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597AB11F27004006BD793 /* top_toolbar.png */; };
 		119597B711F270A5006BD793 /* top_bar_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B611F270A5006BD793 /* top_bar_logo@2x.png */; };
 		119597B911F270AD006BD793 /* top_bar_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B811F270AD006BD793 /* top_bar_logo.png */; };
+		11BC004E11F7E6B4000FA3DD /* libJRAuthenticate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BC003D11F7E312000FA3DD /* libJRAuthenticate.a */; };
 		11BCFE6311F3A8E5000FA3DD /* CollageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFE6211F3A8E5000FA3DD /* CollageView.m */; };
 		11BCFEBF11F3B017000FA3DD /* CollageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFEBE11F3B017000FA3DD /* CollageItem.m */; };
 		11BCFFBC11F67509000FA3DD /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFB611F67509000FA3DD /* Icon-72.png */; };
@@ -110,18 +110,18 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		1171C2E311EFB70E00E69829 /* PBXContainerItemProxy */ = {
+		11BC003C11F7E312000FA3DD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */;
+			containerPortal = 11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libJRAuthenticate.a */;
 			remoteInfo = JRAuthenticate;
 		};
-		1171C2E511EFB73200E69829 /* PBXContainerItemProxy */ = {
+		11BC003E11F7E31B000FA3DD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */;
+			containerPortal = 11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D /* JRAuthenticate */;
 			remoteInfo = JRAuthenticate;
 		};
 /* End PBXContainerItemProxy section */
@@ -129,7 +129,6 @@
 /* Begin PBXFileReference section */
 		112A018311E52ADB001B988A /* LiveGatherAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveGatherAPI.h; sourceTree = "<group>"; };
 		112A018411E52ADB001B988A /* LiveGatherAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveGatherAPI.m; sourceTree = "<group>"; };
-		1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; explicitFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
 		1171C30111EFB8C800E69829 /* SDKSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SDKSettings.plist; sourceTree = "<group>"; };
 		1171C30611EFB8C800E69829 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		1171C30711EFB8C800E69829 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -246,6 +245,7 @@
 		119597AB11F27004006BD793 /* top_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_toolbar.png; sourceTree = "<group>"; };
 		119597B611F270A5006BD793 /* top_bar_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_bar_logo@2x.png"; sourceTree = "<group>"; };
 		119597B811F270AD006BD793 /* top_bar_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_bar_logo.png; sourceTree = "<group>"; };
+		11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
 		11BCFE6111F3A8E5000FA3DD /* CollageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollageView.h; sourceTree = "<group>"; };
 		11BCFE6211F3A8E5000FA3DD /* CollageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollageView.m; sourceTree = "<group>"; };
 		11BCFEBD11F3B017000FA3DD /* CollageItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollageItem.h; sourceTree = "<group>"; };
@@ -293,7 +293,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1171C34411EFB8EB00E69829 /* libJRAuthenticate.a in Frameworks */,
+				11BC004E11F7E6B4000FA3DD /* libJRAuthenticate.a in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765590DF743DE002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -321,14 +321,6 @@
 			);
 			name = "Application Delegate";
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		1171C2E011EFB70E00E69829 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				1171C2E411EFB70E00E69829 /* libJRAuthenticate.a */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		1171C2FF11EFB8C800E69829 /* JSON */ = {
@@ -613,6 +605,14 @@
 			path = "Retina Display";
 			sourceTree = "<group>";
 		};
+		11BC003911F7E312000FA3DD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				11BC003D11F7E312000FA3DD /* libJRAuthenticate.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		11BCFFB211F6744B000FA3DD /* Icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -716,7 +716,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */,
+				11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Application Delegate */,
 				289233A00DB2D0730083E9F9 /* View Controllers */,
 				281C6CD70DB2D82200F60ACC /* Flipside View [DISREGARD] */,
@@ -784,7 +784,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				1171C2E611EFB73200E69829 /* PBXTargetDependency */,
+				11BC003F11F7E31B000FA3DD /* PBXTargetDependency */,
 			);
 			name = LiveGather;
 			productName = LiveGather;
@@ -814,8 +814,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 1171C2E011EFB70E00E69829 /* Products */;
-					ProjectRef = 1171C2DA11EFB6FA00E69829 /* JRAuthenticate.xcodeproj */;
+					ProductGroup = 11BC003911F7E312000FA3DD /* Products */;
+					ProjectRef = 11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -826,11 +826,11 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		1171C2E411EFB70E00E69829 /* libJRAuthenticate.a */ = {
+		11BC003D11F7E312000FA3DD /* libJRAuthenticate.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
 			path = libJRAuthenticate.a;
-			remoteRef = 1171C2E311EFB70E00E69829 /* PBXContainerItemProxy */;
+			remoteRef = 11BC003C11F7E312000FA3DD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -942,10 +942,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		1171C2E611EFB73200E69829 /* PBXTargetDependency */ = {
+		11BC003F11F7E31B000FA3DD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = JRAuthenticate;
-			targetProxy = 1171C2E511EFB73200E69829 /* PBXContainerItemProxy */;
+			targetProxy = 11BC003E11F7E31B000FA3DD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

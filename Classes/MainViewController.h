@@ -13,9 +13,8 @@
 #import "ResourceManager.h"
 #import "MBProgressHUD.h"
 #import "LiveGatherAPI.h"
-#import "ASIHTTPRequest.h"
 
-@class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue;
+@class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController;
 
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate> {
 	IBOutlet UIButton			*viewLiveStreamButton;
@@ -25,7 +24,6 @@
 	ResourceManager				*appResourceManager;
 	UploadPhotoViewController	*uploadViewController;
 	LiveStreamViewController	*liveStreamView;
-	ASINetworkQueue				*networkQueue;
 	IBOutlet UIProgressView		*progressView;
 	MBProgressHUD				*HUD;
 	LiveGatherAPI				*applicationAPI;

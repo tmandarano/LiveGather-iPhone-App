@@ -9,10 +9,7 @@
 /* Begin PBXBuildFile section */
 		112A018511E52ADB001B988A /* LiveGatherAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 112A018411E52ADB001B988A /* LiveGatherAPI.m */; };
 		1171C32C11EFB8C800E69829 /* SDKSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1171C30111EFB8C800E69829 /* SDKSettings.plist */; };
-		1171C32D11EFB8C800E69829 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C30E11EFB8C800E69829 /* libjson.a */; };
 		1171C32E11EFB8C800E69829 /* SDKSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1171C31011EFB8C800E69829 /* SDKSettings.plist */; };
-		1171C32F11EFB8C800E69829 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C31D11EFB8C800E69829 /* libjson.a */; };
-		1171C33011EFB8C800E69829 /* libjson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C32B11EFB8C800E69829 /* libjson.a */; };
 		1171C39A11EFC28100E69829 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C39911EFC28100E69829 /* QuartzCore.framework */; };
 		1171C3CA11EFC30400E69829 /* libz.1.2.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C3C911EFC30400E69829 /* libz.1.2.3.dylib */; };
 		11769A69118382F30036C548 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 11769A68118382F30036C548 /* MBProgressHUD.m */; };
@@ -95,14 +92,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = D2AAC07E0554694100DB518D /* libJRAuthenticate.a */;
+			remoteGlobalIDString = D2AAC07E0554694100DB518D;
 			remoteInfo = JRAuthenticate;
 		};
 		11BC003E11F7E31B000FA3DD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = D2AAC07D0554694100DB518D /* JRAuthenticate */;
+			remoteGlobalIDString = D2AAC07D0554694100DB518D;
 			remoteInfo = JRAuthenticate;
 		};
 /* End PBXContainerItemProxy section */
@@ -118,7 +115,6 @@
 		1171C30A11EFB8C800E69829 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
 		1171C30B11EFB8C800E69829 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
 		1171C30C11EFB8C800E69829 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		1171C30E11EFB8C800E69829 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjson.a; sourceTree = "<group>"; };
 		1171C31011EFB8C800E69829 /* SDKSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SDKSettings.plist; sourceTree = "<group>"; };
 		1171C31511EFB8C800E69829 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		1171C31611EFB8C800E69829 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -127,7 +123,6 @@
 		1171C31911EFB8C800E69829 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
 		1171C31A11EFB8C800E69829 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
 		1171C31B11EFB8C800E69829 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		1171C31D11EFB8C800E69829 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjson.a; sourceTree = "<group>"; };
 		1171C32311EFB8C800E69829 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		1171C32411EFB8C800E69829 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
 		1171C32511EFB8C800E69829 /* NSString+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+SBJSON.h"; sourceTree = "<group>"; };
@@ -135,7 +130,6 @@
 		1171C32711EFB8C800E69829 /* SBJsonBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonBase.h; sourceTree = "<group>"; };
 		1171C32811EFB8C800E69829 /* SBJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonParser.h; sourceTree = "<group>"; };
 		1171C32911EFB8C800E69829 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
-		1171C32B11EFB8C800E69829 /* libjson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjson.a; sourceTree = "<group>"; };
 		1171C39911EFC28100E69829 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		1171C3C911EFC30400E69829 /* libz.1.2.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.3.dylib; path = usr/lib/libz.1.2.3.dylib; sourceTree = SDKROOT; };
 		11769A67118382F30036C548 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -242,9 +236,6 @@
 				11769AF4118384C00036C548 /* SystemConfiguration.framework in Frameworks */,
 				11769AFF118384E30036C548 /* MobileCoreServices.framework in Frameworks */,
 				11769BD0118393510036C548 /* MapKit.framework in Frameworks */,
-				1171C32D11EFB8C800E69829 /* libjson.a in Frameworks */,
-				1171C32F11EFB8C800E69829 /* libjson.a in Frameworks */,
-				1171C33011EFB8C800E69829 /* libjson.a in Frameworks */,
 				1171C39A11EFC28100E69829 /* QuartzCore.framework in Frameworks */,
 				1171C3CA11EFC30400E69829 /* libz.1.2.3.dylib in Frameworks */,
 			);
@@ -324,7 +315,6 @@
 		1171C30D11EFB8C800E69829 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				1171C30E11EFB8C800E69829 /* libjson.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -380,7 +370,6 @@
 		1171C31C11EFB8C800E69829 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				1171C31D11EFB8C800E69829 /* libjson.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -435,7 +424,6 @@
 		1171C32A11EFB8C800E69829 /* lib */ = {
 			isa = PBXGroup;
 			children = (
-				1171C32B11EFB8C800E69829 /* libjson.a */,
 			);
 			path = lib;
 			sourceTree = "<group>";
@@ -675,6 +663,7 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "LiveGather" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -842,7 +831,7 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (46AS96JUN4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -862,7 +851,6 @@
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = LiveGather;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53B586ED-C145-4640-BF6A-D8853E067325";
 				SDKROOT = iphonesimulator4.0;
 				USER_HEADER_SEARCH_PATHS = "$(RPX)/**";
 				VALIDATE_PRODUCT = YES;
@@ -873,7 +861,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -886,7 +875,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "Don't Code Sign";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

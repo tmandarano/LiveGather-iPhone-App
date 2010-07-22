@@ -127,7 +127,7 @@
 	
 	[liveStreamScrollView setContentSize:CGSizeMake((liveStreamScrollView.contentSize.width + contentSizeAddition), (liveStreamScrollView.contentSize.height))];
 	
-	for (int i = 0; i < [streamArray count]; i++) {
+	/*for (int i = 0; i < [streamArray count]; i++) {
 		CollageItem *item = [streamArray objectAtIndex:i];
 		[item setFrame:CGRectMake((item.frame.origin.x + contentSizeAddition), item.frame.origin.y, item.frame.size.width, item.frame.size.height)];
 	}
@@ -162,7 +162,7 @@
 		
 		NSLog(@"row: %d", row);
 		NSLog(@"col: %d", col);
-	}
+	}*/
 	
 	[liveStreamScrollView setContentOffset:CGPointMake((contentSizeAddition - 15), 0.0) animated:NO];
 	

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "JSON.h"
 #import "JRAuthenticate.h"
+#import "LGPhoto.h"
 
 @interface LiveGatherAPI : NSObject {
 	NSArray *photosFeed;
@@ -22,5 +23,7 @@
 - (UIImage *)getUserProfilePhoto:(NSString *)userID;
 - (NSArray *)getPhotoInformation:(NSString *)photoID;
 - (NSArray *)fetchMorePhotos:(int)howManyWeHave andWith:(int)howManyWeWant;
+
+- (NSArray *)parseJSONResponse:(NSString *)response;
 
 @end

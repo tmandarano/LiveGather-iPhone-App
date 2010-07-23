@@ -36,6 +36,7 @@
 	for(NSDictionary *dict in objects) {
 		NSString *ID = (NSString *) [dict objectForKey:@"id"];
 		NSString *name = (NSString *) [dict objectForKey:@"name"];
+		NSLog(@"%@", ID);
 		NSArray *tags = (NSArray *) [dict objectForKey: @"tags"];
 		//loop over tags here...
 		for(NSDictionary *tag in tags) {

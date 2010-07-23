@@ -14,8 +14,8 @@
 #define kLiveStreamPreviewStartPoint_Y 12
 #define kLiveStreamPreviewLowerStartPoint_X 10
 #define kLiveStreamPreviewLowerStartPoint_Y 81
-#define kLiveStreamPreviewVerticalPadding 69
-#define kLiveStreamPreviewHorizontalPadding 69
+#define kLiveStreamPreviewVerticalPadding 2
+#define kLiveStreamPreviewHorizontalPadding 2
 #define kLiveStreamPreviewImageWidth 61
 #define kLiveStreamPreviewImageHeight 61
 #define kLiveStreamPreviewStaticHeight 149
@@ -50,16 +50,11 @@
 //Custom Methods for this Class
 
 - (IBAction)viewLiveStream {
-	[self presentModalViewController:liveStreamView animated:YES];
+	[applicationAPI getLiveFeed:10];
+	//[self presentModalViewController:liveStreamView animated:YES];
 }
 
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)img editingInfo:(NSDictionary *)editInfo {
-	[[picker parentViewController] dismissModalViewControllerAnimated:NO];
-	//[appResourceManager saveImageToDocuments:img withFilename:@"image_to_upload" andFileType:@"PNG"];
-	[self presentModalViewController:uploadViewController animated:YES];
-}
-
-- (void)updateLiveStreamPhotos {
+- (IBAction)updateLiveStreamPhotos {
 	HUD = [[MBProgressHUD alloc] initWithView:self.view];
 	[self.view addSubview:HUD];
 	HUD.delegate = self;
@@ -95,10 +90,10 @@
 		
 		if(row == 1)
 		{
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + 5) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 		}
 		else {
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + 5) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
 		}
 		
 		[liveStreamPreviewScrollView addSubview:imageView];

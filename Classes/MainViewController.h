@@ -16,9 +16,10 @@
 
 @class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController;
 
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, MBProgressHUDDelegate> {
+@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate> {
 	IBOutlet UIButton			*viewLiveStreamButton;
 	IBOutlet UIScrollView		*liveStreamPreviewScrollView;
+	IBOutlet UIButton			*refreshLiveStreamMiniViewButton;
 	UIImagePickerController		*imagePickerController;
 	NSUserDefaults				*settings;
 	ResourceManager				*appResourceManager;
@@ -33,7 +34,7 @@
 
 - (IBAction)viewLiveStream;
 
-- (void)updateLiveStreamPhotos;
+- (IBAction)updateLiveStreamPhotos;
 - (void)newLiveStreamPhotosDownloaded;
 
 //

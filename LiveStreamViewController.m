@@ -19,8 +19,8 @@
 #define kLiveStreamPreviewMidStartPoint_Y 142
 #define kLiveStreamPreviewBottomStartPoint_X 5
 #define kLiveStreamPreviewBottomStartPoint_Y 279
-#define kLiveStreamPreviewVerticalPadding 5
-#define kLiveStreamPreviewHorizontalPadding 5
+#define kLiveStreamPreviewVerticalPadding 2
+#define kLiveStreamPreviewHorizontalPadding 2
 #define kLiveStreamPreviewImageWidth 125
 #define kLiveStreamPreviewImageHeight 129
 #define kLiveStreamPreviewStaticHeight 415

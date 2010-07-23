@@ -31,5 +31,7 @@
 		<string>Icon-Small.png</string>
 		<string>Icon.png</string>
 	</array>
+	<key>UIPrerenderedIcon</key>
+	<true/>
 </dict>
 </plist>

@@ -50,8 +50,8 @@
 //Custom Methods for this Class
 
 - (IBAction)viewLiveStream {
-	[applicationAPI getLiveFeed:10];
-	//[self presentModalViewController:liveStreamView animated:YES];
+	//[applicationAPI getLiveFeed:10];
+	[self presentModalViewController:liveStreamView animated:YES];
 }
 
 - (IBAction)updateLiveStreamPhotos {

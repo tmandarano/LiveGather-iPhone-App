@@ -14,6 +14,7 @@
 #import "MBProgressHUD.h"
 #import "LiveGatherAPI.h"
 #import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
 
 @class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue;
 
@@ -21,7 +22,10 @@
 	IBOutlet UIButton			*viewLiveStreamButton;
 	IBOutlet UIScrollView		*liveStreamPreviewScrollView;
 	IBOutlet UIButton			*refreshLiveStreamMiniViewButton;
-	UIImagePickerController		*imagePickerController;
+	IBOutlet UIButton			*uploadPhotoButton;
+	IBOutlet UIButton			*myStreamButton;
+	IBOutlet UIButton			*peopleWatchingButton;
+	IBOutlet UIButton			*settingsButton;
 	NSUserDefaults				*settings;
 	ResourceManager				*appResourceManager;
 	UploadPhotoViewController	*uploadViewController;
@@ -29,14 +33,19 @@
 	IBOutlet UIProgressView		*progressView;
 	MBProgressHUD				*HUD;
 	LiveGatherAPI				*applicationAPI;
+	ASINetworkQueue				*networkQueue;
+	NSMutableArray				*downloadedImages;
 }
 
 @property (nonatomic, retain) ResourceManager *appResourceManager;
 
 - (IBAction)viewLiveStream;
+- (IBAction)uploadPhoto;
 
 - (IBAction)updateLiveStreamPhotos;
-- (void)newLiveStreamPhotosDownloaded;
+- (void)downloadNewLiveStreamPhotos;
+- (void)imageFetchComplete:(ASIHTTPRequest *)request;
+- (void)imageDownloadingFinished;
 
 //
 - (IBAction)showInfo;

@@ -11,9 +11,9 @@
 @implementation MainViewController
 
 #define kLiveStreamPreviewStartPoint_X 10
-#define kLiveStreamPreviewStartPoint_Y 12
+#define kLiveStreamPreviewStartPoint_Y 22
 #define kLiveStreamPreviewLowerStartPoint_X 10
-#define kLiveStreamPreviewLowerStartPoint_Y 81
+#define kLiveStreamPreviewLowerStartPoint_Y 86
 #define kLiveStreamPreviewVerticalPadding 2
 #define kLiveStreamPreviewHorizontalPadding 2
 #define kLiveStreamPreviewImageWidth 61
@@ -49,29 +49,35 @@
 
 //Custom Methods for this Class
 
+- (IBAction)uploadPhoto {
+	[uploadViewController showUserImageControlOption];
+	[self presentModalViewController:uploadViewController animated:YES];
+}
+
 - (IBAction)viewLiveStream {
 	//[applicationAPI getLiveFeed:10];
 	[self presentModalViewController:liveStreamView animated:YES];
 }
 
-- (IBAction)updateLiveStreamPhotos {
-	HUD = [[MBProgressHUD alloc] initWithView:self.view];
-	[self.view addSubview:HUD];
-	HUD.delegate = self;
-	HUD.labelText = @"Loading";
-	HUD.detailsLabelText = @"Algorithm is Sorting ImageViews";
-	[HUD showWhileExecuting:@selector(newLiveStreamPhotosDownloaded) onTarget:self withObject:nil animated:YES];
+- (IBAction)updateLiveStreamPhotos {	
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = @"Loading";
+	HUD.detailsLabelText = @"Algorithm is working";
+    [HUD showWhileExecuting:@selector(downloadNewLiveStreamPhotos) onTarget:self withObject:nil animated:YES];
 }
 
-- (void)newLiveStreamPhotosDownloaded {
-	int numImageViewsToPlace = 50;
+- (void)downloadNewLiveStreamPhotos {
+	int numImageViewsToPlace = 9;
 	int numRows = 2;
 	int numCols = 0;
 	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
 	
 	for (int i = 0; i < numImageViewsToPlace; i++) {
 		int row = i % numRows;
-
+		
 		if(row == 0)
 		{
 			numCols += 1;
@@ -101,6 +107,14 @@
 		NSLog(@"row: %d", row);
 		NSLog(@"col: %d", col);
 	}
+}
+
+- (void)imageFetchComplete:(ASIHTTPRequest *)request {
+	
+}
+
+- (void)imageDownloadingFinished {
+	
 }
 
 - (void)hudWasHidden {

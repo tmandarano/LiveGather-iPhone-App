@@ -10,22 +10,20 @@
 #import "ResourceManager.h"
 #import "MainViewController.h"
 #import "LiveGatherAPI.h"
+#import "EAGLView.h"
 
 @class MainViewController, LiveGatherAPI;
 
 @interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate> {
-	IBOutlet UIImageView		*imagePreview;
-	IBOutlet UIImageView		*captionTextFieldBackground;
-	IBOutlet UIImageView		*tagsTextFieldBackground;
+	IBOutlet UIButton			*backButton;
+	IBOutlet UIButton			*uploadButton;
 	IBOutlet UITextField		*captionTextField;
 	IBOutlet UITextField		*tagsTextField;
-	IBOutlet UILabel			*privacySelectionLabel;
-	IBOutlet UIButton			*cancelButton;
-	IBOutlet UIButton			*uploadButton;
-	IBOutlet UIButton			*privacySelectionButton;
-	IBOutlet UILabel			*topBarNameLabel;
+	IBOutlet UILabel			*locationLabel;
+	IBOutlet UIButton			*refreshLocationButton;
+	IBOutlet UIButton			*sendToTwitterButton;
+	IBOutlet UIButton			*sendToFacebookButton;
 	
-	UIImage						*imageForUpload;
 	MainViewController			*mainViewController;
 	LiveGatherAPI				*livegatherController;
 	UIImagePickerController		*imagePickerController;
@@ -33,7 +31,9 @@
 
 - (IBAction)cancel;
 - (IBAction)upload;
-- (IBAction)privacySelectionButtonPressed;
+- (IBAction)refreshLocation;
+- (IBAction)sendToTwitter;
+- (IBAction)sendToFacebook;
 - (void)showUserImageControlOption;
 
 @end

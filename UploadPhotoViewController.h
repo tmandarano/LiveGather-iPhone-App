@@ -10,7 +10,6 @@
 #import "ResourceManager.h"
 #import "MainViewController.h"
 #import "LiveGatherAPI.h"
-#import "EAGLView.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
 

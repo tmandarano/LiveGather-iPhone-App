@@ -16,7 +16,7 @@
     
 }
 
-//Handling API on the server
+//Handling APIs on the server
 - (NSArray *)getLiveFeed:(int)numPhotos;
 - (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius;
 - (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius;

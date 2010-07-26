@@ -29,9 +29,7 @@
 }
 
 - (IBAction)refreshLocation {
-	//[((EAGLView*)self.view) drawView];
-	EAGLView *eaglView = [[EAGLView alloc] init];
-	[eaglView drawView];
+	
 }
 
 - (IBAction)sendToTwitter {

@@ -11,6 +11,7 @@
 @interface LiveGatherAPI()
 //Internal private methods
 - (NSArray *)parseJSONPhotoResponse:(NSString *)response;
+- (NSArray *)parseTagsResponse:(NSString *)response;
 
 @end
 
@@ -59,11 +60,12 @@
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
     NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
     NSLog(@"%@", response);
-    
-    
-    
-    NSArray *arr;
-    return arr;
+	
+	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseTagsResponse:response]];
+	
+	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
+	
+	return arr;
 }
 
 - (NSArray *)getRecentTagsWithLimit:(int)limit {
@@ -79,15 +81,27 @@
     NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
     NSLog(@"%@", response);
     
-    NSMutableArray *returnArray = [NSMutableArray new];
+    NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseTagsResponse:response]];
+	
+	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
+	
+	return arr;
+}
+
+- (NSArray *)getPhotosByTagID:(int)tagID {
+    NSArray *arr;
+    return arr;
+}
+
+- (NSArray *)parseTagsResponse:(NSString *)response {
+	NSMutableArray *returnArray = [NSMutableArray new];
     
     NSArray *objects = (NSArray*)[response JSONValue];
     
     for(NSDictionary *dict in objects) {
 		LGTag *tag = [[LGTag alloc] init];
 		
-        NSString *ID = (NSString *) [dict objectForKey:@"id"];
-		int tagID = [ID intValue];
+        NSString *tagID = (NSString *) [dict objectForKey:@"id"];
         NSString *tagName = (NSString *) [dict objectForKey:@"tag"];
         NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
 		
@@ -101,11 +115,6 @@
     }
     
     NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
-    return arr;
-}
-
-- (NSArray *)getPhotosByTagID:(int)tagID {
-    NSArray *arr;
     return arr;
 }
 

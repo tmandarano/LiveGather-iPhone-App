@@ -15,6 +15,8 @@
 #import "LiveGatherAPI.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
+#import "LGPhoto.h"
+#import "LGTag.h"
 
 @class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue;
 

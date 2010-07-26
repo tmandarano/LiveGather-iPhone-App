@@ -12,6 +12,8 @@
 #import <MapKit/MapKit.h>
 #import "CollageView.h"
 #import "CollageItem.h"
+#import "LGPhoto.h"
+#import "LGTag.h"
 
 @class CollageView;
 

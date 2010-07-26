@@ -9,8 +9,8 @@
 #import "LiveGatherAPI.h"
 
 @interface LiveGatherAPI()
-
-- (void)sendPostDataToServer:(NSData *)data toServer:(NSString *)server;
+//Internal private methods
+- (NSArray *)parseJSONPhotoResponse:(NSString *)response;
 
 @end
 
@@ -18,7 +18,6 @@
 
 
 - (NSArray *)getLiveFeed:(int)numPhotos {
-	NSLog(@"GETTING");
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/recent/%d", numPhotos]]];
 	[request setHTTPMethod:@"GET"];
@@ -31,78 +30,86 @@
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
 	NSLog(@"%@", response);
 		
-	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONResponse:response]];
+	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONPhotoResponse:response]];
 		
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 	
 	return arr;
 }
 
-- (NSArray *)getPhotosNear:(float)longitude andLatitude:(float)latitude {
-	/*NSLog(@"GETTING");
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/recent/%d", numPhotos]]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:nil];
-	NSError *err;
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
-	
-	NSDictionary *dictionary = [response JSONValue];
-	
-	//po*/
-	NSArray *array;
-	return array;
+- (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius {
+    NSArray *arr;
+    return arr;
 }
 
-- (NSArray *)getUserInformation {
-	NSArray *array;
-	return array;
+- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius {
+    NSArray *arr;
+    return arr;
 }
 
-- (void)editUser {
-	
+- (NSArray *)getTrendingTagsWithLimit:(int)limit {
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/tags/trending/%d", limit]]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:nil forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"LivGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+    [request setHTTPBody:nil];
+    NSError *err;
+    NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+    NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+    NSLog(@"%@", response);
+    
+    
+    
+    NSArray *arr;
+    return arr;
 }
 
-- (UIImage *)getUserProfilePhoto:(NSString *)userID {
-	UIImage *image;
-	return image;
+- (NSArray *)getRecentTagsWithLimit:(int)limit {
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+    [request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/tags/recent/%d", limit]]];
+    [request setHTTPMethod:@"GET"];
+    [request setValue:nil forHTTPHeaderField:@"Content-Length"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"LivGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+    [request setHTTPBody:nil];
+    NSError *err;
+    NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+    NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+    NSLog(@"%@", response);
+    
+    NSMutableArray *returnArray = [NSMutableArray new];
+    
+    NSArray *objects = (NSArray*)[response JSONValue];
+    
+    for(NSDictionary *dict in objects) {
+		LGTag *tag = [[LGTag alloc] init];
+		
+        NSString *ID = (NSString *) [dict objectForKey:@"id"];
+		int tagID = [ID intValue];
+        NSString *tagName = (NSString *) [dict objectForKey:@"tag"];
+        NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+		
+		NSLog(@"Processing Tag: %@", tagName);
+		
+		[tag setTag:tagName];
+		[tag setTagID:tagID];
+		[tag setDateAdded:dateAdded];
+		
+		[returnArray addObject:tag];
+    }
+    
+    NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
+    return arr;
 }
 
-- (NSArray *)getPhotoInformation:(NSString *)photoID {
-	NSLog(@"GETTING");
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%@", photoID]]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:nil];
-	NSError *err;
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
-	
-	//NSDictionary *dictionary = [response JSONValue];
-	
-	NSArray *array;
-	return array;
+- (NSArray *)getPhotosByTagID:(int)tagID {
+    NSArray *arr;
+    return arr;
 }
 
-- (NSArray *)fetchMorePhotos:(int)howManyWeHave andWith:(int)howManyWeWant {
-	NSArray *array;
-	return array;
-}
-
-- (void)sendPostDataToServer:(NSData *)data toServer:(NSString *)server {
-	
-}
-
-- (NSArray *)parseJSONResponse:(NSString *)response {
+- (NSArray *)parseJSONPhotoResponse:(NSString *)response {
 	NSMutableArray *returnArray = [NSMutableArray new];
 	
 	NSArray *objects = (NSArray*)[response JSONValue];
@@ -119,6 +126,8 @@
 		NSString *caption = (NSString *) [dict objectForKey:@"caption"];
 		NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
 		NSArray *tags = (NSArray *) [dict objectForKey: @"tags"];
+		
+		NSLog(@"Processing Photo: %@", ID);
 		
 		[photo setID:ID];
 		[photo setPhotoName:name];
@@ -141,29 +150,6 @@
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 	
 	return arr;
-}
-
-- (BOOL)loginUser:(NSString *)usernameCredential withPassword:(NSString *)passwordCredential {
-	NSMutableData *postData = [NSMutableData data];
-	NSString *email = @"alexander@xandernet.net";
-	NSString *location = @"";
-	[postData appendData:[[NSString stringWithFormat:@"username=%@&email=%@&password=%@&location=%@", 
-						   [usernameCredential stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-						   [email stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-						   [passwordCredential stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
-						   [location stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] 
-						  dataUsingEncoding:NSUTF8StringEncoding]];
-	NSString *postLength = [NSString stringWithFormat:@"%d", [postData length]];
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:@"http://dev.livegather.com/users/create"]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:postData];
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
 }
 
 @end

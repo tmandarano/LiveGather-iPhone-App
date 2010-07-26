@@ -55,8 +55,8 @@
 }
 
 - (IBAction)viewLiveStream {
-	//[applicationAPI getLiveFeed:10];
-	[self presentModalViewController:liveStreamView animated:YES];
+	[applicationAPI getRecentTagsWithLimit:5];
+	//[self presentModalViewController:liveStreamView animated:YES];
 }
 
 - (IBAction)updateLiveStreamPhotos {	

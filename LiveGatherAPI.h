@@ -10,20 +10,18 @@
 #import "JSON.h"
 #import "JRAuthenticate.h"
 #import "LGPhoto.h"
+#import "LGTag.h"
 
 @interface LiveGatherAPI : NSObject {
-	NSArray *photosFeed;
+    
 }
 
-- (BOOL)loginUser:(NSString *)usernameCredential withPassword:(NSString *)passwordCredential;
+//Handling API on the server
 - (NSArray *)getLiveFeed:(int)numPhotos;
-- (NSArray *)getPhotosNear:(float)longitude andLatitude:(float)latitude;
-- (NSArray *)getUserInformation;
-- (void)editUser;
-- (UIImage *)getUserProfilePhoto:(NSString *)userID;
-- (NSArray *)getPhotoInformation:(NSString *)photoID;
-- (NSArray *)fetchMorePhotos:(int)howManyWeHave andWith:(int)howManyWeWant;
-
-- (NSArray *)parseJSONResponse:(NSString *)response;
+- (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius;
+- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius;
+- (NSArray *)getTrendingTagsWithLimit:(int)limit;
+- (NSArray *)getRecentTagsWithLimit:(int)limit;
+- (NSArray *)getPhotosByTagID:(int)id;
 
 @end

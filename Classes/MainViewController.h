@@ -23,6 +23,7 @@
 @interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate> {
 	IBOutlet UIButton			*viewLiveStreamButton;
 	IBOutlet UIScrollView		*liveStreamPreviewScrollView;
+	IBOutlet UIScrollView		*tagsScrollView;
 	IBOutlet UIButton			*refreshLiveStreamMiniViewButton;
 	IBOutlet UIButton			*uploadPhotoButton;
 	IBOutlet UIButton			*myStreamButton;
@@ -43,6 +44,8 @@
 
 - (IBAction)viewLiveStream;
 - (IBAction)uploadPhoto;
+
+- (void)updateTags;
 
 - (IBAction)updateLiveStreamPhotos;
 - (void)downloadNewLiveStreamPhotos;

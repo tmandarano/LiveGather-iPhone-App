@@ -11,9 +11,9 @@
 @implementation MainViewController
 
 #define kLiveStreamPreviewStartPoint_X 10
-#define kLiveStreamPreviewStartPoint_Y 22
+#define kLiveStreamPreviewStartPoint_Y 5
 #define kLiveStreamPreviewLowerStartPoint_X 10
-#define kLiveStreamPreviewLowerStartPoint_Y 86
+#define kLiveStreamPreviewLowerStartPoint_Y 70
 #define kLiveStreamPreviewVerticalPadding 2
 #define kLiveStreamPreviewHorizontalPadding 2
 #define kLiveStreamPreviewImageWidth 61
@@ -38,6 +38,9 @@
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
 	[self updateLiveStreamPhotos];
+	[self updateTags];
+	
+	[refreshLiveStreamMiniViewButton setFrame:CGRectMake(277, 419, 35, 32)];
 	
 	[super viewDidLoad];
 }
@@ -55,8 +58,24 @@
 }
 
 - (IBAction)viewLiveStream {
-	[applicationAPI getRecentTagsWithLimit:5];
-	//[self presentModalViewController:liveStreamView animated:YES];
+	//[applicationAPI getRecentTagsWithLimit:5];
+	[self presentModalViewController:liveStreamView animated:YES];
+}
+
+- (void)updateTags {
+	NSMutableArray *tagsArray = [[NSMutableArray alloc] initWithArray:[applicationAPI getRecentTagsWithLimit:5]];
+	
+	int numTagsToPlace = [tagsArray count];
+	float currentPointInScrollView = 0;
+	
+	for (int i = 0; i < numTagsToPlace; i++) {
+		LGTag *tag = [tagsArray objectAtIndex:i];
+		UILabel *label = [[UILabel alloc] init];
+		[label setTextColor:[UIColor blueColor]];
+		[label setText:[NSString stringWithFormat:@"#%@",[tag tag]]];
+		[tagsScrollView addSubview:label];
+		currentPointInScrollView += label.frame.size.width;
+	}
 }
 
 - (IBAction)updateLiveStreamPhotos {	

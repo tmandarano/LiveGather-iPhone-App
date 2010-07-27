@@ -37,6 +37,8 @@
 	liveStreamView = [[LiveStreamViewController alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
+	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
+	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
 	
@@ -89,47 +91,85 @@
 }
 
 - (void)downloadNewLiveStreamPhotos {
-	int numImageViewsToPlace = 9;
-	int numRows = 2;
-	int numCols = 0;
-	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:10]];
 	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		
-		if(row == 0)
-		{
-			numCols += 1;
-		}
+	if(!networkQueue) {
+		networkQueue = [[ASINetworkQueue alloc] init];
 	}
+	[networkQueue reset];
+	//[networkQueue setDownloadProgressDelegate:progressIndicator];
+	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
+	//[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
+	[networkQueue setShowAccurateProgress:YES];
+	[networkQueue setDelegate:self];
 	
-	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-	
-	[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		int col = i / numRows;
+	for (int i = 0; i < [liveStreamArray count]; i++) {
+		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
-		UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
-		
-		if(row == 1)
-		{
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		else {
-			[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
-		}
-		
-		[liveStreamPreviewScrollView addSubview:imageView];
-		
-		NSLog(@"row: %d", row);
-		NSLog(@"col: %d", col);
+		ASIHTTPRequest *request;
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com%@", photo.photoURL]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", photo.photoName]]];
+		//[request setDownloadProgressDelegate:imageProgressIndicator1];
+		[networkQueue addOperation:request];
 	}
+	[networkQueue go];
 }
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
-	
+	if(networkQueue.requestsCount == 0)
+	{
+		NSLog(@"Drawing objects to stream view");
+		
+		int numImageViewsToPlace = [liveStreamObjects count];
+		
+		NSLog(@"%d", numImageViewsToPlace);
+		
+		int numRows = 2;
+		int numCols = 0;
+		int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
+		
+		for (int i = 0; i < numImageViewsToPlace; i++) {
+			int row = i % numRows;
+			
+			if(row == 0)
+			{
+				numCols += 1;
+			}
+		}
+		
+		int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+		
+		[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+		
+		for (int i = 0; i < numImageViewsToPlace; i++) {
+			int row = i % numRows;
+			int col = i / numRows;
+			
+			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+			
+			UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
+						
+			if(row == 1)
+			{
+				[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			}
+			else {
+				[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+			}
+			
+			[liveStreamPreviewScrollView addSubview:imageView];
+			
+			NSLog(@"row: %d", row);
+			NSLog(@"col: %d", col);
+		}
+	}
+	else {
+		NSLog(@"Adding Object for Stream");
+		UIImage *img = [[UIImage alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+		LGPhoto *photo = [[LGPhoto alloc] init];
+		[photo setPhotoImage:img];
+		[liveStreamObjects addObject:photo];
+	}
 }
 
 - (void)imageDownloadingFinished {

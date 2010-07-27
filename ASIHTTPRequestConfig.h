@@ -30,3 +30,8 @@
 #ifndef DEBUG_PERSISTENT_CONNECTIONS
 	#define DEBUG_PERSISTENT_CONNECTIONS 0
 #endif
+
+// When set to 1, ASIHTTPRequests will print information about the use of the cache to the console
+#ifndef DEBUG_CACHE
+#define DEBUG_CACHE 0
+#endif

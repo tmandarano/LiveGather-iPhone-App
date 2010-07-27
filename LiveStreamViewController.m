@@ -37,8 +37,8 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	applicationAPI = [[LiveGatherAPI alloc] init];
-	streamArray = [NSMutableArray new];
-	streamContainersArray = [NSMutableArray new];
+	//streamArray = [NSMutableArray new];
+	//streamContainersArray = [NSMutableArray new];
 	liveStreamScrollView = [[CollageView alloc] initWithFrame:CGRectMake(0, 45, 320, 415)];
 	[liveStreamScrollView setBackgroundColor:[UIColor blackColor]];
 	[self.view addSubview:liveStreamScrollView];
@@ -58,7 +58,7 @@
 }
 
 - (void)newLiveStreamPhotosDownloaded {
-	int numImageViewsToPlace = 100;
+	/*int numImageViewsToPlace = 100;
 	int numRows = 3;
 	int numCols = 0;
 	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
@@ -106,7 +106,7 @@
 		
 		NSLog(@"row: %d", row);
 		NSLog(@"col: %d", col);
-	}
+	}*/
 }
 
 - (IBAction)refreshLiveStream {

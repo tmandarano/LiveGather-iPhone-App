@@ -39,7 +39,6 @@
 	{
 		[self presentModalViewController:mainViewController animated:YES];
 	}*/
-	[livegatherController loginUser:@"xander" withPassword:@"dilbert"];
 }
 
 - (IBAction)signup {

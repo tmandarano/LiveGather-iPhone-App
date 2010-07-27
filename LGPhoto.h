@@ -19,6 +19,8 @@
 	NSArray		*photoTags;
 	NSString	*photoDateAdded;
 	NSString	*photoUserID;
+	UIImage		*photoImage;
+	NSString	*photoPath;
 }
 
 //Getters and setters
@@ -47,5 +49,11 @@
 
 - (NSString *)photoUserID;
 - (void)setPhotoUserID:(NSString *)userid;
+
+- (UIImage *)photoImage;
+- (void)setPhotoImage:(UIImage *)image;
+
+- (NSString *)photoPath;
+- (void)setPhotoPath:(NSString *)path;
 
 @end

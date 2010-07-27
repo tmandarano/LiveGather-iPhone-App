@@ -37,7 +37,7 @@
 	MBProgressHUD				*HUD;
 	LiveGatherAPI				*applicationAPI;
 	ASINetworkQueue				*networkQueue;
-	NSMutableArray				*downloadedImages;
+	NSMutableArray				*liveStreamObjects;
 }
 
 @property (nonatomic, retain) ResourceManager *appResourceManager;

@@ -23,8 +23,7 @@
 	//IBOutlet UIScrollView		*liveStreamScrollView;
 	IBOutlet UIButton			*searchButton;
 	IBOutlet UIButton			*refreshButton;
-	NSMutableArray				*streamArray;
-	NSMutableArray				*streamContainersArray;
+	NSMutableArray				*liveStreamObjects;
 	LiveGatherAPI				*applicationAPI;
 	MBProgressHUD				*HUD;
 	CollageView					*liveStreamScrollView;

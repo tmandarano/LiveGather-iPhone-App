@@ -91,4 +91,20 @@
 	photoUserID = userid;
 }
 
+- (UIImage *)photoImage {
+	return photoImage;
+}
+
+- (void)setPhotoImage:(UIImage *)image {
+	photoImage = image;
+}
+
+- (NSString *)photoPath {
+	return photoPath;
+}
+
+- (void)setPhotoPath:(NSString *)path {
+	photoPath = path;
+}
+
 @end

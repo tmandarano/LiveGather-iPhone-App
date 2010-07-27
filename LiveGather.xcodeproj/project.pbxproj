@@ -670,10 +670,10 @@
 			children = (
 				289233A80DB2D0DB0083E9F9 /* MainViewController.h */,
 				289233A90DB2D0DB0083E9F9 /* MainViewController.m */,
-				11BAD7C111FE518100FE4DE4 /* FollowersViewController.h */,
-				11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */,
 				1191BF97117A0A29003DF9B8 /* LiveStreamViewController.h */,
 				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
+				11BAD7C111FE518100FE4DE4 /* FollowersViewController.h */,
+				11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */,
 				1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */,
 				1191BF3E11798459003DF9B8 /* UploadPhotoViewController.m */,
 				1191BF8D117A0A0E003DF9B8 /* AccountLoginViewController.h */,
@@ -932,7 +932,7 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (46AS96JUN4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -957,7 +957,6 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = LiveGather;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "53B586ED-C145-4640-BF6A-D8853E067325";
 				SDKROOT = iphonesimulator4.0;
 				USER_HEADER_SEARCH_PATHS = "$(RPX)/**";
 			};

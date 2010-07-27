@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface LGPhoto : NSObject {
+@interface LGPhoto : UIImageView {
 	NSString	*photoID;
 	NSString	*photoURL;
 	NSString	*photoName;

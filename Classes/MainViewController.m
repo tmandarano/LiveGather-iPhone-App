@@ -147,17 +147,20 @@
 			
 			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
 			
-			UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
+			//UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
 						
 			if(row == 1)
 			{
-				[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+				[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+				//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 			}
 			else {
-				[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+				[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+				//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
 			}
 			
-			[liveStreamPreviewScrollView addSubview:imageView];
+			//[liveStreamPreviewScrollView addSubview:imageView];
+			[liveStreamPreviewScrollView addSubview:photo];
 			
 			NSLog(@"row: %d", row);
 			NSLog(@"col: %d", col);
@@ -167,7 +170,7 @@
 		NSLog(@"Adding Object for Stream");
 		UIImage *img = [[UIImage alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 		LGPhoto *photo = [[LGPhoto alloc] init];
-		[photo setPhotoImage:img];
+		[photo setImage:img];
 		[liveStreamObjects addObject:photo];
 	}
 }

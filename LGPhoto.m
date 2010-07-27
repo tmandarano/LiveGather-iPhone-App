@@ -15,10 +15,14 @@
 	
 	if(self = [super init])
 	{
-		
+		[self setUserInteractionEnabled:YES];
 	}
 	
 	return self;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	NSLog(@"%@", photoID);
 }
 
 

@@ -86,6 +86,8 @@
 		11BAD71111FD642200FE4DE4 /* bottom_bar_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD70711FD642200FE4DE4 /* bottom_bar_button@2x.png */; };
 		11BAD71211FD642200FE4DE4 /* bottom_bar_button_pressed@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD70811FD642200FE4DE4 /* bottom_bar_button_pressed@2x.png */; };
 		11BAD71311FD642200FE4DE4 /* followers_table_cell_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD70911FD642200FE4DE4 /* followers_table_cell_bg@2x.png */; };
+		11BAD7B211FE512000FE4DE4 /* FollowersView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD7B111FE512000FE4DE4 /* FollowersView.xib */; };
+		11BAD7C311FE518100FE4DE4 /* FollowersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */; };
 		11BC004E11F7E6B4000FA3DD /* libJRAuthenticate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BC003D11F7E312000FA3DD /* libJRAuthenticate.a */; };
 		11BCFE6311F3A8E5000FA3DD /* CollageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFE6211F3A8E5000FA3DD /* CollageView.m */; };
 		11BCFEBF11F3B017000FA3DD /* CollageItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BCFEBE11F3B017000FA3DD /* CollageItem.m */; };
@@ -247,6 +249,9 @@
 		11BAD70711FD642200FE4DE4 /* bottom_bar_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_bar_button@2x.png"; sourceTree = "<group>"; };
 		11BAD70811FD642200FE4DE4 /* bottom_bar_button_pressed@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bottom_bar_button_pressed@2x.png"; sourceTree = "<group>"; };
 		11BAD70911FD642200FE4DE4 /* followers_table_cell_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "followers_table_cell_bg@2x.png"; sourceTree = "<group>"; };
+		11BAD7B111FE512000FE4DE4 /* FollowersView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FollowersView.xib; sourceTree = "<group>"; };
+		11BAD7C111FE518100FE4DE4 /* FollowersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FollowersViewController.h; sourceTree = "<group>"; };
+		11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FollowersViewController.m; sourceTree = "<group>"; };
 		11BC002D11F7E30B000FA3DD /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
 		11BCFE6111F3A8E5000FA3DD /* CollageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollageView.h; sourceTree = "<group>"; };
 		11BCFE6211F3A8E5000FA3DD /* CollageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollageView.m; sourceTree = "<group>"; };
@@ -665,6 +670,8 @@
 			children = (
 				289233A80DB2D0DB0083E9F9 /* MainViewController.h */,
 				289233A90DB2D0DB0083E9F9 /* MainViewController.m */,
+				11BAD7C111FE518100FE4DE4 /* FollowersViewController.h */,
+				11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */,
 				1191BF97117A0A29003DF9B8 /* LiveStreamViewController.h */,
 				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
 				1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */,
@@ -705,6 +712,7 @@
 			isa = PBXGroup;
 			children = (
 				280E754B0DD40C5E005A515E /* MainView.xib */,
+				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
 				11D1FD581179648C007B66EF /* LiveStreamView.xib */,
 				1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */,
 				1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */,
@@ -871,6 +879,7 @@
 				11BAD71111FD642200FE4DE4 /* bottom_bar_button@2x.png in Resources */,
 				11BAD71211FD642200FE4DE4 /* bottom_bar_button_pressed@2x.png in Resources */,
 				11BAD71311FD642200FE4DE4 /* followers_table_cell_bg@2x.png in Resources */,
+				11BAD7B211FE512000FE4DE4 /* FollowersView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -903,6 +912,7 @@
 				1176F49711FA0C3100CCA857 /* ASINetworkQueue.m in Sources */,
 				1176F4AC11FA0E6C00CCA857 /* LGPhoto.m in Sources */,
 				11BAD6D311FD5D1700FE4DE4 /* LGTag.m in Sources */,
+				11BAD7C311FE518100FE4DE4 /* FollowersViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

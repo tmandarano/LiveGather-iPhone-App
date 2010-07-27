@@ -153,6 +153,12 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 	// When the request fails or completes successfully, complete will be true
 	BOOL complete;
 	
+    // external "finished" indicator, subject of KVO notifications; updates after 'complete'
+    BOOL finished;
+    
+    // True if our 'cancel' selector has been called
+    BOOL cancelled;
+    
 	// If an error occurs, error will contain an NSError
 	// If error code is = ASIConnectionFailureErrorType (1, Connection failure occurred) - inspect [[error userInfo] objectForKey:NSUnderlyingErrorKey] for more information
 	NSError *error;
@@ -701,6 +707,11 @@ extern unsigned long const ASIWWANBandwidthThrottleAmount;
 + (BOOL)isNetworkReachableViaWWAN;
 
 #endif
+
+#pragma mark queue
+
+// Returns the shared queue
++ (NSOperationQueue *)sharedQueue;
 
 #pragma mark cache
 

@@ -21,6 +21,11 @@
 #endif
 #import "ASIInputStream.h"
 
+#if DEBUG_CACHE
+#define CACHEDBUG(...) NSLog(__VA_ARGS__)
+#else
+#define CACHEDBUG(...)
+#endif
 
 // Automatically set on build
 NSString *ASIHTTPRequestVersion = @"v1.7-25 2010-07-22";
@@ -506,29 +511,53 @@ static NSOperationQueue *sharedQueue = nil;
 
 #pragma mark get information about this request
 
-- (void)cancel
+// cancel the request - this must be run on the same thread as the request is running on
+- (void)cancelOnRequestThread
 {
 	#if DEBUG_REQUEST_STATUS
 	NSLog(@"Request cancelled: %@",self);
 	#endif
+    
+    [self autorelease];
 
 	[[self cancelledLock] lock];
 
-	if ([self isCancelled] || [self complete]) {
+    if ([self isCancelled] || [self complete]) {
 		[[self cancelledLock] unlock];
 		return;
 	}
-
 	[self failWithError:ASIRequestCancelledError];
 	[self setComplete:YES];
 	[self cancelLoad];
 	
 	[[self retain] autorelease];
-	[super cancel];
-
+    [self willChangeValueForKey:@"isCancelled"];
+    cancelled = YES;
+    [self didChangeValueForKey:@"isCancelled"];
+    
 	[[self cancelledLock] unlock];
 }
 
+- (void)cancel
+{
+    [self retain];
+    [self performSelector:@selector(cancelOnRequestThread)
+                 onThread:[[self class] threadForRequest:self]
+               withObject:nil
+            waitUntilDone:NO];    
+}
+
+
+- (BOOL)isCancelled
+{
+    BOOL result;
+    
+	[[self cancelledLock] lock];
+    result = cancelled;
+    [[self cancelledLock] unlock];
+    
+    return result;
+}
 
 // Call this method to get the received data as an NSString. Don't use for binary data!
 - (NSString *)responseString
@@ -599,7 +628,7 @@ static NSOperationQueue *sharedQueue = nil;
 
 - (BOOL)isFinished 
 {
-	return [self complete];
+	return finished;
 }
 
 - (BOOL)isExecuting {
@@ -667,6 +696,7 @@ static NSOperationQueue *sharedQueue = nil;
 			// See if we should pull from the cache rather than fetching the data
 			if ([self cachePolicy] == ASIOnlyLoadIfNotCachedCachePolicy) {
 				if ([self useDataFromCache]) {
+                    CACHEDBUG(@"%@: Using data from cache", [self.url absoluteURL]);
 					return;
 				}
 			} else if ([self cachePolicy] == ASIReloadIfDifferentCachePolicy) {
@@ -682,9 +712,14 @@ static NSOperationQueue *sharedQueue = nil;
 					if (lastModified) {
 						[[self requestHeaders] setObject:lastModified forKey:@"If-Modified-Since"];
 					}
+                    if (etag || lastModified)
+                    {
+                        CACHEDBUG(@"%@: Conditional request headers set", [self.url absoluteURL]);
+                    }
 				}
 			}
 		}
+        CACHEDBUG(@"%@: Loading from network", [self.url absoluteURL]);
 
 		[self applyAuthorizationHeader];
 		
@@ -1688,7 +1723,7 @@ static NSOperationQueue *sharedQueue = nil;
 		[[self connectionInfo] setObject:[NSDate dateWithTimeIntervalSinceNow:[self persistentConnectionTimeoutSeconds]] forKey:@"expires"];
 	}
 	
-	if ([self isCancelled] || [self error]) {
+    if ([self isCancelled] || [self error]) {
 		return;
 	}
 	
@@ -1711,6 +1746,12 @@ static NSOperationQueue *sharedQueue = nil;
 
     [failedRequest reportFailure];
 	
+    if (!inProgress)
+    {
+        // if we're not in progress, we can't notify the queue we've finished (doing so can cause a crash later on)
+        // "markAsFinished" will be at the start of main() when we are started
+        return;
+    }
 	// markAsFinished may well cause this object to be dealloced
 	[self retain];
 	[self markAsFinished];
@@ -2811,13 +2852,22 @@ static NSOperationQueue *sharedQueue = nil;
 		CFMakeCollectable(proxyAuthentication);
 	}
 
-	[self willChangeValueForKey:@"isFinished"];
-	[self willChangeValueForKey:@"isExecuting"];
+    BOOL wasInProgress = inProgress;
+    BOOL wasFinished = finished;
+
+    if (!wasFinished)
+        [self willChangeValueForKey:@"isFinished"];
+    if (wasInProgress)
+        [self willChangeValueForKey:@"isExecuting"];
+
 	[self setInProgress:NO];
 	[self setStatusTimer:nil];
+    finished = YES;
 
-	[self didChangeValueForKey:@"isExecuting"];
-	[self didChangeValueForKey:@"isFinished"];
+    if (wasInProgress)
+        [self didChangeValueForKey:@"isExecuting"];
+    if (!wasFinished)
+        [self didChangeValueForKey:@"isFinished"];
 
 	CFRunLoopStop(CFRunLoopGetCurrent());
 
@@ -2920,7 +2970,17 @@ static NSOperationQueue *sharedQueue = nil;
 		}
 		
 		NSString *reason = @"A connection failure occurred";
-		
+
+		if ([[underlyingError domain] isEqualToString:(NSString *)kCFErrorDomainCFNetwork]) {
+			switch (underlyingError.code)
+			{
+				case kCFHostErrorUnknown:
+                                case kCFHostErrorHostNotFound:
+					reason = @"Hostname could not be resolved";
+					break;
+			}
+		}
+
 		// We'll use a custom error message for SSL errors, but you should always check underlying error if you want more details
 		// For some reason SecureTransport.h doesn't seem to be available on iphone, so error codes hard-coded
 		// Also, iPhone seems to handle errors differently from Mac OS X - a self-signed certificate returns a different error code on each platform, so we'll just provide a general error
@@ -3901,6 +3961,14 @@ static NSOperationQueue *sharedQueue = nil;
 	[bandwidthThrottlingLock unlock];
 }
 #endif
+
+#pragma mark queue
+
+// Returns the shared queue
++ (NSOperationQueue *)sharedQueue
+{
+    return [[sharedQueue retain] autorelease];
+}
 
 #pragma mark cache
 

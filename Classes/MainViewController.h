@@ -48,6 +48,7 @@
 - (void)updateTags;
 
 - (IBAction)updateLiveStreamPhotos;
+- (IBAction)refreshStream;
 - (void)downloadNewLiveStreamPhotos;
 - (void)imageFetchComplete:(ASIHTTPRequest *)request;
 - (void)imageDownloadingFinished;

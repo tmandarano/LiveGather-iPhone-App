@@ -3,7 +3,7 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1024</int>
 		<string key="IBDocument.SystemVersion">10F569</string>
-		<string key="IBDocument.InterfaceBuilderVersion">802</string>
+		<string key="IBDocument.InterfaceBuilderVersion">804</string>
 		<string key="IBDocument.AppKitVersion">1038.29</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
@@ -113,7 +113,7 @@
 					<object class="IBUIButton" id="946257398">
 						<reference key="NSNextResponder" ref="883825266"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{127, 186}, {66, 63}}</string>
+						<string key="NSFrame">{{232, 96}, {66, 63}}</string>
 						<reference key="NSSuperview" ref="883825266"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -134,7 +134,7 @@
 					<object class="IBUIButton" id="730137561">
 						<reference key="NSNextResponder" ref="883825266"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{238, 186}, {54, 63}}</string>
+						<string key="NSFrame">{{240, 187}, {50, 62}}</string>
 						<reference key="NSSuperview" ref="883825266"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -155,7 +155,7 @@
 					<object class="IBUIButton" id="825721929">
 						<reference key="NSNextResponder" ref="883825266"/>
 						<int key="NSvFlags">292</int>
-						<string key="NSFrame">{{231, 96}, {69, 63}}</string>
+						<string key="NSFrame">{{125, 186}, {69, 63}}</string>
 						<reference key="NSSuperview" ref="883825266"/>
 						<bool key="IBUIOpaque">NO</bool>
 						<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
@@ -339,15 +339,6 @@
 					<int key="connectionID">132</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBCocoaTouchEventConnection" key="connection">
-						<string key="label">updateLiveStreamPhotos</string>
-						<reference key="source" ref="589216670"/>
-						<reference key="destination" ref="372490531"/>
-						<int key="IBEventType">7</int>
-					</object>
-					<int key="connectionID">135</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBCocoaTouchOutletConnection" key="connection">
 						<string key="label">uploadPhotoButton</string>
 						<reference key="source" ref="372490531"/>
@@ -396,6 +387,15 @@
 					</object>
 					<int key="connectionID">153</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">updateLiveStreamPhotos</string>
+						<reference key="source" ref="589216670"/>
+						<reference key="destination" ref="372490531"/>
+						<int key="IBEventType">7</int>
+					</object>
+					<int key="connectionID">157</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -428,12 +428,12 @@
 							<reference ref="349976664"/>
 							<reference ref="758308304"/>
 							<reference ref="923026723"/>
-							<reference ref="825721929"/>
 							<reference ref="1062407400"/>
-							<reference ref="946257398"/>
-							<reference ref="730137561"/>
 							<reference ref="947198853"/>
 							<reference ref="589216670"/>
+							<reference ref="730137561"/>
+							<reference ref="946257398"/>
+							<reference ref="825721929"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -559,15 +559,15 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">AUL+AABDOgAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABCDAAAw3cAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDdAAAw3cAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABDbgAAw3cAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABDZwAAwx0AAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABC+gAAw30AAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -594,7 +594,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">155</int>
+			<int key="maxID">157</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -606,6 +606,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>refreshStream</string>
 							<string>showInfo</string>
 							<string>updateLiveStreamPhotos</string>
 							<string>uploadPhoto</string>
@@ -613,6 +614,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -623,6 +625,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>refreshStream</string>
 							<string>showInfo</string>
 							<string>updateLiveStreamPhotos</string>
 							<string>uploadPhoto</string>
@@ -630,6 +633,10 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">refreshStream</string>
+								<string key="candidateClassName">id</string>
+							</object>
 							<object class="IBActionInfo">
 								<string key="name">showInfo</string>
 								<string key="candidateClassName">id</string>
@@ -808,7 +815,7 @@
 				<string>{112, 120}</string>
 				<string>{90, 103}</string>
 				<string>{47, 43}</string>
-				<string>{83, 98}</string>
+				<string>{50, 62}</string>
 				<string>{420, 91}</string>
 				<string>{112, 101}</string>
 				<string>{96, 89}</string>

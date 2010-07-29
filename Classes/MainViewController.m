@@ -55,8 +55,9 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	[uploadViewController showUserImageControlOption];
-	[self presentModalViewController:uploadViewController animated:YES];
+	NSLog(@"%d", [liveStreamObjects count]);
+	//[uploadViewController showUserImageControlOption];
+	//[self presentModalViewController:uploadViewController animated:YES];
 }
 
 - (IBAction)viewLiveStream {
@@ -77,6 +78,56 @@
 		[label setText:[NSString stringWithFormat:@"#%@",[tag tag]]];
 		[tagsScrollView addSubview:label];
 		currentPointInScrollView += label.frame.size.width;
+	}
+}
+
+- (IBAction)refreshStream {
+	NSLog(@"Drawing objects to stream view");
+	
+	int numImageViewsToPlace = [liveStreamObjects count];
+	
+	NSLog(@"%d", numImageViewsToPlace);
+	
+	int numRows = 2;
+	int numCols = 0;
+	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+	
+	[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+		
+		//UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
+		
+		if(row == 1)
+		{
+			[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else {
+			[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+			//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+		}
+		
+		//[liveStreamPreviewScrollView addSubview:imageView];
+		[liveStreamPreviewScrollView addSubview:photo];
+		
+		NSLog(@"row: %d", row);
+		NSLog(@"col: %d", col);
 	}
 }
 
@@ -107,7 +158,7 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com%@", photo.photoURL]]];
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%@/3", photo.photoID]]];
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", photo.photoName]]];
 		//[request setDownloadProgressDelegate:imageProgressIndicator1];
 		[networkQueue addOperation:request];
@@ -148,7 +199,9 @@
 			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
 			
 			//UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
-						
+			//UIButton *button = [[UIButton alloc] init];
+			//[button setBackgroundImage:photo.photoImage forState:UIControlStateNormal]
+			
 			if(row == 1)
 			{
 				[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
@@ -185,7 +238,7 @@
 
 //<!--End Custom Methods for this Class
 
-- (IBAction)showInfo {    
+- (IBAction)showInfo {
 	
 	FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideView" bundle:nil];
 	controller.delegate = self;

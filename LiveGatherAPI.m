@@ -148,6 +148,8 @@
 		[photo setPhotoTags:tags];
 		
 		[returnArray addObject:photo];
+        
+        [photo release];
 		
 		for(NSDictionary *tag in tags) {
 			//NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
@@ -158,6 +160,8 @@
 	
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 	
+    [returnArray release];
+    
 	return arr;
 }
 

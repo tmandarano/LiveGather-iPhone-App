@@ -20,8 +20,6 @@
 #define kLiveStreamPreviewImageHeight 61
 #define kLiveStreamPreviewStaticHeight 149
 
-@synthesize appResourceManager;
-
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
@@ -32,16 +30,21 @@
 
 
 - (void)viewDidLoad {
-	appResourceManager = [[ResourceManager alloc] init];
 	uploadViewController = [[UploadPhotoViewController alloc] init];
 	liveStreamView = [[LiveStreamViewController alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
+	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
 	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
 	
+	[liveStreamPreviewScrollView setDelegate:self];
+	
+	if (!visibleLiveStreamItems) visibleLiveStreamItems = [[NSMutableSet alloc] init];
+	if (!recycledLiveStreamItems) recycledLiveStreamItems = [[NSMutableSet alloc] init];
+		
 	[refreshLiveStreamMiniViewButton setFrame:CGRectMake(277, 419, 35, 32)];
 	
 	[super viewDidLoad];
@@ -81,18 +84,46 @@
 	}
 }
 
-- (IBAction)refreshStream {
-	NSLog(@"Drawing objects to stream view");
-	
-	int numImageViewsToPlace = [liveStreamObjects count];
-	
-	NSLog(@"%d", numImageViewsToPlace);
+- (void)drawItemsToLiveStream {	
+	if ([liveStreamObjects count] > 0) {
+		NSLog(@" We have items");
+		int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
+		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
+		for (LGPhotoView *photoView in visibleLiveStreamItems) {
+			if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
+				[recycledLiveStreamItems addObject:photoView];
+				[photoView removeFromSuperview];
+			}
+		}
+		[visibleLiveStreamItems minusSet:recycledLiveStreamItems];
+		
+		for (int i = firstIndexVisibleInStream; i <= lastIndexVisibleInStream; i++) {
+			if (![self isDisplayingItemForIndex:i]) {
+				LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
+				if (photoView == nil) {
+					photoView = [[[LGPhotoView alloc] init] autorelease];
+				}
+				photoView = [self configureItem:photoView forIndex:i];
+				[liveStreamPreviewScrollView addSubview:photoView];
+				[visibleLiveStreamItems addObject:photoView];
+			}
+		}
+	}
+	else {
+		[self downloadNewLiveStreamPhotos];
+	}
+
+}
+
+- (int)liveStreamItemsCurrentlyInView:(NSString *)index {
+	NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
+	int firstIndex = 0;
+	int lastIndex = 0;
 	
 	int numRows = 2;
 	int numCols = 0;
-	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
 	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		
 		if(row == 0)
@@ -102,33 +133,152 @@
 	}
 	
 	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-	
+	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
 	[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
+	CGRect visibleBoundsOfView = liveStreamPreviewScrollView.bounds;
+		
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		int col = i / numRows;
 		
-		LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
-		
-		//UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
-		
 		if(row == 1)
 		{
-			[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+				int indexNum = ((2 * col) + row);
+				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+			}
 		}
 		else {
-			[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
-			//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+				int indexNum = ((2 * col) + row);
+				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+			}
 		}
-		
-		//[liveStreamPreviewScrollView addSubview:imageView];
-		[liveStreamPreviewScrollView addSubview:photo];
-		
-		NSLog(@"row: %d", row);
-		NSLog(@"col: %d", col);
 	}
+	
+	firstIndex = [[arrayOfCellsInView lastObject] intValue];
+	lastIndex = [[arrayOfCellsInView lastObject] intValue];
+	
+	for (int i =0; i < [arrayOfCellsInView count]; i++) {		
+		if ([[arrayOfCellsInView objectAtIndex:i] intValue] < firstIndex) {
+			firstIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+		}
+		if([[arrayOfCellsInView objectAtIndex:i] intValue] > lastIndex) {
+			lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+		}
+	}
+	
+	if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
+		firstIndex -= 2;
+	}
+	
+	if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 2;
+	}
+	else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 1;
+	}
+		
+	int returnVal = 0;
+	
+	if ([index isEqualToString:@"first"]) {
+		returnVal = firstIndex;
+	}
+	else if([index isEqualToString:@"last"]) {
+		returnVal = lastIndex;
+	}
+	else {
+		returnVal = -1;
+	}
+	
+	return returnVal;
+}
+
+- (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
+	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[liveStreamObjects objectAtIndex:index]];
+	photoView.frame = [self getRectForItemInLiveStream:index];
+	//
+	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
+	//
+	photoView.index = index;
+	return photoView;
+}
+
+- (int)numberOfImagesForStream {
+	return [liveStreamObjects count];
+}
+
+- (BOOL)isDisplayingItemForIndex:(int)index {
+	BOOL foundCell = NO;
+	for (LGPhotoView *photoView in visibleLiveStreamItems) {
+		if (photoView.index == index) {
+			foundCell = YES;
+			break;
+		}
+	}
+	return foundCell;
+}
+
+- (CGRect)getRectForItemInLiveStream:(int)index {
+	CGRect itemRect;
+	
+	int numRows = 2;
+	int numCols = 0;
+	
+	for (int i = 0; i <= index; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	for (int i = 0; i <= index; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		if(((2 * col) + row) == index)
+		{
+			if(row == 1)
+			{
+				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			}
+			else {
+				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight);
+			}
+			break;
+		}
+	}
+	
+	return itemRect;
+}
+
+- (LGPhotoView *)dequeueRecycledLiveStreamView {
+	LGPhotoView *photoView = [recycledLiveStreamItems anyObject];
+	if (photoView) {
+		[[photoView retain] autorelease];
+		[recycledLiveStreamItems removeObject:photoView];
+	}
+	return photoView;
+}
+
+- (IBAction)refreshStream {
+	for (int i = 0; i < [liveStreamObjects count]; i++) {
+		if ([self isDisplayingItemForIndex:i]) {
+			NSLog(@"Displaying %d", i);
+		}
+		else {
+			NSLog(@"Not displaying %d", i);
+		}
+
+	}
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self drawItemsToLiveStream];
 }
 
 - (IBAction)updateLiveStreamPhotos {	
@@ -142,15 +292,13 @@
 }
 
 - (void)downloadNewLiveStreamPhotos {
-	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:10]];
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:15]];
 	
 	if(!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];
 	}
 	[networkQueue reset];
-	//[networkQueue setDownloadProgressDelegate:progressIndicator];
 	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
-	//[networkQueue setRequestDidFailSelector:@selector(imageFetchFailed:)];
 	[networkQueue setShowAccurateProgress:YES];
 	[networkQueue setDelegate:self];
 	
@@ -158,23 +306,48 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%@/3", photo.photoID]]];
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.jpg", photo.photoName]]];
-		//[request setDownloadProgressDelegate:imageProgressIndicator1];
-		[networkQueue addOperation:request];
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+		
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		
+		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
+			[networkQueue addOperation:request];
+		}
+		else {
+			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+			[img setID:photo.photoID];
+			[liveStreamObjects addObject:img];
+			[self imageFetchComplete:nil];
+		}
 	}
 	[networkQueue go];
 }
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
+	if (request == nil) {
+		[self drawItemsToLiveStream];
+	}
+	
 	if(networkQueue.requestsCount == 0)
 	{
-		NSLog(@"Drawing objects to stream view");
+		if (request) {
+			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+			[photo setID:[photoID intValue]];
+			[photo setPhotoIndex:[liveStreamObjects count]];
+			LGPhotoView *photoView = [[LGPhotoView alloc] init];
+			[photoView setPhoto:photo];
+			[photoView setIndex:photo.photoIndex];
+			[liveStreamObjects addObject:photo];
+			[liveStreamObjectViews addObject:photoView];
+		}
 		
-		int numImageViewsToPlace = [liveStreamObjects count];
+		[self drawItemsToLiveStream];
 		
-		NSLog(@"%d", numImageViewsToPlace);
-		
+		/*int numImageViewsToPlace = [liveStreamObjects count];
+				
 		int numRows = 2;
 		int numCols = 0;
 		int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
@@ -197,33 +370,29 @@
 			int col = i / numRows;
 			
 			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
-			
-			//UIImageView *imageView = [[UIImageView alloc] initWithImage:photo.photoImage];
-			//UIButton *button = [[UIButton alloc] init];
-			//[button setBackgroundImage:photo.photoImage forState:UIControlStateNormal]
+			LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:photo];
 			
 			if(row == 1)
 			{
-				[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-				//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+				[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
 			}
 			else {
-				[photo setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
-				//[imageView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
+				[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
 			}
 			
-			//[liveStreamPreviewScrollView addSubview:imageView];
-			[liveStreamPreviewScrollView addSubview:photo];
-			
-			NSLog(@"row: %d", row);
-			NSLog(@"col: %d", col);
-		}
+			[liveStreamPreviewScrollView addSubview:photoView];
+		}*/
 	}
 	else {
-		NSLog(@"Adding Object for Stream");
-		UIImage *img = [[UIImage alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-		LGPhoto *photo = [[LGPhoto alloc] init];
-		[photo setImage:img];
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+		[photo setID:[photoID intValue]];
+		LGPhotoView *photoView = [[LGPhotoView alloc] init];
+		[photoView setPhoto:photo];
+		[photo setPhotoIndex:[liveStreamObjects count]];
+		[photoView setIndex:photo.photoIndex];
+		[liveStreamObjectViews addObject:photoView];
 		[liveStreamObjects addObject:photo];
 	}
 }

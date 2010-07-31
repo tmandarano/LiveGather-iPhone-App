@@ -138,7 +138,7 @@
 		
 		NSLog(@"Processing Photo: %@", ID);
 		
-		[photo setID:ID];
+		[photo setID:[ID intValue]];
 		[photo setPhotoName:name];
 		[photo setPhotoURL:URL];
 		[photo setPhotoUserID:userID];

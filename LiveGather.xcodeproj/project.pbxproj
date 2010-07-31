@@ -65,6 +65,8 @@
 		119597B311F27004006BD793 /* top_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597AB11F27004006BD793 /* top_toolbar.png */; };
 		119597B711F270A5006BD793 /* top_bar_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B611F270A5006BD793 /* top_bar_logo@2x.png */; };
 		119597B911F270AD006BD793 /* top_bar_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B811F270AD006BD793 /* top_bar_logo.png */; };
+		11B19E4D1203C658006E4CDF /* LGPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 11B19E4C1203C658006E4CDF /* LGPhotoView.m */; };
+		11B19FA71203FB7D006E4CDF /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11B19FA61203FB7D006E4CDF /* Default@2x.png */; };
 		11BAD6D311FD5D1700FE4DE4 /* LGTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BAD6D211FD5D1700FE4DE4 /* LGTag.m */; };
 		11BAD6F611FD640700FE4DE4 /* upload_button_homescreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD6EC11FD640700FE4DE4 /* upload_button_homescreen.png */; };
 		11BAD6F711FD640700FE4DE4 /* mystream_button_homescreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BAD6ED11FD640700FE4DE4 /* mystream_button_homescreen.png */; };
@@ -227,6 +229,9 @@
 		119597AB11F27004006BD793 /* top_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_toolbar.png; sourceTree = "<group>"; };
 		119597B611F270A5006BD793 /* top_bar_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_bar_logo@2x.png"; sourceTree = "<group>"; };
 		119597B811F270AD006BD793 /* top_bar_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_bar_logo.png; sourceTree = "<group>"; };
+		11B19E4B1203C658006E4CDF /* LGPhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhotoView.h; sourceTree = "<group>"; };
+		11B19E4C1203C658006E4CDF /* LGPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhotoView.m; sourceTree = "<group>"; };
+		11B19FA61203FB7D006E4CDF /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		11BAD6D111FD5D1700FE4DE4 /* LGTag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTag.h; sourceTree = "<group>"; };
 		11BAD6D211FD5D1700FE4DE4 /* LGTag.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTag.m; sourceTree = "<group>"; };
 		11BAD6EC11FD640700FE4DE4 /* upload_button_homescreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = upload_button_homescreen.png; sourceTree = "<group>"; };
@@ -609,6 +614,7 @@
 				1195978E11F26C35006BD793 /* Retina Display */,
 				11769C3B11851B0C0036C548 /* gray.jpg */,
 				11D1FD1411760E76007B66EF /* Default.png */,
+				11B19FA61203FB7D006E4CDF /* Default@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -620,6 +626,8 @@
 				1176F44911FA0B2300CCA857 /* ASIHTTPRequest */,
 				112A018311E52ADB001B988A /* LiveGatherAPI.h */,
 				112A018411E52ADB001B988A /* LiveGatherAPI.m */,
+				11B19E4B1203C658006E4CDF /* LGPhotoView.h */,
+				11B19E4C1203C658006E4CDF /* LGPhotoView.m */,
 				1176F4AA11FA0E6C00CCA857 /* LGPhoto.h */,
 				1176F4AB11FA0E6C00CCA857 /* LGPhoto.m */,
 				11BAD6D111FD5D1700FE4DE4 /* LGTag.h */,
@@ -880,6 +888,7 @@
 				11BAD71211FD642200FE4DE4 /* bottom_bar_button_pressed@2x.png in Resources */,
 				11BAD71311FD642200FE4DE4 /* followers_table_cell_bg@2x.png in Resources */,
 				11BAD7B211FE512000FE4DE4 /* FollowersView.xib in Resources */,
+				11B19FA71203FB7D006E4CDF /* Default@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -913,6 +922,7 @@
 				1176F4AC11FA0E6C00CCA857 /* LGPhoto.m in Sources */,
 				11BAD6D311FD5D1700FE4DE4 /* LGTag.m in Sources */,
 				11BAD7C311FE518100FE4DE4 /* FollowersViewController.m in Sources */,
+				11B19E4D1203C658006E4CDF /* LGPhotoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

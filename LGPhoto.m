@@ -15,23 +15,26 @@
 	
 	if(self = [super init])
 	{
-		[self setUserInteractionEnabled:YES];
 	}
 	
 	return self;
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	NSLog(@"%@", photoID);
-}
 
-
-- (NSString *)photoID {
+- (int)photoID {
 	return photoID;
 }
 
-- (void)setID:(NSString *)ID {
+- (void)setID:(int)ID {
 	photoID = ID;
+}
+
+- (void)setPhotoIndex:(int)index {
+	photoIndex = index;
+}
+
+- (int)photoIndex {
+	return photoIndex;
 }
 
 - (NSString *)photoURL {
@@ -93,14 +96,6 @@
 
 - (void)setPhotoUserID:(NSString *)userid {
 	photoUserID = userid;
-}
-
-- (UIImage *)photoImage {
-	return photoImage;
-}
-
-- (void)setPhotoImage:(UIImage *)image {
-	photoImage = image;
 }
 
 - (NSString *)photoPath {

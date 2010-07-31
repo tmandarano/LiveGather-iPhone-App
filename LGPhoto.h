@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 
 
-@interface LGPhoto : UIImageView {
-	NSString	*photoID;
+@interface LGPhoto : UIImage {
+	int			photoID;
 	NSString	*photoURL;
 	NSString	*photoName;
 	NSString	*photoLocationLatitude;
@@ -19,14 +19,17 @@
 	NSArray		*photoTags;
 	NSString	*photoDateAdded;
 	NSString	*photoUserID;
-	UIImage		*photoImage;
 	NSString	*photoPath;
+	int			photoIndex;
 }
 
 //Getters and setters
 
-- (NSString *)photoID;
-- (void)setID:(NSString *)ID;
+- (int)photoID;
+- (void)setID:(int)ID;
+
+- (void)setPhotoIndex:(int)index;
+- (int)photoIndex;
 
 - (NSString *)photoURL;
 - (void)setPhotoURL:(NSString *)url;
@@ -49,9 +52,6 @@
 
 - (NSString *)photoUserID;
 - (void)setPhotoUserID:(NSString *)userid;
-
-- (UIImage *)photoImage;
-- (void)setPhotoImage:(UIImage *)image;
 
 - (NSString *)photoPath;
 - (void)setPhotoPath:(NSString *)path;

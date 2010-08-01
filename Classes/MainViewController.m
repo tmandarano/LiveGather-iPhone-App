@@ -86,7 +86,6 @@
 
 - (void)drawItemsToLiveStream {	
 	if ([liveStreamObjects count] > 0) {
-		NSLog(@" We have items");
 		int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
 		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 		for (LGPhotoView *photoView in visibleLiveStreamItems) {
@@ -227,7 +226,7 @@
 	int numRows = 2;
 	int numCols = 0;
 	
-	for (int i = 0; i <= index; i++) {
+	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		
 		if(row == 0)
@@ -236,7 +235,7 @@
 		}
 	}
 	
-	for (int i = 0; i <= index; i++) {
+	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		int col = i / numRows;
 		
@@ -266,7 +265,7 @@
 }
 
 - (IBAction)refreshStream {
-	for (int i = 0; i < [liveStreamObjects count]; i++) {
+	/*for (int i = 0; i < [liveStreamObjects count]; i++) {
 		if ([self isDisplayingItemForIndex:i]) {
 			NSLog(@"Displaying %d", i);
 		}
@@ -274,7 +273,7 @@
 			NSLog(@"Not displaying %d", i);
 		}
 
-	}
+	}*/
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -345,43 +344,6 @@
 		}
 		
 		[self drawItemsToLiveStream];
-		
-		/*int numImageViewsToPlace = [liveStreamObjects count];
-				
-		int numRows = 2;
-		int numCols = 0;
-		int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
-		
-		for (int i = 0; i < numImageViewsToPlace; i++) {
-			int row = i % numRows;
-			
-			if(row == 0)
-			{
-				numCols += 1;
-			}
-		}
-		
-		int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-		
-		[liveStreamPreviewScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-		
-		for (int i = 0; i < numImageViewsToPlace; i++) {
-			int row = i % numRows;
-			int col = i / numRows;
-			
-			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
-			LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:photo];
-			
-			if(row == 1)
-			{
-				[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			}
-			else {
-				[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageHeight, kLiveStreamPreviewImageHeight)];
-			}
-			
-			[liveStreamPreviewScrollView addSubview:photoView];
-		}*/
 	}
 	else {
 		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];

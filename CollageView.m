@@ -14,11 +14,7 @@
 @synthesize liveStreamViewController;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	CGPoint coord = [[touches anyObject] locationInView:self];
-	float xCoord = coord.x;
-	float yCoord = coord.y;
-	liveStreamViewController = [[LiveStreamViewController alloc] init];
-	[liveStreamViewController userTouchedLiveStreamView:xCoord andYCoord:yCoord];
+	
 }
 
 @end

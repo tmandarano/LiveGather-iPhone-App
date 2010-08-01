@@ -14,28 +14,47 @@
 #import "CollageItem.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
+#import "LGPhotoView.h"
+#import "ASIHTTPRequest.h"
+#import "ASINetworkQueue.h"
 
-@class CollageView;
+@class CollageView, ASINetworkQueue;
 
-@interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate> {
+@interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate> {
 	IBOutlet UIButton			*backButton;
 	IBOutlet UILabel			*userNameLabel;
 	//IBOutlet UIScrollView		*liveStreamScrollView;
 	IBOutlet UIButton			*searchButton;
 	IBOutlet UIButton			*refreshButton;
-	NSMutableArray				*liveStreamObjects;
 	LiveGatherAPI				*applicationAPI;
 	MBProgressHUD				*HUD;
 	CollageView					*liveStreamScrollView;
+	ASINetworkQueue				*networkQueue;
+	
+	NSMutableArray				*liveStreamObjects;
+	NSMutableArray				*liveStreamObjectViews;
+	NSMutableSet				*visibleLiveStreamItems;
+	NSMutableSet				*recycledLiveStreamItems;
 }
 
 @property (nonatomic, retain) CollageView *liveStreamScrollView;
 
 - (IBAction)goHome;
 - (void)updateLiveStreamPhotos;
-- (void)newLiveStreamPhotosDownloaded;
+- (void)downloadNewLiveStreamPhotos;
 - (IBAction)refreshLiveStream;
 - (IBAction)searchLiveSteam;
-- (void)userTouchedLiveStreamView:(float)x_coord andYCoord:(float)y_coord;
+
+- (void)imageFetchComplete:(ASIHTTPRequest *)request;
+- (void)imageDownloadingFinished;
+
+- (int)liveStreamItemsCurrentlyInView:(NSString *)index;
+- (CGRect)getRectForItemInLiveStream:(int)index;
+
+- (void)drawItemsToLiveStream;
+- (int)numberOfImagesForStream;
+- (BOOL)isDisplayingItemForIndex:(int)index;
+- (LGPhotoView *)dequeueRecycledLiveStreamView;
+- (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
 
 @end

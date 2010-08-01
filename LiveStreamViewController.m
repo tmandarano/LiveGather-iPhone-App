@@ -39,14 +39,70 @@
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	//streamArray = [NSMutableArray new];
 	//streamContainersArray = [NSMutableArray new];
+	
 	liveStreamScrollView = [[CollageView alloc] initWithFrame:CGRectMake(0, 45, 320, 415)];
 	[liveStreamScrollView setBackgroundColor:[UIColor blackColor]];
+	[liveStreamScrollView setDelegate:self];
+	
+	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
+	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
+	
+	if (!visibleLiveStreamItems) visibleLiveStreamItems = [[NSMutableSet alloc] init];
+	if (!recycledLiveStreamItems) recycledLiveStreamItems = [[NSMutableSet alloc] init];
+	
 	[self.view addSubview:liveStreamScrollView];
 	[self updateLiveStreamPhotos];
-    [super viewDidLoad];
+	
+	[super viewDidLoad];
 }
 
-//Custom Methods
+//Custom Method
+
+- (void)drawItemsToLiveStream {
+	if ([liveStreamObjects count] > 0) {
+		int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
+		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
+		for (LGPhotoView *photoView in visibleLiveStreamItems) {
+			if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
+				[recycledLiveStreamItems addObject:photoView];
+				[photoView removeFromSuperview];
+			}
+		}
+		[visibleLiveStreamItems minusSet:recycledLiveStreamItems];
+		
+		for (int i = firstIndexVisibleInStream; i <= lastIndexVisibleInStream; i++) {
+			if (![self isDisplayingItemForIndex:i]) {
+				LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
+				if (photoView == nil) {
+					photoView = [[[LGPhotoView alloc] init] autorelease];
+				}
+				photoView = [self configureItem:photoView forIndex:i];
+				[liveStreamScrollView addSubview:photoView];
+				[visibleLiveStreamItems addObject:photoView];
+			}
+		}
+	}
+	else {
+		//[self downloadNewLiveStreamPhotos];
+	}
+}
+
+- (LGPhotoView *)dequeueRecycledLiveStreamView {
+	LGPhotoView *photoView = [recycledLiveStreamItems anyObject];
+	if (photoView) {
+		[[photoView retain] autorelease];
+		[recycledLiveStreamItems removeObject:photoView];
+	}
+	return photoView;
+}
+
+- (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
+	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[liveStreamObjects objectAtIndex:index]];
+	photoView.frame = [self getRectForItemInLiveStream:index];
+	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
+	photoView.index = index;
+	return photoView;
+}
 
 - (void)updateLiveStreamPhotos {
 	HUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -54,16 +110,34 @@
 	HUD.delegate = self;
 	HUD.labelText = @"Loading";
 	HUD.detailsLabelText = @"Algorithm is Sorting ImageViews";
-	[HUD showWhileExecuting:@selector(newLiveStreamPhotosDownloaded) onTarget:self withObject:nil animated:YES];
+	//[HUD showWhileExecuting:@selector(downloadNewLiveStreamPhotos) onTarget:self withObject:nil animated:YES];
+	[self downloadNewLiveStreamPhotos];
 }
 
-- (void)newLiveStreamPhotosDownloaded {
-	/*int numImageViewsToPlace = 100;
+- (int)numberOfImagesForStream {
+	return [liveStreamObjects count];
+}
+
+- (BOOL)isDisplayingItemForIndex:(int)index {
+	BOOL foundCell = NO;
+	for (LGPhotoView *photoView in visibleLiveStreamItems) {
+		if (photoView.index == index) {
+			foundCell = YES;
+			break;
+		}
+	}
+	return foundCell;
+}
+
+- (int)liveStreamItemsCurrentlyInView:(NSString *)index {
+	NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
+	int firstIndex = 0;
+	int lastIndex = 0;
+	
 	int numRows = 3;
 	int numCols = 0;
-	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
 	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		
 		if(row == 0)
@@ -73,48 +147,83 @@
 	}
 	
 	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-	
+	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
 	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	CGRect visibleBoundsOfView = liveStreamScrollView.bounds;
 	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		int col = i / numRows;
 		
-		UIView *containerView = [[UIView alloc] init];
-		CollageItem *collageItem = [[CollageItem alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
-		collageItem.userInteractionEnabled = YES;
-		[collageItem setArrayLocation:i];
-		
 		if(row == 0)
 		{
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+				int indexNum = ((2 * col) + row);
+				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+			}
 		}
 		else if(row == 1) {
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+				int indexNum = ((2 * col) + row);
+				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+			}
 		}
 		else if(row == 2) {
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+				int indexNum = ((2 * col) + row);
+				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+			}
 		}
-		
-		[streamArray addObject:collageItem];
-		[streamContainersArray addObject:containerView];
-		[liveStreamScrollView addSubview:containerView];
-		[containerView addSubview:collageItem];
-		
-		NSLog(@"row: %d", row);
-		NSLog(@"col: %d", col);
-	}*/
+	}
+	
+	firstIndex = [[arrayOfCellsInView lastObject] intValue];
+	lastIndex = [[arrayOfCellsInView lastObject] intValue];
+	
+	for (int i =0; i < [arrayOfCellsInView count]; i++) {		
+		if ([[arrayOfCellsInView objectAtIndex:i] intValue] < firstIndex) {
+			firstIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+		}
+		if([[arrayOfCellsInView objectAtIndex:i] intValue] > lastIndex) {
+			lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+		}
+	}
+	
+	if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
+		firstIndex -= 2;
+	}
+	
+	if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 2;
+	}
+	else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 1;
+	}
+	
+	int returnVal = 0;
+	
+	if ([index isEqualToString:@"first"]) {
+		returnVal = firstIndex;
+	}
+	else if([index isEqualToString:@"last"]) {
+		returnVal = lastIndex;
+	}
+	else {
+		returnVal = -1;
+	}
+	
+	return returnVal;
 }
 
-- (IBAction)refreshLiveStream {
-	int numToAdd = 9;
-	int numCols = 0;
-	int numRows = 3;
+- (CGRect)getRectForItemInLiveStream:(int)index {
+	CGRect itemRect;
 	
-	for (int i = 0; i < numToAdd; i++) {
+	int numRows = 3;
+	int numCols = 0;
+	
+	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		
 		if(row == 0)
@@ -123,68 +232,111 @@
 		}
 	}
 	
-	int contentSizeAddition = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-	
-	[liveStreamScrollView setContentSize:CGSizeMake((liveStreamScrollView.contentSize.width + contentSizeAddition), (liveStreamScrollView.contentSize.height))];
-	
-	/*for (int i = 0; i < [streamArray count]; i++) {
-		CollageItem *item = [streamArray objectAtIndex:i];
-		[item setFrame:CGRectMake((item.frame.origin.x + contentSizeAddition), item.frame.origin.y, item.frame.size.width, item.frame.size.height)];
-	}
-	
-	for (int i = 0; i < numToAdd; i++) {
+	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		int col = i / numRows;
 		
-		UIView *containerView = [[UIView alloc] init];
-		CollageItem *collageItem = [[CollageItem alloc] initWithImage:[UIImage imageNamed:@"icon.png"]];
-		collageItem.userInteractionEnabled = YES;
-		[collageItem setArrayLocation:i];
-		
-		if(row == 0)
+		if(((2 * col) + row) == index)
 		{
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+			if(row == 0)
+			{
+				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			}
+			else if(row == 1) {
+				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			}
+			else if(row == 2) {
+				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+			}
+			break;
 		}
-		else if(row == 1) {
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		else if(row == 2) {
-			[containerView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-			[collageItem setFrame:CGRectMake(0, 0, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		
-		[streamArray addObject:collageItem];
-		[streamContainersArray addObject:containerView];
-		[liveStreamScrollView addSubview:containerView];
-		[containerView addSubview:collageItem];
-		
-		NSLog(@"row: %d", row);
-		NSLog(@"col: %d", col);
-	}*/
+	}
 	
-	[liveStreamScrollView setContentOffset:CGPointMake((contentSizeAddition - 15), 0.0) animated:NO];
-	
-	/*UIImageView *imageView = [streamArray objectAtIndex:3];
-	UIView *containerView = [streamContainersArray objectAtIndex:3];
-	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
-	[mapView setShowsUserLocation:YES];
-	NSLog(@"%f", imageView.frame.origin.x);
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:2.0];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
-	[imageView removeFromSuperview];
-	[containerView addSubview:mapView];
-	[UIView commitAnimations];*/
+	return itemRect;
 }
 
-- (void)userTouchedLiveStreamView:(float)x_coord andYCoord:(float)y_coord {
-	NSLog(@"%f %f", x_coord, y_coord);
+- (void)downloadNewLiveStreamPhotos; {
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:15]];
+	
+	if(!networkQueue) {
+		networkQueue = [[ASINetworkQueue alloc] init];
+	}
+	[networkQueue reset];
+	[networkQueue setRequestDidFinishSelector:@selector(imageFetchComplete:)];
+	[networkQueue setShowAccurateProgress:YES];
+	[networkQueue setDelegate:self];
+	
+	for (int i = 0; i < [liveStreamArray count]; i++) {
+		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
+		
+		ASIHTTPRequest *request;
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+		
+		NSFileManager *fileManager = [[NSFileManager alloc] init];
+		
+		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
+			[networkQueue addOperation:request];
+		}
+		else {
+			NSLog(@"Alright the image exists");
+			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+			[img setID:photo.photoID];
+			[liveStreamObjects addObject:img];
+			NSLog(@"%d", [liveStreamObjects count]);
+			[self imageFetchComplete:nil];
+		}
+	}
+	[networkQueue go];
 }
 
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	NSLog(@"Touuuuuucccchhhhhhh");
+- (void)imageFetchComplete:(ASIHTTPRequest *)request {
+	if (request == nil) {
+		
+	}
+	
+	if(networkQueue.requestsCount == 0)
+	{
+		if (request) {
+			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+			[photo setID:[photoID intValue]];
+			[photo setPhotoIndex:[liveStreamObjects count]];
+			LGPhotoView *photoView = [[LGPhotoView alloc] init];
+			[photoView setPhoto:photo];
+			[photoView setIndex:photo.photoIndex];
+			[liveStreamObjects addObject:photo];
+			[liveStreamObjectViews addObject:photoView];
+		}
+		
+		[self drawItemsToLiveStream];
+	}
+	else {
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+		[photo setID:[photoID intValue]];
+		LGPhotoView *photoView = [[LGPhotoView alloc] init];
+		[photoView setPhoto:photo];
+		[photo setPhotoIndex:[liveStreamObjects count]];
+		[photoView setIndex:photo.photoIndex];
+		[liveStreamObjectViews addObject:photoView];
+		[liveStreamObjects addObject:photo];
+	}
+}
+
+- (void)imageDownloadingFinished {
+	
+}
+
+- (IBAction)refreshLiveStream {
+	NSLog(@"Live: %d", [visibleLiveStreamItems count]);
+	NSLog(@"In the recycling bin: %d", [recycledLiveStreamItems count]);
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	[self drawItemsToLiveStream];
 }
 
 - (IBAction)searchLiveSteam {

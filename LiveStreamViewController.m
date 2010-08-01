@@ -77,6 +77,7 @@
 					photoView = [[[LGPhotoView alloc] init] autorelease];
 				}
 				photoView = [self configureItem:photoView forIndex:i];
+				[photoView setUserInteractionEnabled:YES];
 				[liveStreamScrollView addSubview:photoView];
 				[visibleLiveStreamItems addObject:photoView];
 			}

@@ -3,7 +3,7 @@
 	<data>
 		<int key="IBDocument.SystemTarget">1024</int>
 		<string key="IBDocument.SystemVersion">10F569</string>
-		<string key="IBDocument.InterfaceBuilderVersion">802</string>
+		<string key="IBDocument.InterfaceBuilderVersion">804</string>
 		<string key="IBDocument.AppKitVersion">1038.29</string>
 		<string key="IBDocument.HIToolboxVersion">461.00</string>
 		<object class="NSMutableDictionary" key="IBDocument.PluginVersions">
@@ -47,6 +47,14 @@
 						<int key="NSvFlags">274</int>
 						<object class="NSMutableArray" key="NSSubviews">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBUIImageView" id="803201548">
+								<reference key="NSNextResponder" ref="883825266"/>
+								<int key="NSvFlags">292</int>
+								<string key="NSFrame">{{0, 35}, {320, 425}}</string>
+								<reference key="NSSuperview" ref="883825266"/>
+								<bool key="IBUIUserInteractionEnabled">NO</bool>
+								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
+							</object>
 							<object class="IBUILabel" id="257082002">
 								<reference key="NSNextResponder" ref="883825266"/>
 								<int key="NSvFlags">292</int>
@@ -471,6 +479,14 @@
 					</object>
 					<int key="connectionID">187</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">chosenPhotoPreviewView</string>
+						<reference key="source" ref="372490531"/>
+						<reference key="destination" ref="803201548"/>
+					</object>
+					<int key="connectionID">190</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -518,6 +534,7 @@
 							<reference ref="781174154"/>
 							<reference ref="1038308416"/>
 							<reference ref="520435168"/>
+							<reference ref="803201548"/>
 						</object>
 						<reference key="parent" ref="127630630"/>
 					</object>
@@ -581,6 +598,11 @@
 						<reference key="object" ref="520435168"/>
 						<reference key="parent" ref="883825266"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">189</int>
+						<reference key="object" ref="803201548"/>
+						<reference key="parent" ref="883825266"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -615,6 +637,8 @@
 					<string>170.IBPluginDependency</string>
 					<string>188.IBPluginDependency</string>
 					<string>188.IBViewBoundsToFrameTransform</string>
+					<string>189.IBPluginDependency</string>
+					<string>189.IBViewBoundsToFrameTransform</string>
 					<string>34.IBEditorWindowLastContentRect</string>
 					<string>34.IBPluginDependency</string>
 					<string>34.IBViewBoundsToFrameTransform</string>
@@ -673,6 +697,10 @@
 					<object class="NSAffineTransform">
 						<bytes key="NSTransformStruct">P4AAAL+AAABDAwAAwfgAAA</bytes>
 					</object>
+					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAAAAAAAAw+UAAA</bytes>
+					</object>
 					<string>{{647, 291}, {320, 480}}</string>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
@@ -696,7 +724,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">188</int>
+			<int key="maxID">190</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -805,6 +833,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
 							<string>captionTextField</string>
+							<string>chosenPhotoPreviewView</string>
 							<string>locationLabel</string>
 							<string>refreshLocationButton</string>
 							<string>sendToFacebookButton</string>
@@ -816,6 +845,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>UIButton</string>
 							<string>UITextField</string>
+							<string>UIImageView</string>
 							<string>UILabel</string>
 							<string>UIButton</string>
 							<string>UIButton</string>
@@ -830,6 +860,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>backButton</string>
 							<string>captionTextField</string>
+							<string>chosenPhotoPreviewView</string>
 							<string>locationLabel</string>
 							<string>refreshLocationButton</string>
 							<string>sendToFacebookButton</string>
@@ -846,6 +877,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">captionTextField</string>
 								<string key="candidateClassName">UITextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">chosenPhotoPreviewView</string>
+								<string key="candidateClassName">UIImageView</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">locationLabel</string>

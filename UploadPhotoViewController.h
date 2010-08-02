@@ -24,6 +24,7 @@
 	IBOutlet UIButton			*refreshLocationButton;
 	IBOutlet UIButton			*sendToTwitterButton;
 	IBOutlet UIButton			*sendToFacebookButton;
+	IBOutlet UIImageView		*chosenPhotoPreviewView;
 	
 	MainViewController			*mainViewController;
 	LiveGatherAPI				*livegatherController;
@@ -36,5 +37,7 @@
 - (IBAction)sendToTwitter;
 - (IBAction)sendToFacebook;
 - (void)showUserImageControlOption;
+- (void)uploadImageToServer:(UIImage *)img;
+- (void)imageFinishedUploadingToServer:(NSString *)serverResponse;
 
 @end

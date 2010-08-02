@@ -58,9 +58,8 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	NSLog(@"%d", [liveStreamObjects count]);
-	//[uploadViewController showUserImageControlOption];
-	//[self presentModalViewController:uploadViewController animated:YES];
+	[uploadViewController showUserImageControlOption];
+	[self presentModalViewController:uploadViewController animated:YES];
 }
 
 - (IBAction)viewLiveStream {

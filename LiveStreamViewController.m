@@ -110,7 +110,7 @@
 	[self.view addSubview:HUD];
 	HUD.delegate = self;
 	HUD.labelText = @"Loading";
-	HUD.detailsLabelText = @"Algorithm is Sorting ImageViews";
+	HUD.detailsLabelText = @"Retrieving LiveStream";
 	//[HUD showWhileExecuting:@selector(downloadNewLiveStreamPhotos) onTarget:self withObject:nil animated:YES];
 	[self downloadNewLiveStreamPhotos];
 }

@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface LGPhoto : UIImage {
 	int			photoID;
 	NSString	*photoURL;

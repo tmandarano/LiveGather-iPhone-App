@@ -20,7 +20,6 @@
 	return self;
 }
 
-
 - (int)photoID {
 	return photoID;
 }

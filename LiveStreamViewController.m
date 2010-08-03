@@ -22,8 +22,15 @@
 #define kLiveStreamPreviewVerticalPadding 2
 #define kLiveStreamPreviewHorizontalPadding 2
 #define kLiveStreamPreviewImageWidth 125
-#define kLiveStreamPreviewImageHeight 129
+#define kLiveStreamPreviewImageHeight 135
 #define kLiveStreamPreviewStaticHeight 415
+//For Large View
+#define kLiveStreamStartPoint_X 15
+#define kLiveStreamStartPoint_Y 9
+#define kLiveStreamHorizontalPadding 7 //1/2 of 15 right?
+#define kLiveStreamImageWidth 290
+#define kLiveStreamImageHeight 360
+#define kLiveStreamLargeHeight 377
 
 // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
@@ -78,6 +85,7 @@
 				}
 				photoView = [self configureItem:photoView forIndex:i];
 				[photoView setUserInteractionEnabled:YES];
+				[photoView setDelegate:self];
 				[liveStreamScrollView addSubview:photoView];
 				[visibleLiveStreamItems addObject:photoView];
 			}
@@ -256,6 +264,10 @@
 	return itemRect;
 }
 
+- (void)photoViewWasTouchedWithID:(int)imgID {
+	
+}
+
 - (void)downloadNewLiveStreamPhotos; {
 	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:15]];
 	
@@ -271,17 +283,17 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/170/3", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]];
 		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
-		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
+		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]]) {
 			[networkQueue addOperation:request];
 		}
 		else {
 			NSLog(@"Alright the image exists");
-			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]];
 			[img setID:photo.photoID];
 			[liveStreamObjects addObject:img];
 			NSLog(@"%d", [liveStreamObjects count]);

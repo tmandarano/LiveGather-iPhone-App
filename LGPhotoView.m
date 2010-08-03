@@ -11,6 +11,8 @@
 
 @implementation LGPhotoView
 
+@synthesize delegate;
+
 - (id)init {
 	
 	if(self = [super init])
@@ -21,8 +23,13 @@
 	return self;
 }
 
+- (void)setDelegate:(id <LGPhotoDelegate>)dlg {
+	delegate = dlg;
+}
+
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	NSLog(@"%d", [self photoID]);
+	[delegate photoViewWasTouchedWithID:[self photoID]];
 }
 
 - (void)setIndex:(int)newIndex {

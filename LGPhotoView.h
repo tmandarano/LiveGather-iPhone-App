@@ -9,11 +9,22 @@
 #import <Foundation/Foundation.h>
 #import "LGPhoto.h"
 
+@class LGPhotoView;
+@protocol LGPhotoDelegate <NSObject>
+@optional
+- (void)photoViewWasTouchedWithID:(int)imgID;
+@end
+
 
 @interface LGPhotoView : UIImageView {
 	LGPhoto		*photo;
 	int			index;
+	id <LGPhotoDelegate> delegate;
 }
+
+@property (nonatomic, assign) id <LGPhotoDelegate> delegate;
+
+- (void)setDelegate:(id <LGPhotoDelegate>)dlg;
 
 - (void)setIndex:(int)newIndex;
 - (int)index;

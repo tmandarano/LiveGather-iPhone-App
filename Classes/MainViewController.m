@@ -32,6 +32,7 @@
 - (void)viewDidLoad {
 	uploadViewController = [[UploadPhotoViewController alloc] init];
 	liveStreamView = [[LiveStreamViewController alloc] init];
+	singlePhotoView = [[SinglePhotoViewController alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
@@ -50,16 +51,11 @@
 	[super viewDidLoad];
 }
 
-
-- (void)flipsideViewControllerDidFinish:(FlipsideViewController *)controller {
-	[self dismissModalViewControllerAnimated:YES];
-}
-
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	[uploadViewController showUserImageControlOption];
 	[self presentModalViewController:uploadViewController animated:YES];
+	[uploadViewController showUserImageControlOption];
 }
 
 - (IBAction)viewLiveStream {
@@ -103,6 +99,7 @@
 				}
 				photoView = [self configureItem:photoView forIndex:i];
 				[photoView setUserInteractionEnabled:YES];
+				[photoView setDelegate:self];
 				[liveStreamPreviewScrollView addSubview:photoView];
 				[visibleLiveStreamItems addObject:photoView];
 			}
@@ -276,6 +273,11 @@
 	}*/
 }
 
+- (void)photoViewWasTouchedWithID:(int)imgID {
+	[self presentModalViewController:singlePhotoView animated:YES];
+	[singlePhotoView showImageWithID:imgID];
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	[self drawItemsToLiveStream];
 }
@@ -368,17 +370,6 @@
 }
 
 //<!--End Custom Methods for this Class
-
-- (IBAction)showInfo {
-	
-	FlipsideViewController *controller = [[FlipsideViewController alloc] initWithNibName:@"FlipsideView" bundle:nil];
-	controller.delegate = self;
-	
-	controller.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-	[self presentModalViewController:controller animated:YES];
-	
-	[controller release];
-}
 
 
 - (void)didReceiveMemoryWarning {

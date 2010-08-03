@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		112A018511E52ADB001B988A /* LiveGatherAPI.m in Sources */ = {isa = PBXBuildFile; fileRef = 112A018411E52ADB001B988A /* LiveGatherAPI.m */; };
+		115AB3CB12069733002B4468 /* single_image_caption_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 115AB3C912069733002B4468 /* single_image_caption_bg@2x.png */; };
+		115AB3CC12069733002B4468 /* single_image_location_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 115AB3CA12069733002B4468 /* single_image_location_bg@2x.png */; };
+		115AB3CF1206973B002B4468 /* single_image_caption_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 115AB3CD1206973B002B4468 /* single_image_caption_bg.png */; };
+		115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 115AB3CE1206973B002B4468 /* single_image_location_bg.png */; };
+		115AB40412069FB3002B4468 /* Image.png in Resources */ = {isa = PBXBuildFile; fileRef = 115AB40312069FB3002B4468 /* Image.png */; };
+		115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 115AB4A71207E3A2002B4468 /* SinglePhotoView.xib */; };
+		115AB4AC1207E6FC002B4468 /* SinglePhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 115AB4AB1207E6FC002B4468 /* SinglePhotoViewController.m */; };
 		1171C32C11EFB8C800E69829 /* SDKSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1171C30111EFB8C800E69829 /* SDKSettings.plist */; };
 		1171C32E11EFB8C800E69829 /* SDKSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1171C31011EFB8C800E69829 /* SDKSettings.plist */; };
 		1171C39A11EFC28100E69829 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1171C39911EFC28100E69829 /* QuartzCore.framework */; };
@@ -134,6 +141,14 @@
 /* Begin PBXFileReference section */
 		112A018311E52ADB001B988A /* LiveGatherAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveGatherAPI.h; sourceTree = "<group>"; };
 		112A018411E52ADB001B988A /* LiveGatherAPI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LiveGatherAPI.m; sourceTree = "<group>"; };
+		115AB3C912069733002B4468 /* single_image_caption_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "single_image_caption_bg@2x.png"; sourceTree = "<group>"; };
+		115AB3CA12069733002B4468 /* single_image_location_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "single_image_location_bg@2x.png"; sourceTree = "<group>"; };
+		115AB3CD1206973B002B4468 /* single_image_caption_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = single_image_caption_bg.png; sourceTree = "<group>"; };
+		115AB3CE1206973B002B4468 /* single_image_location_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = single_image_location_bg.png; sourceTree = "<group>"; };
+		115AB40312069FB3002B4468 /* Image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Image.png; sourceTree = "<group>"; };
+		115AB4A71207E3A2002B4468 /* SinglePhotoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SinglePhotoView.xib; sourceTree = "<group>"; };
+		115AB4AA1207E6FC002B4468 /* SinglePhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SinglePhotoViewController.h; sourceTree = "<group>"; };
+		115AB4AB1207E6FC002B4468 /* SinglePhotoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SinglePhotoViewController.m; sourceTree = "<group>"; };
 		1171C30111EFB8C800E69829 /* SDKSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = SDKSettings.plist; sourceTree = "<group>"; };
 		1171C30611EFB8C800E69829 /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		1171C30711EFB8C800E69829 /* NSObject+SBJSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+SBJSON.h"; sourceTree = "<group>"; };
@@ -529,6 +544,8 @@
 		1195978D11F26C35006BD793 /* iPhone */ = {
 			isa = PBXGroup;
 			children = (
+				115AB3CD1206973B002B4468 /* single_image_caption_bg.png */,
+				115AB3CE1206973B002B4468 /* single_image_location_bg.png */,
 				11BAD6EC11FD640700FE4DE4 /* upload_button_homescreen.png */,
 				11BAD6ED11FD640700FE4DE4 /* mystream_button_homescreen.png */,
 				11BAD6EE11FD640700FE4DE4 /* settings_button_homescreen.png */,
@@ -562,6 +579,8 @@
 		1195978E11F26C35006BD793 /* Retina Display */ = {
 			isa = PBXGroup;
 			children = (
+				115AB3C912069733002B4468 /* single_image_caption_bg@2x.png */,
+				115AB3CA12069733002B4468 /* single_image_location_bg@2x.png */,
 				11BAD70011FD642200FE4DE4 /* upload_button_homescreen@2x.png */,
 				11BAD70111FD642200FE4DE4 /* mystream_button_homescreen@2x.png */,
 				11BAD70211FD642200FE4DE4 /* settings_button_homescreen@2x.png */,
@@ -615,6 +634,7 @@
 				11769C3B11851B0C0036C548 /* gray.jpg */,
 				11D1FD1411760E76007B66EF /* Default.png */,
 				11B19FA61203FB7D006E4CDF /* Default@2x.png */,
+				115AB40312069FB3002B4468 /* Image.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -682,6 +702,8 @@
 				1191BF98117A0A29003DF9B8 /* LiveStreamViewController.m */,
 				11BAD7C111FE518100FE4DE4 /* FollowersViewController.h */,
 				11BAD7C211FE518100FE4DE4 /* FollowersViewController.m */,
+				115AB4AA1207E6FC002B4468 /* SinglePhotoViewController.h */,
+				115AB4AB1207E6FC002B4468 /* SinglePhotoViewController.m */,
 				1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */,
 				1191BF3E11798459003DF9B8 /* UploadPhotoViewController.m */,
 				1191BF8D117A0A0E003DF9B8 /* AccountLoginViewController.h */,
@@ -720,10 +742,11 @@
 			isa = PBXGroup;
 			children = (
 				280E754B0DD40C5E005A515E /* MainView.xib */,
-				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
 				11D1FD581179648C007B66EF /* LiveStreamView.xib */,
-				1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */,
+				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
+				115AB4A71207E3A2002B4468 /* SinglePhotoView.xib */,
 				1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */,
+				1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */,
 				280E754C0DD40C5E005A515E /* MainWindow.xib */,
 				280E754A0DD40C5E005A515E /* FlipsideView.xib */,
 				8D1107310486CEB800E47090 /* LiveGather-Info.plist */,
@@ -889,6 +912,12 @@
 				11BAD71311FD642200FE4DE4 /* followers_table_cell_bg@2x.png in Resources */,
 				11BAD7B211FE512000FE4DE4 /* FollowersView.xib in Resources */,
 				11B19FA71203FB7D006E4CDF /* Default@2x.png in Resources */,
+				115AB3CB12069733002B4468 /* single_image_caption_bg@2x.png in Resources */,
+				115AB3CC12069733002B4468 /* single_image_location_bg@2x.png in Resources */,
+				115AB3CF1206973B002B4468 /* single_image_caption_bg.png in Resources */,
+				115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */,
+				115AB40412069FB3002B4468 /* Image.png in Resources */,
+				115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +952,7 @@
 				11BAD6D311FD5D1700FE4DE4 /* LGTag.m in Sources */,
 				11BAD7C311FE518100FE4DE4 /* FollowersViewController.m in Sources */,
 				11B19E4D1203C658006E4CDF /* LGPhotoView.m in Sources */,
+				115AB4AC1207E6FC002B4468 /* SinglePhotoViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1015,6 +1045,10 @@
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.3;
 			};
@@ -1030,6 +1064,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				PREBINDING = NO;
 				SDKROOT = iphoneos3.1.3;
 			};

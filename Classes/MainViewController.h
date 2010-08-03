@@ -6,7 +6,6 @@
 //  Copyright __MyCompanyName__ 2010. All rights reserved.
 //
 
-#import "FlipsideViewController.h"
 #import "UploadPhotoViewController.h"
 #import "LiveStreamViewController.h"
 #import "AccountLoginViewController.h"
@@ -17,10 +16,11 @@
 #import "LGPhoto.h"
 #import "LGTag.h"
 #import "LGPhotoView.h"
+#import "SinglePhotoViewController.h"
 
-@class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue;
+@class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue, SinglePhotoViewController;
 
-@interface MainViewController : UIViewController <FlipsideViewControllerDelegate, UIScrollViewDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate> {
+@interface MainViewController : UIViewController <UIScrollViewDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate, LGPhotoDelegate> {
 	IBOutlet UIButton			*viewLiveStreamButton;
 	IBOutlet UIScrollView		*liveStreamPreviewScrollView;
 	IBOutlet UIScrollView		*tagsScrollView;
@@ -32,6 +32,7 @@
 	NSUserDefaults				*settings;
 	UploadPhotoViewController	*uploadViewController;
 	LiveStreamViewController	*liveStreamView;
+	SinglePhotoViewController	*singlePhotoView;
 	IBOutlet UIProgressView		*progressView;
 	MBProgressHUD				*HUD;
 	LiveGatherAPI				*applicationAPI;
@@ -63,9 +64,5 @@
 - (BOOL)isDisplayingItemForIndex:(int)index;
 - (LGPhotoView *)dequeueRecycledLiveStreamView;
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
-
-//
-- (IBAction)showInfo;
-//
 
 @end

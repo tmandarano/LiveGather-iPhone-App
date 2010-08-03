@@ -20,7 +20,7 @@
 
 @class CollageView, ASINetworkQueue;
 
-@interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate> {
+@interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate, LGPhotoDelegate> {
 	IBOutlet UIButton			*backButton;
 	IBOutlet UILabel			*userNameLabel;
 	//IBOutlet UIScrollView		*liveStreamScrollView;

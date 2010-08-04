@@ -18,6 +18,7 @@
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
 
+@class ASINetworkQueue, ASIHTTPRequest;
 
 @interface SinglePhotoViewController : UIViewController {
 	IBOutlet UIImageView	*mainImageView;
@@ -30,13 +31,19 @@
 	IBOutlet UILabel		*imageTagsLabel;
 	IBOutlet UILabel		*imageCommentsLabel;
 	IBOutlet UIButton		*addCommentButton;
+	ASINetworkQueue			*networkQueue;
 	
-	int						imageIDToDisplay;
+	int						imageID;
 }
+
+@property (nonatomic) int imageID;
 
 - (IBAction)cancel;
 - (IBAction)addComment;
 - (void)showComments;
 - (void)showImageWithID:(int)imgID;
+- (void)imageFetchComplete:(ASIHTTPRequest *)request;
+- (void)imageAlreadyExists:(int)imgID;
+- (void)initializeResources;
 
 @end

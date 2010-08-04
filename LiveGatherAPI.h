@@ -11,9 +11,10 @@
 #import "JRAuthenticate.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
+#import "LGUser.h"
 
 @interface LiveGatherAPI : NSObject {
-    
+	
 }
 
 //Handling APIs on the server
@@ -22,6 +23,9 @@
 - (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius;
 - (NSArray *)getTrendingTagsWithLimit:(int)limit;
 - (NSArray *)getRecentTagsWithLimit:(int)limit;
-- (NSArray *)getPhotosByTagID:(int)id;
+- (NSArray *)getPhotosByTagID:(int)tagID;
+- (LGPhoto *)getPhotoForID:(int)photoID;
+- (LGUser *)getUserForID:(int)userID;
+- (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude;
 
 @end

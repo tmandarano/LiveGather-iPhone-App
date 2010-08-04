@@ -17,6 +17,7 @@
 
 @implementation LiveGatherAPI
 
+#define kAppUserAgent "LiveGather-for-iPhone-V0.1"
 
 - (NSArray *)getLiveFeed:(int)numPhotos {
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
@@ -88,9 +89,104 @@
 	return arr;
 }
 
+- (LGPhoto *)getPhotoForID:(int)photoID {
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d", photoID]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
+	
+	NSDictionary *dict = [response JSONValue];
+	
+	LGPhoto *photo = [[LGPhoto alloc] init];
+	
+	NSString *name = (NSString *) [dict objectForKey:@"name"];
+	NSString *userID = (NSString *) [dict objectForKey:@"user_id"];
+	NSString *latitude = (NSString *) [dict objectForKey:@"latitude"];
+	NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
+	NSString *caption = (NSString *) [dict objectForKey:@"caption"];
+	NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+	NSMutableArray *photoTags = [NSMutableArray new];
+	NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
+	
+	for (NSDictionary *tag in tags) {
+		LGTag *photoTag = [[LGTag alloc] init];
+		NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
+		NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
+		[photoTag setTag:tagName];
+		[photoTag setTagID:tag_id];
+		[photoTags addObject:photoTag];
+	}
+	
+	[photo setPhotoName:name];
+	[photo setPhotoUserID:userID];
+	[photo setPhotoLocation:latitude withLong:longitude];
+	[photo setPhotoCaption:caption];
+	[photo setPhotoDateAdded:dateAdded];
+	[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
+	
+	return photo;
+	
+	[photo release];
+}
+
+- (LGUser *)getUserForID:(int)userID {
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/users/%d", userID]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
+	
+	NSDictionary *dict = [response JSONValue];
+	
+	LGUser *user = [[LGUser alloc] init];
+	
+	NSString *ID = (NSString *) [dict objectForKey:@"id"];
+	NSString *username = (NSString *) [dict objectForKey:@"username"];
+	NSString *emailAddress = (NSString *) [dict objectForKey:@"email"];
+	NSString *imageURL = (NSString *) [dict objectForKey:@"photo_url"];
+	
+	[user setUserID:ID];
+	[user setUsername:username];
+	[user setEmailAddress:emailAddress];
+	[user setImageURL:imageURL];
+	
+	return user;
+	
+	[user release];
+}
+
 - (NSArray *)getPhotosByTagID:(int)tagID {
     NSArray *arr;
     return arr;
+}
+
+- (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude {
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@,%@&output=json&sensor=true_or_false", latitude, longitude]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	NSLog(@"%@", response);
+	
+	return @"";
 }
 
 - (NSArray *)parseTagsResponse:(NSString *)response {
@@ -134,7 +230,17 @@
 		NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
 		NSString *caption = (NSString *) [dict objectForKey:@"caption"];
 		NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
-		NSArray *tags = (NSArray *) [dict objectForKey: @"tags"];
+		NSMutableArray *photoTags = [NSMutableArray new];
+		NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
+		
+		for (NSDictionary *tag in tags) {
+			LGTag *photoTag = [[LGTag alloc] init];
+			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
+			NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
+			[photoTag setTag:tagName];
+			[photoTag setTagID:tag_id];
+			[photoTags addObject:photoTag];
+		}
 		
 		NSLog(@"Processing Photo: %@", ID);
 		
@@ -145,16 +251,11 @@
 		[photo setPhotoLocation:latitude withLong:longitude];
 		[photo setPhotoCaption:caption];
 		[photo setPhotoDateAdded:dateAdded];
-		[photo setPhotoTags:tags];
+		[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
 		
 		[returnArray addObject:photo];
         
         [photo release];
-		
-		for(NSDictionary *tag in tags) {
-			//NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
-			//NSString *tag_name = (NSString *) [tag objectForKey:@"tag"];
-		}
 		
 	}
 	

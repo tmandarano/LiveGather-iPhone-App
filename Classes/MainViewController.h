@@ -17,6 +17,7 @@
 #import "LGTag.h"
 #import "LGPhotoView.h"
 #import "SinglePhotoViewController.h"
+#import "LGUser.h"
 
 @class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue, SinglePhotoViewController;
 

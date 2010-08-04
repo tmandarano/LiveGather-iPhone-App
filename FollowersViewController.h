@@ -18,6 +18,7 @@
 #import "ASINetworkQueue.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
+#import "LGUser.h"
 
 @class ResourceManager, UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController;
 

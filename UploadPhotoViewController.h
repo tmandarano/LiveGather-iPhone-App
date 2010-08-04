@@ -12,6 +12,7 @@
 #import "LiveGatherAPI.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
+#import "LGUser.h"
 
 @class MainViewController, LiveGatherAPI;
 

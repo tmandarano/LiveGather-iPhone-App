@@ -274,8 +274,9 @@
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID {
+	[singlePhotoView setImageID:imgID];
 	[self presentModalViewController:singlePhotoView animated:YES];
-	[singlePhotoView showImageWithID:imgID];
+	[singlePhotoView initializeResources];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

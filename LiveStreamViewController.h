@@ -17,6 +17,7 @@
 #import "LGPhotoView.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
+#import "LGUser.h"
 
 @class CollageView, ASINetworkQueue;
 

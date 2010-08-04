@@ -65,12 +65,28 @@
 	photoLocationLongitude = longitude;
 }
 
+- (NSString *)photoAddress {
+	return photoAddress;
+}
+
+- (void)setPhotoAddress:(NSString *)address {
+	photoAddress = address;
+}
+
 - (NSString *)photoCaption {
 	return photoCaption;
 }
 
 - (void)setPhotoCaption:(NSString *)caption {
 	photoCaption = caption;
+}
+
+- (LGUser *)photoUser {
+	return photoUser;
+}
+
+- (void)setPhotoUser:(LGUser *)user {
+	photoUser = user;
 }
 
 - (NSArray *)photoTags {

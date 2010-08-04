@@ -17,8 +17,9 @@
 #import "LGPhotoView.h"
 #import "ASIHTTPRequest.h"
 #import "ASINetworkQueue.h"
+#import "LGUser.h"
 
-@class ASINetworkQueue, ASIHTTPRequest;
+@class ASINetworkQueue, ASIHTTPRequest, LiveGatherAPI;
 
 @interface SinglePhotoViewController : UIViewController {
 	IBOutlet UIImageView	*mainImageView;
@@ -32,8 +33,10 @@
 	IBOutlet UILabel		*imageCommentsLabel;
 	IBOutlet UIButton		*addCommentButton;
 	ASINetworkQueue			*networkQueue;
+	LiveGatherAPI			*applicationAPI;
 	
 	int						imageID;
+	LGPhoto					*imageInformation;
 }
 
 @property (nonatomic) int imageID;

@@ -23,6 +23,7 @@
 
 - (void)viewDidLoad {	
 	[self showImageWithID:imageID];
+	applicationAPI = [[LiveGatherAPI alloc] init];
     [super viewDidLoad];
 }
 
@@ -31,7 +32,15 @@
 }
 
 - (IBAction)addComment {
-	
+	//PhotoFlipsideLocationView *flipsideView = [[PhotoFlipsideLocationView alloc] init];
+	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(mainImageView.frame.origin.x, mainImageView.frame.origin.y, mainImageView.frame.size.width, mainImageView.frame.size.height)];
+	[mapView setShowsUserLocation:YES];
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:2.0];
+	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:mainImageView cache:YES];
+	[mainImageView removeFromSuperview];
+	[self.view addSubview:mapView];
+	[UIView commitAnimations];
 }
 
 - (void)showComments {
@@ -66,18 +75,47 @@
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
 	UIImage *image = [[UIImage alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 	[mainImageView setImage:image];
+	LGPhoto *photo = [applicationAPI getPhotoForID:imageID];
+	[imageCaptionLabel setText:[NSString stringWithFormat:@"%@", photo.photoCaption]];
+	[usernameLabel setText:[NSString stringWithFormat:@"%@", [applicationAPI getUserForID:[photo.photoUserID intValue]].username]];
+	NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
+	LGTag *tag = [photoTags objectAtIndex:0];
+	[imageTagsLabel setText:[NSString stringWithFormat:@"#%@", tag.tag]];
 }
 
 - (void)imageAlreadyExists:(int)imgID {
 	UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", imgID]]];
 	[mainImageView setImage:image];
+	LGPhoto *photo = [applicationAPI getPhotoForID:imageID];
+	[imageCaptionLabel setText:[NSString stringWithFormat:@"%@", photo.photoCaption]];
+	[usernameLabel setText:[NSString stringWithFormat:@"%@", [applicationAPI getUserForID:[photo.photoUserID intValue]].username]];
 }
 
 - (void)initializeResources {
 	if (mainImageView) {
 		UIImage *image = [[UIImage alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", imageID]]];
 		[mainImageView setImage:image];
+		LGPhoto *photo = [applicationAPI getPhotoForID:imageID];
+		[imageCaptionLabel setText:[NSString stringWithFormat:@"%@", photo.photoCaption]];
+		[usernameLabel setText:[NSString stringWithFormat:@"%@", [applicationAPI getUserForID:[photo.photoUserID intValue]].username]];
+		NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
+		LGTag *tag = [photoTags objectAtIndex:0];
+		[imageTagsLabel setText:[NSString stringWithFormat:@"#%@", tag.tag]];
 	}
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	/*UIImageView *imageView = [streamArray objectAtIndex:3];
+	UIView *containerView = [streamContainersArray objectAtIndex:3];
+	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
+	[mapView setShowsUserLocation:YES];
+	NSLog(@"%f", imageView.frame.origin.x);
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:2.0];
+	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
+	[imageView removeFromSuperview];
+	[containerView addSubview:mapView];
+	[UIView commitAnimations];*/
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

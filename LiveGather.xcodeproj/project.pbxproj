@@ -110,7 +110,6 @@
 		11D1FD0D11755BBF007B66EF /* ResourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 11D1FD0C11755BBF007B66EF /* ResourceManager.m */; };
 		11D1FD1511760E76007B66EF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD1411760E76007B66EF /* Default.png */; };
 		11D1FD591179648C007B66EF /* LiveStreamView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD581179648C007B66EF /* LiveStreamView.xib */; };
-		11DBE60B1209498B00E583DA /* PhotoFlipsideLocationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11DBE60A1209498B00E583DA /* PhotoFlipsideLocationView.xib */; };
 		11DDD9931200BA8700451E21 /* libJRAuthenticate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11DDD98E1200BA3400451E21 /* libJRAuthenticate.a */; };
 		1D3623260D0F684500981E51 /* LiveGatherAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* LiveGatherAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -292,7 +291,6 @@
 		11D1FD0C11755BBF007B66EF /* ResourceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResourceManager.m; sourceTree = "<group>"; };
 		11D1FD1411760E76007B66EF /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		11D1FD581179648C007B66EF /* LiveStreamView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LiveStreamView.xib; sourceTree = "<group>"; };
-		11DBE60A1209498B00E583DA /* PhotoFlipsideLocationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoFlipsideLocationView.xib; sourceTree = "<group>"; };
 		11DDD97E1200BA3000451E21 /* JRAuthenticate.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = JRAuthenticate.xcodeproj; sourceTree = RPX; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* LiveGatherAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LiveGatherAppDelegate.h; sourceTree = "<group>"; };
@@ -728,7 +726,6 @@
 				11DDD97E1200BA3000451E21 /* JRAuthenticate.xcodeproj */,
 				080E96DDFE201D6D7F000001 /* Application Delegate */,
 				289233A00DB2D0730083E9F9 /* View Controllers */,
-				281C6CD70DB2D82200F60ACC /* Flipside View [DISREGARD] */,
 				11D1FD0411754506007B66EF /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				11D1FCE21175404D007B66EF /* Images */,
@@ -744,6 +741,7 @@
 			children = (
 				32CA4F630368D1EE00C91783 /* LiveGather_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
+				281C6CD70DB2D82200F60ACC /* Flipside View [DISREGARD] */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -756,7 +754,6 @@
 				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
 				115AB4A71207E3A2002B4468 /* SinglePhotoView.xib */,
 				1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */,
-				11DBE60A1209498B00E583DA /* PhotoFlipsideLocationView.xib */,
 				1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */,
 				280E754C0DD40C5E005A515E /* MainWindow.xib */,
 				280E754A0DD40C5E005A515E /* FlipsideView.xib */,
@@ -930,7 +927,6 @@
 				115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */,
 				115AB40412069FB3002B4468 /* Image.png in Resources */,
 				115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */,
-				11DBE60B1209498B00E583DA /* PhotoFlipsideLocationView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

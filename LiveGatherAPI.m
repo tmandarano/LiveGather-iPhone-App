@@ -185,33 +185,8 @@
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
 	NSLog(@"%@", response);
-	
+		
 	return @"";
-}
-
-- (NSArray *)parseTagsResponse:(NSString *)response {
-	NSMutableArray *returnArray = [NSMutableArray new];
-    
-    NSArray *objects = (NSArray*)[response JSONValue];
-    
-    for(NSDictionary *dict in objects) {
-		LGTag *tag = [[LGTag alloc] init];
-		
-        NSString *tagID = (NSString *) [dict objectForKey:@"id"];
-        NSString *tagName = (NSString *) [dict objectForKey:@"tag"];
-        NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
-		
-		NSLog(@"Processing Tag: %@", tagName);
-		
-		[tag setTag:tagName];
-		[tag setTagID:tagID];
-		[tag setDateAdded:dateAdded];
-		
-		[returnArray addObject:tag];
-    }
-    
-    NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
-    return arr;
 }
 
 - (NSArray *)parseJSONPhotoResponse:(NSString *)response {
@@ -264,6 +239,31 @@
     [returnArray release];
     
 	return arr;
+}
+
+- (NSArray *)parseTagsResponse:(NSString *)response {
+	NSMutableArray *returnArray = [NSMutableArray new];
+    
+    NSArray *objects = (NSArray*)[response JSONValue];
+    
+    for(NSDictionary *dict in objects) {
+		LGTag *tag = [[LGTag alloc] init];
+		
+        NSString *tagID = (NSString *) [dict objectForKey:@"id"];
+        NSString *tagName = (NSString *) [dict objectForKey:@"tag"];
+        NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+		
+		NSLog(@"Processing Tag: %@", tagName);
+		
+		[tag setTag:tagName];
+		[tag setTagID:tagID];
+		[tag setDateAdded:dateAdded];
+		
+		[returnArray addObject:tag];
+    }
+    
+    NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
+    return arr;
 }
 
 @end

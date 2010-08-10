@@ -32,19 +32,22 @@
 }
 
 - (IBAction)addComment {
-	//PhotoFlipsideLocationView *flipsideView = [[PhotoFlipsideLocationView alloc] init];
-	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(mainImageView.frame.origin.x, mainImageView.frame.origin.y, mainImageView.frame.size.width, mainImageView.frame.size.height)];
-	[mapView setShowsUserLocation:YES];
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:2.0];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:mainImageView cache:YES];
-	[mainImageView removeFromSuperview];
-	[self.view addSubview:mapView];
-	[UIView commitAnimations];
+	NSString *string = [applicationAPI reverseGeocodeCoordinatesWithLatitude:@"40.714224" andLongitude:@"-73.961452"];
+	NSLog(@"%@", string);
 }
 
 - (void)showComments {
-	
+	/*UIImageView *imageView = [streamArray objectAtIndex:3];
+	 UIView *containerView = [streamContainersArray objectAtIndex:3];
+	 MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
+	 [mapView setShowsUserLocation:YES];
+	 NSLog(@"%f", imageView.frame.origin.x);
+	 [UIView beginAnimations:nil context:NULL];
+	 [UIView setAnimationDuration:2.0];
+	 [UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
+	 [imageView removeFromSuperview];
+	 [containerView addSubview:mapView];
+	 [UIView commitAnimations];*/
 }
 
 - (void)showImageWithID:(int)imgID {
@@ -105,17 +108,7 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	/*UIImageView *imageView = [streamArray objectAtIndex:3];
-	UIView *containerView = [streamContainersArray objectAtIndex:3];
-	MKMapView *mapView = [[MKMapView alloc] initWithFrame:CGRectMake(imageView.frame.origin.x, imageView.frame.origin.y, imageView.frame.size.width, imageView.frame.size.height)];
-	[mapView setShowsUserLocation:YES];
-	NSLog(@"%f", imageView.frame.origin.x);
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:2.0];
-	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:containerView cache:YES];
-	[imageView removeFromSuperview];
-	[containerView addSubview:mapView];
-	[UIView commitAnimations];*/
+	
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

@@ -10,6 +10,7 @@
 
 @implementation MainViewController
 
+#define miniPhotoIndex(row, col) ((2 * col) + row)
 #define kLiveStreamPreviewStartPoint_X 10
 #define kLiveStreamPreviewStartPoint_Y 5
 #define kLiveStreamPreviewLowerStartPoint_X 10
@@ -141,14 +142,14 @@
 		{
 			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewLowerStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = ((2 * col) + row);
+				int indexNum = miniPhotoIndex(row, col);
 				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
 			}
 		}
 		else {
 			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = ((2 * col) + row);
+				int indexNum = miniPhotoIndex(row, col);
 				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
 			}
 		}
@@ -236,7 +237,7 @@
 		int row = i % numRows;
 		int col = i / numRows;
 		
-		if(((2 * col) + row) == index)
+		if(miniPhotoIndex(row, col) == index)
 		{
 			if(row == 1)
 			{
@@ -253,6 +254,7 @@
 }
 
 - (LGPhotoView *)dequeueRecycledLiveStreamView {
+	NSLog(@"dequeuing a photo");
 	LGPhotoView *photoView = [recycledLiveStreamItems anyObject];
 	if (photoView) {
 		[[photoView retain] autorelease];
@@ -294,7 +296,7 @@
 }
 
 - (void)downloadNewLiveStreamPhotos {
-	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:15]];
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:25]];
 	
 	if(!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];

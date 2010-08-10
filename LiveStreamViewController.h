@@ -19,17 +19,16 @@
 #import "ASINetworkQueue.h"
 #import "LGUser.h"
 
-@class CollageView, ASINetworkQueue;
+@class ASINetworkQueue;
 
 @interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate, LGPhotoDelegate> {
 	IBOutlet UIButton			*backButton;
 	IBOutlet UILabel			*userNameLabel;
-	//IBOutlet UIScrollView		*liveStreamScrollView;
 	IBOutlet UIButton			*searchButton;
 	IBOutlet UIButton			*refreshButton;
 	LiveGatherAPI				*applicationAPI;
 	MBProgressHUD				*HUD;
-	CollageView					*liveStreamScrollView;
+	UIScrollView				*liveStreamScrollView;
 	ASINetworkQueue				*networkQueue;
 	
 	NSMutableArray				*liveStreamObjects;
@@ -37,8 +36,6 @@
 	NSMutableSet				*visibleLiveStreamItems;
 	NSMutableSet				*recycledLiveStreamItems;
 }
-
-@property (nonatomic, retain) CollageView *liveStreamScrollView;
 
 - (IBAction)goHome;
 - (void)updateLiveStreamPhotos;

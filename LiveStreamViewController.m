@@ -11,8 +11,7 @@
 
 @implementation LiveStreamViewController
 
-@synthesize liveStreamScrollView;
-
+#define photoIndex(row, col) ((3 * col) + row)
 #define kLiveStreamPreviewStartPoint_X 5
 #define kLiveStreamPreviewStartPoint_Y 5
 #define kLiveStreamPreviewMidStartPoint_X 5
@@ -47,7 +46,7 @@
 	//streamArray = [NSMutableArray new];
 	//streamContainersArray = [NSMutableArray new];
 	
-	liveStreamScrollView = [[CollageView alloc] initWithFrame:CGRectMake(0, 45, 320, 415)];
+	liveStreamScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, 416)];
 	[liveStreamScrollView setBackgroundColor:[UIColor blackColor]];
 	[liveStreamScrollView setDelegate:self];
 	
@@ -92,7 +91,7 @@
 		}
 	}
 	else {
-		//[self downloadNewLiveStreamPhotos];
+		
 	}
 }
 
@@ -168,21 +167,21 @@
 		{
 			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = ((2 * col) + row);
+				int indexNum = photoIndex(row, col);
 				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
 			}
 		}
 		else if(row == 1) {
 			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = ((2 * col) + row);
+				int indexNum = photoIndex(row, col);
 				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
 			}
 		}
 		else if(row == 2) {
 			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = ((2 * col) + row);
+				int indexNum = photoIndex(row, col);
 				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
 			}
 		}
@@ -200,11 +199,20 @@
 		}
 	}
 	
-	if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
+	if ((firstIndex - 3) > 0 || (firstIndex - 3) == 0) {
+		firstIndex -= 3;
+	}
+	else if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
 		firstIndex -= 2;
 	}
+	else if ((firstIndex - 1) > 0 || (firstIndex - 1) == 0) {
+		firstIndex -= 1;
+	}
 	
-	if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
+	if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 3;
+	}
+	else if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
 		lastIndex += 2;
 	}
 	else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
@@ -232,7 +240,7 @@
 	int numRows = 3;
 	int numCols = 0;
 	
-	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		
 		if(row == 0)
@@ -241,11 +249,11 @@
 		}
 	}
 	
-	for (int i = 0; i <= [self numberOfImagesForStream]; i++) {
+	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
 		int row = i % numRows;
 		int col = i / numRows;
 		
-		if(((2 * col) + row) == index)
+		if(photoIndex(row, col) == index) 
 		{
 			if(row == 0)
 			{
@@ -257,11 +265,13 @@
 			else if(row == 2) {
 				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
 			}
+			
 			break;
 		}
 	}
 	
 	return itemRect;
+	
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID {
@@ -269,7 +279,7 @@
 }
 
 - (void)downloadNewLiveStreamPhotos; {
-	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:15]];
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:25]];
 	
 	if(!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];
@@ -283,29 +293,27 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/170/3", photo.photoID]]];
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]];
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
-		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]]) {
+		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
 			[networkQueue addOperation:request];
 		}
 		else {
-			NSLog(@"Alright the image exists");
-			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"170.jpg", photo.photoID]]];
+			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setID:photo.photoID];
 			[liveStreamObjects addObject:img];
-			NSLog(@"%d", [liveStreamObjects count]);
 			[self imageFetchComplete:nil];
 		}
 	}
-	[networkQueue go];
+	[networkQueue go];	
 }
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
 	if (request == nil) {
-		
+		[self drawItemsToLiveStream];
 	}
 	
 	if(networkQueue.requestsCount == 0)
@@ -344,8 +352,43 @@
 }
 
 - (IBAction)refreshLiveStream {
-	NSLog(@"Live: %d", [visibleLiveStreamItems count]);
-	NSLog(@"In the recycling bin: %d", [recycledLiveStreamItems count]);
+	/*int numImageViewsToPlace = [self numberOfImagesForStream];
+	int numRows = 3;
+	int numCols = 0;
+	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 2) * numCols);
+	
+	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		
+		if(row == 0)
+		{
+			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 1) {
+			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		else if(row == 2) {
+			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
+		}
+		
+		[liveStreamScrollView addSubview:photoView];
+	}*/
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -368,12 +411,12 @@
 
 
 /*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
+ // Override to allow orientations other than the default portrait orientation.
+ - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+ // Return YES for supported orientations
+ return (interfaceOrientation == UIInterfaceOrientationPortrait);
+ }
+ */
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

@@ -12,6 +12,7 @@
 @implementation LiveStreamViewController
 
 #define photoIndex(row, col) ((3 * col) + row)
+#define largePhotoIndex(row, col) ((1 * col) + row)
 #define kLiveStreamPreviewStartPoint_X 5
 #define kLiveStreamPreviewStartPoint_Y 5
 #define kLiveStreamPreviewMidStartPoint_X 5
@@ -55,6 +56,8 @@
 	
 	if (!visibleLiveStreamItems) visibleLiveStreamItems = [[NSMutableSet alloc] init];
 	if (!recycledLiveStreamItems) recycledLiveStreamItems = [[NSMutableSet alloc] init];
+	
+	currentLiveStreamMode = kLiveStreamModeIcons;
 	
 	[self.view addSubview:liveStreamScrollView];
 	[self updateLiveStreamPhotos];
@@ -109,6 +112,7 @@
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
 	photoView.index = index;
+	
 	return photoView;
 }
 
@@ -138,97 +142,165 @@
 }
 
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index {
-	NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
-	int firstIndex = 0;
-	int lastIndex = 0;
-	
-	int numRows = 3;
-	int numCols = 0;
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		int row = i % numRows;
-		
-		if(row == 0)
-		{
-			numCols += 1;
-		}
-	}
-	
-	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
-	int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
-	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-	CGRect visibleBoundsOfView = liveStreamScrollView.bounds;
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		int row = i % numRows;
-		int col = i / numRows;
-		
-		if(row == 0)
-		{
-			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
-			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = photoIndex(row, col);
-				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
-			}
-		}
-		else if(row == 1) {
-			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
-			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = photoIndex(row, col);
-				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
-			}
-		}
-		else if(row == 2) {
-			CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
-			if (CGRectContainsRect(visibleBoundsOfView, rect)) {
-				int indexNum = photoIndex(row, col);
-				[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
-			}
-		}
-	}
-	
-	firstIndex = [[arrayOfCellsInView lastObject] intValue];
-	lastIndex = [[arrayOfCellsInView lastObject] intValue];
-	
-	for (int i =0; i < [arrayOfCellsInView count]; i++) {		
-		if ([[arrayOfCellsInView objectAtIndex:i] intValue] < firstIndex) {
-			firstIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
-		}
-		if([[arrayOfCellsInView objectAtIndex:i] intValue] > lastIndex) {
-			lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
-		}
-	}
-	
-	if ((firstIndex - 3) > 0 || (firstIndex - 3) == 0) {
-		firstIndex -= 3;
-	}
-	else if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
-		firstIndex -= 2;
-	}
-	else if ((firstIndex - 1) > 0 || (firstIndex - 1) == 0) {
-		firstIndex -= 1;
-	}
-	
-	if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
-		lastIndex += 3;
-	}
-	else if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
-		lastIndex += 2;
-	}
-	else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
-		lastIndex += 1;
-	}
-	
 	int returnVal = 0;
 	
-	if ([index isEqualToString:@"first"]) {
-		returnVal = firstIndex;
+	if (currentLiveStreamMode == kLiveStreamModeIcons) {
+		NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
+		int firstIndex = 0;
+		int lastIndex = 0;
+		
+		int numRows = 3;
+		int numCols = 0;
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			
+			if(row == 0)
+			{
+				numCols += 1;
+			}
+		}
+		
+		int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 5) * numCols);
+		int contentSizeHeight = kLiveStreamPreviewImageHeight + kLiveStreamPreviewVerticalPadding;
+		[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+		CGRect visibleBoundsOfView = liveStreamScrollView.bounds;
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			int col = i / numRows;
+			
+			if(row == 0)
+			{
+				CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+					int indexNum = photoIndex(row, col);
+					[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+				}
+			}
+			else if(row == 1) {
+				CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+					int indexNum = photoIndex(row, col);
+					[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+				}
+			}
+			else if(row == 2) {
+				CGRect rect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				if (CGRectContainsRect(visibleBoundsOfView, rect)) {
+					int indexNum = photoIndex(row, col);
+					[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+				}
+			}
+		}
+		
+		firstIndex = [[arrayOfCellsInView lastObject] intValue];
+		lastIndex = [[arrayOfCellsInView lastObject] intValue];
+		
+		for (int i =0; i < [arrayOfCellsInView count]; i++) {		
+			if ([[arrayOfCellsInView objectAtIndex:i] intValue] < firstIndex) {
+				firstIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+			}
+			if([[arrayOfCellsInView objectAtIndex:i] intValue] > lastIndex) {
+				lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+			}
+		}
+		
+		if ((firstIndex - 3) > 0 || (firstIndex - 3) == 0) {
+			firstIndex -= 3;
+		}
+		else if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
+			firstIndex -= 2;
+		}
+		else if ((firstIndex - 1) > 0 || (firstIndex - 1) == 0) {
+			firstIndex -= 1;
+		}
+		
+		if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
+			lastIndex += 3;
+		}
+		else if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
+			lastIndex += 2;
+		}
+		else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
+			lastIndex += 1;
+		}
+				
+		if ([index isEqualToString:@"first"]) {
+			returnVal = firstIndex;
+		}
+		else if([index isEqualToString:@"last"]) {
+			returnVal = lastIndex;
+		}
+		else {
+			returnVal = -1;
+		}
 	}
-	else if([index isEqualToString:@"last"]) {
-		returnVal = lastIndex;
-	}
-	else {
-		returnVal = -1;
+	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
+		int firstIndex = 0;
+		int lastIndex = 0;
+		
+		int numRows = 1;
+		int numCols = 0;
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			
+			if(row == 0)
+			{
+				numCols += 1;
+			}
+		}
+		
+		int contentSizeHeight = kLiveStreamPreviewStaticHeight;
+		int contentSizeWidth = (((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * numCols) + (3 * kLiveStreamHorizontalPadding));
+		[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+		CGRect visibleBoundsOfView = liveStreamScrollView.bounds;
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			int col = i / numRows;
+			
+			if(row == 0)
+			{
+				CGRect rect = CGRectMake((((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * col) + (2* kLiveStreamHorizontalPadding)), kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight);				
+				if (CGRectIntersectsRect(visibleBoundsOfView, rect)) {
+					int indexNum = largePhotoIndex(row, col);
+					[arrayOfCellsInView addObject:[NSNumber numberWithInt:indexNum]];
+				}
+			}
+		}
+		
+		firstIndex = [[arrayOfCellsInView lastObject] intValue];
+		lastIndex = [[arrayOfCellsInView lastObject] intValue];
+		
+		for (int i =0; i < [arrayOfCellsInView count]; i++) {		
+			if ([[arrayOfCellsInView objectAtIndex:i] intValue] < firstIndex) {
+				firstIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+			}
+			if([[arrayOfCellsInView objectAtIndex:i] intValue] > lastIndex) {
+				lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
+			}
+		}
+		
+		if ((firstIndex - 1) > 0 || (firstIndex - 1) == 0) {
+			firstIndex -= 1;
+		}
+		
+		if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
+			lastIndex += 1;
+		}
+		
+		if ([index isEqualToString:@"first"]) {
+			returnVal = firstIndex;
+		}
+		else if([index isEqualToString:@"last"]) {
+			returnVal = lastIndex;
+		}
+		else {
+			returnVal = -1;
+		}
 	}
 	
 	return returnVal;
@@ -237,36 +309,65 @@
 - (CGRect)getRectForItemInLiveStream:(int)index {
 	CGRect itemRect;
 	
-	int numRows = 3;
-	int numCols = 0;
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		int row = i % numRows;
+	if (currentLiveStreamMode == kLiveStreamModeIcons) {
+		int numRows = 3;
+		int numCols = 0;
 		
-		if(row == 0)
-		{
-			numCols += 1;
-		}
-	}
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		int row = i % numRows;
-		int col = i / numRows;
-		
-		if(photoIndex(row, col) == index) 
-		{
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			
 			if(row == 0)
 			{
-				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				numCols += 1;
 			}
-			else if(row == 1) {
-				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
-			}
-			else if(row == 2) {
-				itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
-			}
+		}
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			int col = i / numRows;
 			
-			break;
+			if(photoIndex(row, col) == index) 
+			{
+				if(row == 0)
+				{
+					itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				}
+				else if(row == 1) {
+					itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				}
+				else if(row == 2) {
+					itemRect = CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight);
+				}
+				
+				break;
+			}
+		}		
+	}
+	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		int numRows = 1;
+		int numCols = 0;
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			
+			if(row == 0)
+			{
+				numCols += 1;
+			}
+		}
+		
+		for (int i = 0; i < [self numberOfImagesForStream]; i++) {
+			int row = i % numRows;
+			int col = i / numRows;
+						
+			if (largePhotoIndex(row, col) == index) {
+				if(row == 0)
+				{
+					itemRect = CGRectMake((((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * col) + (2* kLiveStreamHorizontalPadding)), kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight);
+				}
+				
+				break;
+			}
 		}
 	}
 	
@@ -274,8 +375,21 @@
 	
 }
 
-- (void)photoViewWasTouchedWithID:(int)imgID {
+- (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
+	/*LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
+	[liveStreamScrollView bringSubviewToFront:photoView];
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:1.0];
+	[photoView setFrame:CGRectMake(kLiveStreamStartPoint_X, kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight)];
+	[UIView commitAnimations];*/
 	
+	if (currentLiveStreamMode == kLiveStreamModeIcons) {
+		currentLiveStreamMode = kLiveStreamModeLarge;
+		[self drawItemsToLiveStream];
+		CGRect rect = [self getRectForItemInLiveStream:imgIndex];
+		[liveStreamScrollView setContentOffset:CGPointMake(rect.origin.x, liveStreamScrollView.contentOffset.y)];
+		[self drawItemsToLiveStream];
+	}
 }
 
 - (void)downloadNewLiveStreamPhotos; {
@@ -304,7 +418,12 @@
 		else {
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setID:photo.photoID];
+			[img setPhotoIndex:[liveStreamObjects count]];
+			LGPhotoView *photoView = [[LGPhotoView alloc] init];
+			[photoView setPhoto:img];
+			[photoView setIndex:img.photoIndex];
 			[liveStreamObjects addObject:img];
+			[liveStreamObjectViews addObject:photoView];
 			[self imageFetchComplete:nil];
 		}
 	}
@@ -352,6 +471,53 @@
 }
 
 - (IBAction)refreshLiveStream {
+	NSLog(@"------BEGIN DEBUG INFO DUMP------");
+	NSLog(@"First Visible: %d | Last Visible: %d", [self liveStreamItemsCurrentlyInView:@"first"], [self liveStreamItemsCurrentlyInView:@"last"]);
+	for (int i = 0; i < [liveStreamObjects count]; i++) {
+		if ([self isDisplayingItemForIndex:i]) {
+			NSLog(@"Image %d is being shown", i);
+		}
+		else {
+			NSLog(@"Image %d is NOT being shown", i);
+		}
+
+	}
+	NSLog(@"------END DEBUG DUMP------");
+	
+	/*currentLiveStreamMode = kLiveStreamModeLarge;
+	
+	int numImageViewsToPlace = [self numberOfImagesForStream];
+	int numRows = 1;
+	int numCols = 0;
+	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		
+		if(row == 0)
+		{
+			numCols += 1;
+		}
+	}
+	
+	int contentSizeWidth = (((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * numCols) + (3 * kLiveStreamHorizontalPadding));
+	
+	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
+	
+	for (int i = 0; i < numImageViewsToPlace; i++) {
+		int row = i % numRows;
+		int col = i / numRows;
+		
+		LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
+		
+		if(row == 0)
+		{
+			[photoView setFrame:CGRectMake((((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * col) + (2* kLiveStreamHorizontalPadding)), kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight)];
+		}
+		
+		[liveStreamScrollView addSubview:photoView];
+	}
+		
 	/*int numImageViewsToPlace = [self numberOfImagesForStream];
 	int numRows = 3;
 	int numCols = 0;
@@ -392,7 +558,15 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-	[self drawItemsToLiveStream];
+	if (currentLiveStreamMode == kLiveStreamModeIcons) {
+		[self drawItemsToLiveStream];
+	}
+	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		[self drawItemsToLiveStream];
+	}
+	/*NSLog(@"------BEGIN DEBUG INFO DUMP %d------", currentLiveStreamMode);
+	NSLog(@"First Visible: %d | Last Visible: %d", [self liveStreamItemsCurrentlyInView:@"first"], [self liveStreamItemsCurrentlyInView:@"last"]);*/
+	NSLog(@"------END DEBUG DUMP------");
 }
 
 - (IBAction)searchLiveSteam {

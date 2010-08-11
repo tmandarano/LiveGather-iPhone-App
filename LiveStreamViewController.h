@@ -19,6 +19,11 @@
 #import "ASINetworkQueue.h"
 #import "LGUser.h"
 
+typedef enum _CurrentLiveStreamMode {
+	kLiveStreamModeIcons = 0,
+	kLiveStreamModeLarge
+} CurrentLiveStreamMode;
+
 @class ASINetworkQueue;
 
 @interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate, LGPhotoDelegate> {
@@ -30,6 +35,7 @@
 	MBProgressHUD				*HUD;
 	UIScrollView				*liveStreamScrollView;
 	ASINetworkQueue				*networkQueue;
+	CurrentLiveStreamMode		currentLiveStreamMode;
 	
 	NSMutableArray				*liveStreamObjects;
 	NSMutableArray				*liveStreamObjectViews;

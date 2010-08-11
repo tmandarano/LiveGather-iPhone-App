@@ -28,8 +28,8 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	NSLog(@"%d", [self photoID]);
-	[delegate photoViewWasTouchedWithID:[self photoID]];
+	//[delegate photoViewWasTouchedWithID:[self photoID]];
+	[delegate photoViewWasTouchedWithID:[self photoID] andIndex:[self index]];
 }
 
 - (void)setIndex:(int)newIndex {

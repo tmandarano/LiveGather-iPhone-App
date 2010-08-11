@@ -254,7 +254,6 @@
 }
 
 - (LGPhotoView *)dequeueRecycledLiveStreamView {
-	NSLog(@"dequeuing a photo");
 	LGPhotoView *photoView = [recycledLiveStreamItems anyObject];
 	if (photoView) {
 		[[photoView retain] autorelease];
@@ -264,21 +263,15 @@
 }
 
 - (IBAction)refreshStream {
-	/*for (int i = 0; i < [liveStreamObjects count]; i++) {
-		if ([self isDisplayingItemForIndex:i]) {
-			NSLog(@"Displaying %d", i);
-		}
-		else {
-			NSLog(@"Not displaying %d", i);
-		}
-
-	}*/
+	
 }
 
-- (void)photoViewWasTouchedWithID:(int)imgID {
+- (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
 	[singlePhotoView setImageID:imgID];
 	[self presentModalViewController:singlePhotoView animated:YES];
 	[singlePhotoView initializeResources];
+	
+	NSLog(@"");
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -321,7 +314,11 @@
 		else {
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setID:photo.photoID];
+			LGPhotoView *photoView = [[LGPhotoView alloc] init];
+			[photoView setPhoto:photo];
+			[photoView setIndex:photo.photoIndex];
 			[liveStreamObjects addObject:img];
+			[liveStreamObjectViews addObject:photoView];
 			[self imageFetchComplete:nil];
 		}
 	}

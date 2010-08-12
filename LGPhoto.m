@@ -65,6 +65,14 @@
 	photoLocationLongitude = longitude;
 }
 
+- (NSString *)photoLocatio {
+	
+}
+
+- (void)setPhotoLocation:(NSString *)location {
+	
+}
+
 - (NSString *)photoAddress {
 	return photoAddress;
 }

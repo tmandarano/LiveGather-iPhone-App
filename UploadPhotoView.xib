@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="34"/>
+			<integer value="155"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -90,6 +90,7 @@
 								<int key="NSvFlags">292</int>
 								<string key="NSFrame">{{27, 94}, {265, 60}}</string>
 								<reference key="NSSuperview" ref="883825266"/>
+								<float key="IBUIAlpha">0.69999998807907104</float>
 								<bool key="IBUIUserInteractionEnabled">NO</bool>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<object class="NSCustomResource" key="IBUIImage">
@@ -100,7 +101,7 @@
 							<object class="IBUITextField" id="228612156">
 								<reference key="NSNextResponder" ref="883825266"/>
 								<int key="NSvFlags">292</int>
-								<string key="NSFrame">{{29, 94}, {261, 58}}</string>
+								<string key="NSFrame">{{29, 96}, {261, 58}}</string>
 								<reference key="NSSuperview" ref="883825266"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -118,6 +119,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+									<int key="IBUIReturnKeyType">4</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
 							</object>
@@ -128,6 +130,7 @@
 								<reference key="NSSuperview" ref="883825266"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
+								<float key="IBUIAlpha">0.69999998807907104</float>
 								<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								<int key="IBUIContentVerticalAlignment">0</int>
 								<string key="IBUIText"/>
@@ -141,6 +144,7 @@
 								<bool key="IBUIAdjustsFontSizeToFit">YES</bool>
 								<float key="IBUIMinimumFontSize">17</float>
 								<object class="IBUITextInputTraits" key="IBUITextInputTraits">
+									<int key="IBUIReturnKeyType">9</int>
 									<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 								</object>
 							</object>
@@ -527,14 +531,14 @@
 							<reference ref="413911102"/>
 							<reference ref="453482858"/>
 							<reference ref="1052778430"/>
-							<reference ref="564168544"/>
-							<reference ref="228612156"/>
 							<reference ref="1065328107"/>
 							<reference ref="257082002"/>
 							<reference ref="781174154"/>
 							<reference ref="1038308416"/>
 							<reference ref="520435168"/>
 							<reference ref="803201548"/>
+							<reference ref="564168544"/>
+							<reference ref="228612156"/>
 						</object>
 						<reference key="parent" ref="127630630"/>
 					</object>
@@ -657,11 +661,11 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABB6AAAwyEAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABB6AAAwxgAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABB2AAAw08AAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABB2AAAw0QAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

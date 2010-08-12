@@ -98,39 +98,27 @@
 
 - (void)uploadImageToServer:(UIImage *)img {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	//Begin uploading the photo itself to the service
+		
+	NSData *imageData = UIImageJPEGRepresentation(img, 100);
+	NSURL *url = [NSURL URLWithString:@"http://projc:pr0j(@dev.livegather.com/api/photos/upload"];
+	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+	[request setDelegate:self];
+	[request setData:imageData withFileName:@"userfile.jpg" andContentType:@"image/jpeg" forKey:@"userfile"];
 	
-	NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
-	NSString *urlString = @"http://projc:pr0j(@dev.livegather.com/api/photos/create";
-	
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:urlString]];
-	[request setHTTPMethod:@"POST"];
-	
-	NSString *boundary = [NSString stringWithString:@"---------------------------14737809831466499882746641449"];
-	NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary];
-	[request addValue:contentType forHTTPHeaderField: @"Content-Type"];
-	
-	NSMutableData *body = [NSMutableData data];
-	[body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"userfile\"; filename=\"userfile.jpg\"\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:[[NSString stringWithString:@"Content-Type: application/octet-stream\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
-	[body appendData:[NSData dataWithData:imageData]];
-	[body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
-	[request setHTTPBody:body];
-	
-	NSData *returnData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-	NSString *returnString = [[NSString alloc] initWithData:returnData encoding:NSUTF8StringEncoding];
-	
-	NSLog(@"%@", returnString);
-	
-	[self performSelectorOnMainThread:@selector(imageFinishedUploadingToServer:) withObject:returnString waitUntilDone:NO];
+	[request startAsynchronous];
 	
 	[pool release];
 }
 
-- (void)imageFinishedUploadingToServer:(NSString *)serverResponse {
-	NSLog(@"%@", serverResponse);
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+	NSString *responseString = [request responseString];
+	NSLog(@"response: %@", responseString);
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+	
 }
 
 - (IBAction)upload {
@@ -162,7 +150,8 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	
+	[captionTextField resignFirstResponder];
+	[tagsTextField resignFirstResponder];
 }
 
 //<!-- Custom Methods

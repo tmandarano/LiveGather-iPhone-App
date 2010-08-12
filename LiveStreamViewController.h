@@ -56,6 +56,9 @@ typedef enum _CurrentLiveStreamMode {
 - (CGRect)getRectForItemInLiveStream:(int)index;
 
 - (void)drawItemsToLiveStream;
+
+- (void)redrawAllItemsToLiveStream;
+
 - (int)numberOfImagesForStream;
 - (BOOL)isDisplayingItemForIndex:(int)index;
 - (LGPhotoView *)dequeueRecycledLiveStreamView;

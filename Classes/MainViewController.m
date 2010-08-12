@@ -270,8 +270,6 @@
 	[singlePhotoView setImageID:imgID];
 	[self presentModalViewController:singlePhotoView animated:YES];
 	[singlePhotoView initializeResources];
-	
-	NSLog(@"");
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

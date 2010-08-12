@@ -28,8 +28,15 @@
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	//[delegate photoViewWasTouchedWithID:[self photoID]];
-	[delegate photoViewWasTouchedWithID:[self photoID] andIndex:[self index]];
+	CGPoint pt = [[touches anyObject] locationInView:self];
+	
+	if (CGRectContainsPoint(CGRectMake(77, 311, 155, 18), pt)) {
+		[delegate photoLocationLabelWasTouchedWithID:[self photoID] andIndex:[self index]];
+	}
+	else {
+		[delegate photoViewWasTouchedWithID:[self photoID] andIndex:[self index]];
+	}
+
 }
 
 - (void)setIndex:(int)newIndex {

@@ -13,6 +13,7 @@
 @protocol LGPhotoDelegate <NSObject>
 @optional
 - (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex;
+- (void)photoLocationLabelWasTouchedWithID:(int)imgID andIndex:(int)imgIndex;
 @end
 
 

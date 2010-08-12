@@ -13,8 +13,9 @@
 #import "LGPhoto.h"
 #import "LGTag.h"
 #import "LGUser.h"
+#import "ASIFormDataRequest.h"
 
-@class MainViewController, LiveGatherAPI;
+@class MainViewController, LiveGatherAPI, ASIFormDataRequest;
 
 @interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate> {
 	IBOutlet UIButton			*backButton;
@@ -39,6 +40,5 @@
 - (IBAction)sendToFacebook;
 - (void)showUserImageControlOption;
 - (void)uploadImageToServer:(UIImage *)img;
-- (void)imageFinishedUploadingToServer:(NSString *)serverResponse;
 
 @end

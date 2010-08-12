@@ -46,6 +46,8 @@
 - (NSString *)photoLocationLatitude;
 - (NSString *)photoLocationLongitude;
 - (void)setPhotoLocation:(NSString *)latitude withLong:(NSString *)longitude;
+- (NSString *)photoLocation;
+- (void)setPhotoLocation:(NSString *)location;
 
 - (NSString *)photoAddress;
 - (void)setPhotoAddress:(NSString *)address;

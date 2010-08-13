@@ -52,6 +52,8 @@ typedef enum _CurrentLiveStreamMode {
 - (void)imageFetchComplete:(ASIHTTPRequest *)request;
 - (void)imageDownloadingFinished;
 
+- (void)refreshComplete:(ASIHTTPRequest *)request;
+
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index;
 - (CGRect)getRectForItemInLiveStream:(int)index;
 

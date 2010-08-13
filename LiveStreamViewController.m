@@ -643,79 +643,11 @@
 }
 
 - (IBAction)refreshLiveStream {
-	NSLog(@"%d %d", [self liveStreamItemsCurrentlyInView:@"first"],[self liveStreamItemsCurrentlyInView:@"last"]);
-	NSLog(@"%f %f", [liveStreamScrollView bounds].origin.x, [liveStreamScrollView bounds].origin.y);
-	/*currentLiveStreamMode = kLiveStreamModeLarge;
 	
-	int numImageViewsToPlace = [self numberOfImagesForStream];
-	int numRows = 1;
-	int numCols = 0;
-	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
+}
+
+- (void)refreshComplete:(ASIHTTPRequest *)request {
 	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		
-		if(row == 0)
-		{
-			numCols += 1;
-		}
-	}
-	
-	int contentSizeWidth = (((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * numCols) + (3 * kLiveStreamHorizontalPadding));
-	
-	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		int col = i / numRows;
-		
-		LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
-		
-		if(row == 0)
-		{
-			[photoView setFrame:CGRectMake((((kLiveStreamImageWidth + kLiveStreamHorizontalPadding) * col) + (2* kLiveStreamHorizontalPadding)), kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight)];
-		}
-		
-		[liveStreamScrollView addSubview:photoView];
-	}
-		
-	/*int numImageViewsToPlace = [self numberOfImagesForStream];
-	int numRows = 3;
-	int numCols = 0;
-	int contentSizeHeight = kLiveStreamPreviewStaticHeight;
-	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		
-		if(row == 0)
-		{
-			numCols += 1;
-		}
-	}
-	
-	int contentSizeWidth = ((kLiveStreamPreviewImageWidth + 2) * numCols);
-	
-	[liveStreamScrollView setContentSize:CGSizeMake(contentSizeWidth, contentSizeHeight)];
-	
-	for (int i = 0; i < numImageViewsToPlace; i++) {
-		int row = i % numRows;
-		int col = i / numRows;
-		
-		LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageNamed:@"gray.jpg"]];
-		
-		if(row == 0)
-		{
-			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		else if(row == 1) {
-			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewMidStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		else if(row == 2) {
-			[photoView setFrame:CGRectMake(((kLiveStreamPreviewImageWidth + kLiveStreamPreviewHorizontalPadding) * col), kLiveStreamPreviewBottomStartPoint_Y, kLiveStreamPreviewImageWidth, kLiveStreamPreviewImageHeight)];
-		}
-		
-		[liveStreamScrollView addSubview:photoView];
-	}*/
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

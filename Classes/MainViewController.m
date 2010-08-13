@@ -36,6 +36,8 @@
 	singlePhotoView = [[SinglePhotoViewController alloc] init];
 	applicationAPI = [[LiveGatherAPI alloc] init];
 	
+	[tagsScrollView setShowsHorizontalScrollIndicator:NO];
+	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
 	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
 	
@@ -68,15 +70,20 @@
 	NSMutableArray *tagsArray = [[NSMutableArray alloc] initWithArray:[applicationAPI getRecentTagsWithLimit:5]];
 	
 	int numTagsToPlace = [tagsArray count];
-	float currentPointInScrollView = 0;
+	int currentPositionInScrollView = 0;
 	
 	for (int i = 0; i < numTagsToPlace; i++) {
 		LGTag *tag = [tagsArray objectAtIndex:i];
-		UILabel *label = [[UILabel alloc] init];
+		CGSize size = [[tag tag] sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(320, 20)];
+		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(currentPositionInScrollView, 0, size.width, size.height)];
+		currentPositionInScrollView += label.frame.size.width;
 		[label setTextColor:[UIColor blueColor]];
+		[label setFont:[UIFont fontWithName:@"Helvetica" size:14]];
 		[label setText:[NSString stringWithFormat:@"#%@",[tag tag]]];
 		[tagsScrollView addSubview:label];
-		currentPointInScrollView += label.frame.size.width;
+		[tagsScrollView setContentSize:CGSizeMake(currentPositionInScrollView, 20)];
+		NSLog(@": %f", label.frame.origin.x);
+		NSLog(@":: %f", label.frame.size.width);
 	}
 }
 

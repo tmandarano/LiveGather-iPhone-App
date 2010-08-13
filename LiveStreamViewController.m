@@ -11,8 +11,11 @@
 
 @implementation LiveStreamViewController
 
+//Functions for calculating the index number of livestream items
 #define photoIndex(row, col) ((3 * col) + row)
 #define largePhotoIndex(row, col) ((1 * col) + row)
+
+//Measurements for all livestream items
 #define kLiveStreamPreviewStartPoint_X 5
 #define kLiveStreamPreviewStartPoint_Y 15
 #define kLiveStreamPreviewMidStartPoint_X 5
@@ -27,29 +30,30 @@
 //For Large View
 #define kLiveStreamStartPoint_X 15
 #define kLiveStreamStartPoint_Y 9
-#define kLiveStreamHorizontalPadding 7 //1/2 of 15 right?
+#define kLiveStreamHorizontalPadding 7
 #define kLiveStreamImageWidth 290
 #define kLiveStreamImageHeight 360
 
-// The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
-        // Custom initialization
+		
     }
     return self;
 }
 
 
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
+// We're going to do our setup work here
 - (void)viewDidLoad {
+	//App API is a designated place for all server and misc. functions
 	applicationAPI = [[LiveGatherAPI alloc] init];
-	//streamArray = [NSMutableArray new];
-	//streamContainersArray = [NSMutableArray new];
 	
+	//Setup the frame for our scroll view for the livestream
 	liveStreamScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, 320, 416)];
 	[liveStreamScrollView setBackgroundColor:[UIColor blackColor]];
 	[liveStreamScrollView setDelegate:self];
 	
+	//liveStreamObjects will hold LGPhotos and liveStreamObjectViews will hold LGPhotoViews
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
 	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
 	
@@ -85,6 +89,11 @@
 					if (photoView == nil) {
 						photoView = [[[LGPhotoView alloc] init] autorelease];
 					}
+				//	LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+				//	NSString *caption = [photo photoCaption];
+					
+				//	NSLog(@"");
+					
 					photoView = [self configureItem:photoView forIndex:i];
 					[photoView setUserInteractionEnabled:YES];
 					[photoView setDelegate:self];
@@ -115,6 +124,9 @@
 					if (photoView == nil) {
 						photoView = [[[LGPhotoView alloc] init] autorelease];
 					}
+				//	LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+				//	NSLog(@"%@", [photo photoCaption]);
+					
 					photoView = [self configureItem:photoView forIndex:i];
 					[photoView setUserInteractionEnabled:YES];
 					[photoView setDelegate:self];
@@ -431,13 +443,6 @@
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
-	/*LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
-	[liveStreamScrollView bringSubviewToFront:photoView];
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1.0];
-	[photoView setFrame:CGRectMake(kLiveStreamStartPoint_X, kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight)];
-	[UIView commitAnimations];*/
-	
 	if (currentLiveStreamMode == kLiveStreamModeIcons) {
 		/*LGPhotoView *photoView = [liveStreamObjects objectAtIndex:imgIndex];
 		[liveStreamScrollView bringSubviewToFront:photoView];
@@ -450,13 +455,102 @@
 		//[self drawItemsToLiveStream];
 		[self redrawAllItemsToLiveStream];
 		CGRect rect = [self getRectForItemInLiveStream:imgIndex];
-		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y)];
+		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y) animated:NO];
 		[self drawItemsToLiveStream];
 	}
 }
 
 - (void)photoLocationLabelWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
 	
+}
+
+- (int)largeImageCurrentlyMostDisplayed {
+	int firstIndex = [self liveStreamItemsCurrentlyInView:@"first"];
+	int lastIndex = [self liveStreamItemsCurrentlyInView:@"last"];
+	int indexDifference = ((lastIndex - firstIndex) + 1);
+	
+	NSLog(@"%d", indexDifference);
+	
+	int indexVisible = 0;
+	
+	switch (indexDifference) {
+		case 3:
+			if (CGRectIntersectsRect([liveStreamScrollView bounds], [self getRectForItemInLiveStream:lastIndex])) {
+				firstIndex += 1;
+				
+				CGRect firstRect = [self getRectForItemInLiveStream:firstIndex];
+				CGRect lastRect = [self getRectForItemInLiveStream:lastIndex];
+				CGRect liveStreamVisibleBounds = [liveStreamScrollView bounds];
+				int liveStreamEndX = liveStreamVisibleBounds.origin.x + 320;
+				int firstDiff = liveStreamVisibleBounds.origin.x - firstRect.origin.x;
+				
+				int first = kLiveStreamImageWidth - firstDiff;
+				int last = liveStreamEndX - lastRect.origin.x;
+				
+				if (first > last) {
+					indexVisible = firstIndex;
+				}
+				else if (last > first) {
+					indexVisible = lastIndex;
+				}
+				else if (first == last) {
+					indexVisible = lastIndex;
+				}
+			}
+			else if (CGRectIntersectsRect([liveStreamScrollView bounds], [self getRectForItemInLiveStream:firstIndex])) {
+				lastIndex -= 1;
+				
+				CGRect firstRect = [self getRectForItemInLiveStream:firstIndex];
+				CGRect lastRect = [self getRectForItemInLiveStream:lastIndex];
+				CGRect liveStreamVisibleBounds = [liveStreamScrollView bounds];
+				int liveStreamEndX = liveStreamVisibleBounds.origin.x + 320;
+				int firstDiff = liveStreamVisibleBounds.origin.x - firstRect.origin.x;
+				
+				int first = kLiveStreamImageWidth - firstDiff;
+				int last = liveStreamEndX - lastRect.origin.x;
+				
+				if (first > last) {
+					indexVisible = firstIndex;
+				}
+				else if (last > first) {
+					indexVisible = lastIndex;
+				}
+				else if (first == last) {
+					indexVisible = lastIndex;
+				}
+			}
+			break;
+		case 4:
+			firstIndex += 1;
+			lastIndex -= 1;
+			
+			CGRect firstRect = [self getRectForItemInLiveStream:firstIndex];
+			CGRect lastRect = [self getRectForItemInLiveStream:lastIndex];
+			CGRect liveStreamVisibleBounds = [liveStreamScrollView bounds];
+			int liveStreamEndX = liveStreamVisibleBounds.origin.x + 320;
+			int firstDiff = liveStreamVisibleBounds.origin.x - firstRect.origin.x;
+			
+			int first = kLiveStreamImageWidth - firstDiff;
+			int last = liveStreamEndX - lastRect.origin.x;
+			
+			if (first > last) {
+				indexVisible = firstIndex;
+			}
+			else if (last > first) {
+				indexVisible = lastIndex;
+			}
+			else if (first == last) {
+				indexVisible = lastIndex;
+			}			
+			break;
+		case 5:
+			indexVisible = lastIndex - 2;
+			break;
+		default:
+			break;
+	}
+	
+	return indexVisible;
 }
 
 - (void)downloadNewLiveStreamPhotos; {
@@ -483,9 +577,18 @@
 			[networkQueue addOperation:request];
 		}
 		else {
+			LGPhoto *data = [applicationAPI getPhotoForID:photo.photoID];
+						
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setID:photo.photoID];
 			[img setPhotoIndex:[liveStreamObjects count]];
+			[img setPhotoCaption:[data photoCaption]];
+			[img setPhotoUser:[data photoUser]];
+			[img setPhotoTags:[data photoTags]];
+			[img setPhotoUserID:[data photoUserID]];
+			[img setPhotoName:[data photoName]];
+			[img setPhotoDateAdded:[data photoDateAdded]];
+			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:img];
 			[photoView setIndex:img.photoIndex];
@@ -510,6 +613,7 @@
 			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 			[photo setID:[photoID intValue]];
 			[photo setPhotoIndex:[liveStreamObjects count]];
+			[photo setPhotoCaption:@"WTFMATE"];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photoView setIndex:photo.photoIndex];
@@ -524,6 +628,7 @@
 		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 		[photo setID:[photoID intValue]];
+		[photo setPhotoCaption:@"WTFMATE"];
 		LGPhotoView *photoView = [[LGPhotoView alloc] init];
 		[photoView setPhoto:photo];
 		[photo setPhotoIndex:[liveStreamObjects count]];
@@ -538,26 +643,8 @@
 }
 
 - (IBAction)refreshLiveStream {
-	NSLog(@"------BEGIN DEBUG INFO DUMP------");
-	NSLog(@"First Visible: %d | Last Visible: %d", [self liveStreamItemsCurrentlyInView:@"first"], [self liveStreamItemsCurrentlyInView:@"last"]);
-	for (int i = 0; i < [liveStreamObjects count]; i++) {
-		if ([self isDisplayingItemForIndex:i]) {
-			NSLog(@"Image %d is being shown", i);
-		}
-		else {
-			NSLog(@"Image %d is NOT being shown", i);
-		}
-
-	}
-	NSLog(@"------END DEBUG DUMP------");
-	
-	
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:1.0];
-	CGRect rect = [self getRectForItemInLiveStream:10];
-	[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y)];
-	[UIView commitAnimations];
-	
+	NSLog(@"%d %d", [self liveStreamItemsCurrentlyInView:@"first"],[self liveStreamItemsCurrentlyInView:@"last"]);
+	NSLog(@"%f %f", [liveStreamScrollView bounds].origin.x, [liveStreamScrollView bounds].origin.y);
 	/*currentLiveStreamMode = kLiveStreamModeLarge;
 	
 	int numImageViewsToPlace = [self numberOfImagesForStream];
@@ -638,13 +725,14 @@
 	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
 		[self drawItemsToLiveStream];
 	}
-	/*NSLog(@"------BEGIN DEBUG INFO DUMP %d------", currentLiveStreamMode);
-	NSLog(@"First Visible: %d | Last Visible: %d", [self liveStreamItemsCurrentlyInView:@"first"], [self liveStreamItemsCurrentlyInView:@"last"]);
-	NSLog(@"------END DEBUG DUMP------");*/
 }
 
 - (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	
+	if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		int visibleIndex = [self largeImageCurrentlyMostDisplayed];
+		CGRect visibleRect = [self getRectForItemInLiveStream:visibleIndex];
+		[liveStreamScrollView setContentOffset:CGPointMake((visibleRect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y) animated:YES];
+	}
 }
 
 - (IBAction)searchLiveSteam {
@@ -661,7 +749,7 @@
 		currentLiveStreamMode = kLiveStreamModeIcons;
 		[self drawItemsToLiveStream];
 		CGRect rect = [self getRectForItemInLiveStream:currentItemInView];
-		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - kLiveStreamPreviewHorizontalPadding), liveStreamScrollView.contentOffset.y)];
+		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - kLiveStreamPreviewHorizontalPadding), liveStreamScrollView.contentOffset.y) animated:YES];
 		[self redrawAllItemsToLiveStream];
 	}
 
@@ -671,16 +759,12 @@
 	
 }
 
-//<!-- Custom Methods
 
-
-/*
- // Override to allow orientations other than the default portrait orientation.
  - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
  // Return YES for supported orientations
  return (interfaceOrientation == UIInterfaceOrientationPortrait);
- }
- */
+}
+ 
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.

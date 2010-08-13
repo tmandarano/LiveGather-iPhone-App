@@ -50,6 +50,7 @@
 		1176F49611FA0C3100CCA857 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F48E11FA0C3000CCA857 /* ASIInputStream.m */; };
 		1176F49711FA0C3100CCA857 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F49011FA0C3100CCA857 /* ASINetworkQueue.m */; };
 		1176F4AC11FA0E6C00CCA857 /* LGPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F4AB11FA0E6C00CCA857 /* LGPhoto.m */; };
+		117EBECB1213D98400B81279 /* json_cache.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117EBECA1213D98400B81279 /* json_cache.plist */; };
 		1191BEFD11797F94003DF9B8 /* AccountLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */; };
 		1191BEFE11797F94003DF9B8 /* UploadPhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */; };
 		1191BF3F11798459003DF9B8 /* UploadPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1191BF3E11798459003DF9B8 /* UploadPhotoViewController.m */; };
@@ -221,6 +222,7 @@
 		1176F49111FA0C3100CCA857 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		1176F4AA11FA0E6C00CCA857 /* LGPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhoto.h; sourceTree = "<group>"; };
 		1176F4AB11FA0E6C00CCA857 /* LGPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhoto.m; sourceTree = "<group>"; };
+		117EBECA1213D98400B81279 /* json_cache.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = json_cache.plist; sourceTree = "<group>"; };
 		1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountLoginView.xib; sourceTree = "<group>"; };
 		1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPhotoView.xib; sourceTree = "<group>"; };
 		1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadPhotoViewController.h; sourceTree = "<group>"; };
@@ -749,6 +751,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				117EBECA1213D98400B81279 /* json_cache.plist */,
 				280E754B0DD40C5E005A515E /* MainView.xib */,
 				11D1FD581179648C007B66EF /* LiveStreamView.xib */,
 				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
@@ -927,6 +930,7 @@
 				115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */,
 				115AB40412069FB3002B4468 /* Image.png in Resources */,
 				115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */,
+				117EBECB1213D98400B81279 /* json_cache.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

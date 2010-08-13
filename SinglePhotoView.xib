@@ -488,10 +488,10 @@
 							<reference ref="552659721"/>
 							<reference ref="508319769"/>
 							<reference ref="588912902"/>
-							<reference ref="428208424"/>
-							<reference ref="890910411"/>
 							<reference ref="328175884"/>
 							<reference ref="85900903"/>
+							<reference ref="890910411"/>
+							<reference ref="428208424"/>
 						</object>
 						<reference key="parent" ref="0"/>
 					</object>
@@ -666,7 +666,7 @@
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">
-						<bytes key="NSTransformStruct">P4AAAL+AAABBIAAAwoYAAA</bytes>
+						<bytes key="NSTransformStruct">P4AAAL+AAABBIAAAwpYAAA</bytes>
 					</object>
 					<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 					<object class="NSAffineTransform">

@@ -64,4 +64,6 @@ typedef enum _CurrentLiveStreamMode {
 - (LGPhotoView *)dequeueRecycledLiveStreamView;
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
 
+- (int)largeImageCurrentlyMostDisplayed;
+
 @end

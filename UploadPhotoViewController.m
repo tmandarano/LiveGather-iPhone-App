@@ -99,7 +99,7 @@
 - (void)uploadImageToServer:(UIImage *)img {
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 		
-	NSData *imageData = UIImageJPEGRepresentation(img, 100);
+	NSData *imageData = UIImageJPEGRepresentation(img, 1.0);
 	NSURL *url = [NSURL URLWithString:@"http://projc:pr0j(@dev.livegather.com/api/photos/upload"];
 	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
 	[request setDelegate:self];
@@ -114,10 +114,15 @@
 {
 	NSString *responseString = [request responseString];
 	NSLog(@"response: %@", responseString);
+	fileResponseFromServer = responseString;
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
+	
+}
+
+- (void)resetUploadView {
 	
 }
 

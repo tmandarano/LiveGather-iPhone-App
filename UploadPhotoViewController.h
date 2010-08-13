@@ -31,6 +31,8 @@
 	MainViewController			*mainViewController;
 	LiveGatherAPI				*livegatherController;
 	UIImagePickerController		*imagePickerController;
+	
+	NSString					*fileResponseFromServer;
 }
 
 - (IBAction)cancel;
@@ -40,5 +42,6 @@
 - (IBAction)sendToFacebook;
 - (void)showUserImageControlOption;
 - (void)uploadImageToServer:(UIImage *)img;
+- (void)resetUploadView;
 
 @end

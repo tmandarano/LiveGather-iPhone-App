@@ -242,7 +242,7 @@
 			[imageDetailsBackground setAlpha:0.9];
 			
 			UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 97, 18)];
-			[uploadDateLabel setText:photo.photoDateAdded];
+			[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
 			[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
 			[uploadDateLabel setTextColor:[UIColor whiteColor]];
 			[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
@@ -277,7 +277,7 @@
 			NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
 			LGTag *tag = [photoTags lastObject];
 			UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
-			[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
+			[tagsLabel setText:[NSString stringWithFormat:@"#%@",tag.tag]];
 			[tagsLabel setTextAlignment:UITextAlignmentRight];
 			[tagsLabel setTextColor:[UIColor blueColor]];
 			[tagsLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];

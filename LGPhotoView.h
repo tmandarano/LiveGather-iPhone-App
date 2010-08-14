@@ -24,10 +24,12 @@
 }
 
 @property (nonatomic, assign) id <LGPhotoDelegate> delegate;
+@property (nonatomic, retain) LGPhoto *photo;
+@property (nonatomic) int index;
 
 - (void)setDelegate:(id <LGPhotoDelegate>)dlg;
 
-- (void)setIndex:(int)newIndex;
+/*- (void)setIndex:(int)newIndex;
 - (int)index;
 
 - (void)setPhoto:(LGPhoto *)newPhoto;
@@ -52,6 +54,6 @@
 
 - (UIImage *)photoImage;
 
-- (NSString *)photoPath;
+- (NSString *)photoPath;*/
 
 @end

@@ -12,6 +12,8 @@
 @implementation LGPhotoView
 
 @synthesize delegate;
+@synthesize photo;
+@synthesize index;
 
 - (id)init {
 	
@@ -31,15 +33,15 @@
 	CGPoint pt = [[touches anyObject] locationInView:self];
 	
 	if (CGRectContainsPoint(CGRectMake(77, 311, 155, 18), pt)) {
-		[delegate photoLocationLabelWasTouchedWithID:[self photoID] andIndex:[self index]];
+		[delegate photoLocationLabelWasTouchedWithID:self.photo.photoID andIndex:self.index];
 	}
 	else {
-		[delegate photoViewWasTouchedWithID:[self photoID] andIndex:[self index]];
+		[delegate photoViewWasTouchedWithID:self.photo.photoID andIndex:self.index];
 	}
 
 }
 
-- (void)setIndex:(int)newIndex {
+/*- (void)setIndex:(int)newIndex {
 	index = newIndex;
 }
 
@@ -97,6 +99,6 @@
 
 - (NSString *)photoPath {
 	return photo.photoPath;
-}
+}*/
 
 @end

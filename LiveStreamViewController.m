@@ -89,10 +89,6 @@
 					if (photoView == nil) {
 						photoView = [[[LGPhotoView alloc] init] autorelease];
 					}
-				//	LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
-				//	NSString *caption = [photo photoCaption];
-					
-				//	NSLog(@"");
 					
 					photoView = [self configureItem:photoView forIndex:i];
 					[photoView setUserInteractionEnabled:YES];
@@ -123,13 +119,79 @@
 					LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
 					if (photoView == nil) {
 						photoView = [[[LGPhotoView alloc] init] autorelease];
-					}
-				//	LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
-				//	NSLog(@"%@", [photo photoCaption]);
-					
+					}					
 					photoView = [self configureItem:photoView forIndex:i];
 					[photoView setUserInteractionEnabled:YES];
 					[photoView setDelegate:self];
+					
+					LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+					
+					//Add in subviews
+					UIImageView *uploadDateBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+					[uploadDateBackground setFrame:CGRectMake(5, 7, 97, 18)];
+					[uploadDateBackground setAlpha:0.7];
+					
+					UIImageView *usernameBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+					[usernameBackground setFrame:CGRectMake(199, 7, 88, 18)];
+					[usernameBackground setAlpha:0.7];
+					
+					UIImageView *locationBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+					[locationBackground setFrame:CGRectMake(77, 311, 155, 18)];
+					[locationBackground setAlpha:0.7];
+					
+					UIImageView *imageDetailsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_caption_bg.png"]];
+					[imageDetailsBackground setFrame:CGRectMake(5, 332, 280, 23)];
+					[imageDetailsBackground setAlpha:0.9];
+					
+					UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 97, 18)];
+					[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
+					[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
+					[uploadDateLabel setTextColor:[UIColor whiteColor]];
+					[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+					[uploadDateLabel setBackgroundColor:[UIColor clearColor]];
+					[uploadDateBackground addSubview:uploadDateLabel];
+					
+					LGUser *user = photoView.photo.photoUser;
+					UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 88, 18)];
+					[usernameLabel setText:user.username];
+					[usernameLabel setTextAlignment:UITextAlignmentCenter];
+					[usernameLabel setTextColor:[UIColor whiteColor]];
+					[usernameLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+					[usernameLabel setBackgroundColor:[UIColor clearColor]];
+					[usernameBackground addSubview:usernameLabel];
+					
+					UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 155, 18)];
+					[locationLabel setText:photo.photoLocation];
+					[locationLabel setTextAlignment:UITextAlignmentCenter];
+					[locationLabel setTextColor:[UIColor whiteColor]];
+					[locationLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+					[locationLabel setBackgroundColor:[UIColor clearColor]];
+					[locationBackground addSubview:locationLabel];
+					
+					UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 2, 192, 18)];
+					[captionLabel setText:photo.photoCaption];
+					[captionLabel setTextAlignment:UITextAlignmentLeft];
+					[captionLabel setTextColor:[UIColor blackColor]];
+					[captionLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+					[captionLabel setBackgroundColor:[UIColor clearColor]];
+					[imageDetailsBackground addSubview:captionLabel];
+					
+					NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
+					LGTag *tag = [photoTags lastObject];
+					UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
+					[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
+					[tagsLabel setTextAlignment:UITextAlignmentRight];
+					[tagsLabel setTextColor:[UIColor blueColor]];
+					[tagsLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+					[tagsLabel setBackgroundColor:[UIColor clearColor]];
+					[imageDetailsBackground addSubview:captionLabel];
+					[imageDetailsBackground addSubview:tagsLabel];
+					
+					[photoView addSubview:uploadDateBackground];
+					[photoView addSubview:usernameBackground];
+					[photoView addSubview:locationBackground];
+					[photoView addSubview:imageDetailsBackground];
+					
 					[liveStreamScrollView addSubview:photoView];
 					[visibleLiveStreamItems addObject:photoView];
 				}
@@ -144,8 +206,8 @@
 - (void)redrawAllItemsToLiveStream {
 	[visibleLiveStreamItems removeAllObjects];
 	
-	for (UIView *vw in liveStreamScrollView.subviews) {
-		[vw removeFromSuperview];
+	for (UIView *subview in liveStreamScrollView.subviews) {
+		[subview removeFromSuperview];
 	}
 	
 	int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
@@ -159,6 +221,75 @@
 			photoView = [self configureItem:photoView forIndex:i];
 			[photoView setUserInteractionEnabled:YES];
 			[photoView setDelegate:self];
+			
+			LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+			
+			//Add in subviews
+			UIImageView *uploadDateBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+			[uploadDateBackground setFrame:CGRectMake(5, 7, 97, 18)];
+			[uploadDateBackground setAlpha:0.7];
+			
+			UIImageView *usernameBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+			[usernameBackground setFrame:CGRectMake(199, 7, 88, 18)];
+			[usernameBackground setAlpha:0.7];
+			
+			UIImageView *locationBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+			[locationBackground setFrame:CGRectMake(77, 311, 155, 18)];
+			[locationBackground setAlpha:0.7];
+			
+			UIImageView *imageDetailsBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_caption_bg.png"]];
+			[imageDetailsBackground setFrame:CGRectMake(5, 332, 280, 23)];
+			[imageDetailsBackground setAlpha:0.9];
+			
+			UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 97, 18)];
+			[uploadDateLabel setText:photo.photoDateAdded];
+			[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
+			[uploadDateLabel setTextColor:[UIColor whiteColor]];
+			[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+			[uploadDateLabel setBackgroundColor:[UIColor clearColor]];
+			[uploadDateBackground addSubview:uploadDateLabel];
+			
+			LGUser *user = photoView.photo.photoUser;
+			UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 88, 18)];
+			[usernameLabel setText:user.username];
+			[usernameLabel setTextAlignment:UITextAlignmentCenter];
+			[usernameLabel setTextColor:[UIColor whiteColor]];
+			[usernameLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+			[usernameLabel setBackgroundColor:[UIColor clearColor]];
+			[usernameBackground addSubview:usernameLabel];
+			
+			UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 155, 18)];
+			[locationLabel setText:photo.photoLocation];
+			[locationLabel setTextAlignment:UITextAlignmentCenter];
+			[locationLabel setTextColor:[UIColor whiteColor]];
+			[locationLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+			[locationLabel setBackgroundColor:[UIColor clearColor]];
+			[locationBackground addSubview:locationLabel];
+			
+			UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 2, 192, 18)];
+			[captionLabel setText:photo.photoCaption];
+			[captionLabel setTextAlignment:UITextAlignmentLeft];
+			[captionLabel setTextColor:[UIColor blackColor]];
+			[captionLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+			[captionLabel setBackgroundColor:[UIColor clearColor]];
+			[imageDetailsBackground addSubview:captionLabel];
+			
+			NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
+			LGTag *tag = [photoTags lastObject];
+			UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
+			[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
+			[tagsLabel setTextAlignment:UITextAlignmentRight];
+			[tagsLabel setTextColor:[UIColor blueColor]];
+			[tagsLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
+			[tagsLabel setBackgroundColor:[UIColor clearColor]];
+			[imageDetailsBackground addSubview:captionLabel];
+			[imageDetailsBackground addSubview:tagsLabel];
+			
+			[photoView addSubview:uploadDateBackground];
+			[photoView addSubview:usernameBackground];
+			[photoView addSubview:locationBackground];
+			[photoView addSubview:imageDetailsBackground];
+			
 			[liveStreamScrollView addSubview:photoView];
 			[visibleLiveStreamItems addObject:photoView];
 		}
@@ -443,20 +574,23 @@
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
-	if (currentLiveStreamMode == kLiveStreamModeIcons) {
-		/*LGPhotoView *photoView = [liveStreamObjects objectAtIndex:imgIndex];
-		[liveStreamScrollView bringSubviewToFront:photoView];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:1.0];
-		[photoView setFrame:CGRectMake(kLiveStreamStartPoint_X, kLiveStreamStartPoint_Y, kLiveStreamImageWidth, kLiveStreamImageHeight)];
-		[UIView commitAnimations];*/
-		
+	if (currentLiveStreamMode == kLiveStreamModeIcons) {		
 		currentLiveStreamMode = kLiveStreamModeLarge;
 		//[self drawItemsToLiveStream];
 		[self redrawAllItemsToLiveStream];
 		CGRect rect = [self getRectForItemInLiveStream:imgIndex];
 		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y) animated:NO];
-		[self drawItemsToLiveStream];
+		[self redrawAllItemsToLiveStream];
+	}
+	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		/*LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
+		MKMapView *mapView = [[MKMapView alloc] init];
+		[mapView setFrame:photoView.frame];
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:2.5];
+		[photoView removeFromSuperview];
+		[liveStreamScrollView addSubview:mapView];
+		[UIView commitAnimations];*/
 	}
 }
 
@@ -580,7 +714,7 @@
 			LGPhoto *data = [applicationAPI getPhotoForID:photo.photoID];
 						
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
-			[img setID:photo.photoID];
+			[img setPhotoID:photo.photoID];
 			[img setPhotoIndex:[liveStreamObjects count]];
 			[img setPhotoCaption:[data photoCaption]];
 			[img setPhotoUser:[data photoUser]];
@@ -611,7 +745,7 @@
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-			[photo setID:[photoID intValue]];
+			[photo setPhotoID:[photoID intValue]];
 			[photo setPhotoIndex:[liveStreamObjects count]];
 			[photo setPhotoCaption:@"WTFMATE"];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
@@ -627,7 +761,7 @@
 		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-		[photo setID:[photoID intValue]];
+		[photo setPhotoID:[photoID intValue]];
 		[photo setPhotoCaption:@"WTFMATE"];
 		LGPhotoView *photoView = [[LGPhotoView alloc] init];
 		[photoView setPhoto:photo];

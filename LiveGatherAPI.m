@@ -120,13 +120,16 @@
 		NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
 		NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
 		[photoTag setTag:tagName];
-		[photoTag setTagID:tag_id];
+		[photoTag setID:tag_id];
 		[photoTags addObject:photoTag];
 	}
 	
 	[photo setPhotoName:name];
 	[photo setPhotoUserID:userID];
-	[photo setPhotoLocation:latitude withLong:longitude];
+	//[photo setPhotoUser:[self getUserForID:[userID intValue]]];
+	[photo setPhotoLocationLatitude:latitude];
+	[photo setPhotoLocationLongitude:longitude];
+	[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
 	[photo setPhotoCaption:caption];
 	[photo setPhotoDateAdded:dateAdded];
 	[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
@@ -173,6 +176,33 @@
     return arr;
 }
 
+- (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate {
+	NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [df setDateFormat:@"YYYY-MM-DD HH:MM:SS"];
+    NSDate *convertedDate = [df dateFromString:sqlDate];
+    [df release];
+    NSDate *todayDate = [NSDate date];
+    double ti = [convertedDate timeIntervalSinceDate:todayDate];
+    ti = ti * -1;
+    if(ti < 1) {
+        return @"never";
+    } else      if (ti < 60) {
+        return @"less than a minute ago";
+    } else if (ti < 3600) {
+        int diff = round(ti / 60);
+        return [NSString stringWithFormat:@"%d minutes ago", diff];
+    } else if (ti < 86400) {
+        int diff = round(ti / 60 / 60);
+        return[NSString stringWithFormat:@"%d hours ago", diff];
+    } else if (ti < 2629743) {
+        int diff = round(ti / 60 / 60 / 24);
+        return[NSString stringWithFormat:@"%d days ago", diff];
+    } else {
+        return @"never";
+    }
+}
+
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude {
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
 	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@,%@&output=json&sensor=true_or_false", latitude, longitude]]];
@@ -213,17 +243,20 @@
 			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
 			NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
 			[photoTag setTag:tagName];
-			[photoTag setTagID:tag_id];
+			[photoTag setID:tag_id];
 			[photoTags addObject:photoTag];
 		}
 		
 		NSLog(@"Processing Photo: %@", ID);
 		
-		[photo setID:[ID intValue]];
+		[photo setPhotoID:[ID intValue]];
 		[photo setPhotoName:name];
 		[photo setPhotoURL:URL];
 		[photo setPhotoUserID:userID];
-		[photo setPhotoLocation:latitude withLong:longitude];
+		//[photo setPhotoUser:[self getUserForID:[userID intValue]]];
+		[photo setPhotoLocationLatitude:latitude];
+		[photo setPhotoLocationLongitude:longitude];
+		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
 		[photo setPhotoCaption:caption];
 		[photo setPhotoDateAdded:dateAdded];
 		[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
@@ -256,7 +289,7 @@
 		NSLog(@"Processing Tag: %@", tagName);
 		
 		[tag setTag:tagName];
-		[tag setTagID:tagID];
+		[tag setID:tagID];
 		[tag setDateAdded:dateAdded];
 		
 		[returnArray addObject:tag];

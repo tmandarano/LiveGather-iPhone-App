@@ -27,5 +27,6 @@
 - (LGPhoto *)getPhotoForID:(int)photoID;
 - (LGUser *)getUserForID:(int)userID;
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude;
+- (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate;
 
 @end

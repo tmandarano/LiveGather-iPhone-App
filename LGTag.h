@@ -15,13 +15,17 @@
 	NSString	*dateAdded;
 }
 
-- (NSString *)tagID;
+@property (nonatomic, retain) NSString *ID;
+@property (nonatomic, retain) NSString *tag;
+@property (nonatomic, retain) NSString *dateAdded;
+
+/*- (NSString *)tagID;
 - (void)setTagID:(NSString *)tagID;
 
 - (NSString *)tag;
 - (void)setTag:(NSString *)tagName;
 
 - (NSString *)dateAdded;
-- (void)setDateAdded:(NSString *)dateTagAdded;
+- (void)setDateAdded:(NSString *)dateTagAdded;*/
 
 @end

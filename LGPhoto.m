@@ -11,6 +11,21 @@
 
 @implementation LGPhoto
 
+@synthesize photoID;
+@synthesize photoURL;
+@synthesize photoName;
+@synthesize photoLocationLatitude;
+@synthesize photoLocationLongitude;
+@synthesize photoAddress;
+@synthesize photoLocation;
+@synthesize photoCaption;
+@synthesize photoTags;
+@synthesize photoUser;
+@synthesize photoDateAdded;
+@synthesize photoUserID;
+@synthesize photoPath;
+@synthesize photoIndex;
+
 - (id)init {
 	
 	if(self = [super init])
@@ -20,7 +35,7 @@
 	return self;
 }
 
-- (int)photoID {
+/*- (int)photoID {
 	return photoID;
 }
 
@@ -65,7 +80,7 @@
 	photoLocationLongitude = longitude;
 }
 
-- (NSString *)photoLocatio {
+- (NSString *)photoLocation {
 	
 }
 
@@ -127,6 +142,6 @@
 
 - (void)setPhotoPath:(NSString *)path {
 	photoPath = path;
-}
+}*/
 
 @end

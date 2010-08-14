@@ -67,23 +67,22 @@
 }
 
 - (void)updateTags {
-	NSMutableArray *tagsArray = [[NSMutableArray alloc] initWithArray:[applicationAPI getRecentTagsWithLimit:5]];
+	NSMutableArray *tagsArray = [[NSMutableArray alloc] initWithArray:[applicationAPI getRecentTagsWithLimit:10]];
 	
 	int numTagsToPlace = [tagsArray count];
 	int currentPositionInScrollView = 0;
 	
 	for (int i = 0; i < numTagsToPlace; i++) {
 		LGTag *tag = [tagsArray objectAtIndex:i];
-		CGSize size = [[tag tag] sizeWithFont:[UIFont systemFontOfSize:14] constrainedToSize:CGSizeMake(320, 20)];
-		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(currentPositionInScrollView, 0, size.width, size.height)];
-		currentPositionInScrollView += label.frame.size.width;
+		UILabel *label = [[UILabel alloc] init];
 		[label setTextColor:[UIColor blueColor]];
 		[label setFont:[UIFont fontWithName:@"Helvetica" size:14]];
 		[label setText:[NSString stringWithFormat:@"#%@",[tag tag]]];
 		[tagsScrollView addSubview:label];
+		CGSize labelSize = [label.text sizeWithFont:label.font];
+		label.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
+		currentPositionInScrollView = labelSize.width + 5;
 		[tagsScrollView setContentSize:CGSizeMake(currentPositionInScrollView, 20)];
-		NSLog(@": %f", label.frame.origin.x);
-		NSLog(@":: %f", label.frame.size.width);
 	}
 }
 
@@ -318,7 +317,7 @@
 		}
 		else {
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
-			[img setID:photo.photoID];
+			[img setPhotoID:photo.photoID];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photoView setIndex:photo.photoIndex];
@@ -341,7 +340,7 @@
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-			[photo setID:[photoID intValue]];
+			[photo setPhotoID:[photoID intValue]];
 			[photo setPhotoIndex:[liveStreamObjects count]];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
@@ -356,7 +355,7 @@
 		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-		[photo setID:[photoID intValue]];
+		[photo setPhotoID:[photoID intValue]];
 		LGPhotoView *photoView = [[LGPhotoView alloc] init];
 		[photoView setPhoto:photo];
 		[photo setPhotoIndex:[liveStreamObjects count]];

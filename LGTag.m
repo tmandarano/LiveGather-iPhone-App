@@ -11,7 +11,11 @@
 
 @implementation LGTag
 
-- (NSString *)tagID {
+@synthesize ID;
+@synthesize tag;
+@synthesize dateAdded;
+
+/*- (NSString *)tagID {
 	return ID;
 }
 
@@ -33,6 +37,6 @@
 
 - (void)setDateAdded:(NSString *)dateTagAdded {
 	dateAdded = dateTagAdded;
-}
+}*/
 
 @end

@@ -29,7 +29,22 @@
 	int			photoIndex;
 }
 
-//Getters and setters
+@property (nonatomic) int photoID;
+@property (nonatomic, retain) NSString *photoURL;
+@property (nonatomic, retain) NSString *photoName;
+@property (nonatomic, retain) NSString *photoLocationLatitude;
+@property (nonatomic, retain) NSString *photoLocationLongitude;
+@property (nonatomic, retain) NSString *photoAddress;
+@property (nonatomic, retain) NSString *photoLocation;
+@property (nonatomic, retain) NSString *photoCaption;
+@property (nonatomic, retain) NSArray *photoTags;
+@property (nonatomic, retain) LGUser *photoUser;
+@property (nonatomic, retain) NSString *photoDateAdded;
+@property (nonatomic, retain) NSString *photoUserID;
+@property (nonatomic, retain) NSString *photoPath;
+@property (nonatomic) int photoIndex;
+
+/*Getters and setters
 
 - (int)photoID;
 - (void)setID:(int)ID;
@@ -68,6 +83,6 @@
 - (void)setPhotoUserID:(NSString *)userid;
 
 - (NSString *)photoPath;
-- (void)setPhotoPath:(NSString *)path;
+- (void)setPhotoPath:(NSString *)path;*/
 
 @end

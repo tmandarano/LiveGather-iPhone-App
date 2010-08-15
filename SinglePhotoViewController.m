@@ -67,9 +67,17 @@
 	
 	if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", imgID]]]) {
 		[networkQueue addOperation:request];
+		
+		/************************MEMORY FIX HERE***************************/
+		[fileManager release];
+		/************************MEMORY FIX HERE***************************/
 	}
 	else {
-		[self imageAlreadyExists:imgID];
+		[self imageAlreadyExists:imgID];\
+		
+		/************************MEMORY FIX HERE***************************/
+		[fileManager release];
+		/************************MEMORY FIX HERE***************************/
 	}
 	
 	[networkQueue go];
@@ -84,6 +92,10 @@
 	NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
 	LGTag *tag = [photoTags objectAtIndex:0];
 	[imageTagsLabel setText:[NSString stringWithFormat:@"#%@", tag.tag]];
+	
+	/************************MEMORY FIX HERE***************************/
+	[image release];
+	/************************MEMORY FIX HERE***************************/
 }
 
 - (void)imageAlreadyExists:(int)imgID {
@@ -92,6 +104,10 @@
 	LGPhoto *photo = [applicationAPI getPhotoForID:imageID];
 	[imageCaptionLabel setText:[NSString stringWithFormat:@"%@", photo.photoCaption]];
 	[usernameLabel setText:[NSString stringWithFormat:@"%@", [applicationAPI getUserForID:[photo.photoUserID intValue]].username]];
+	
+	/************************MEMORY FIX HERE***************************/
+	[image release];
+	/************************MEMORY FIX HERE***************************/
 }
 
 - (void)initializeResources {
@@ -104,6 +120,10 @@
 		NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
 		LGTag *tag = [photoTags objectAtIndex:0];
 		[imageTagsLabel setText:[NSString stringWithFormat:@"#%@", tag.tag]];
+		
+		/************************MEMORY FIX HERE***************************/
+		[image release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 

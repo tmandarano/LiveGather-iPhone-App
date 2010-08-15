@@ -113,6 +113,11 @@
 					
 					[photoView addSubview:uploadDateBackground];
 					
+					/************************MEMORY FIX HERE***************************/
+					[uploadDateLabel release];
+					[uploadDateBackground release];
+					/************************MEMORY FIX HERE***************************/
+					
 					[liveStreamScrollView addSubview:photoView];
 					[visibleLiveStreamItems addObject:photoView];
 				}
@@ -221,6 +226,18 @@
 					[photoView addSubview:usernameBackground];
 					[photoView addSubview:locationBackground];
 					[photoView addSubview:imageDetailsBackground];
+					
+					/************************MEMORY FIX HERE***************************/
+					[uploadDateLabel release];
+					[usernameLabel release];
+					[locationLabel release];
+					[captionLabel release];
+					[tagsLabel release];
+					[uploadDateBackground release];
+					[usernameBackground release];
+					[locationBackground release];
+					[imageDetailsBackground release];
+					/************************MEMORY FIX HERE***************************/
 					
 					[liveStreamScrollView addSubview:photoView];
 					[visibleLiveStreamItems addObject:photoView];
@@ -331,11 +348,72 @@
 				[photoView addSubview:locationBackground];
 				[photoView addSubview:imageDetailsBackground];
 				
+				/************************MEMORY FIX HERE***************************/
+				[uploadDateLabel release];
+				[usernameLabel release];
+				[locationLabel release];
+				[captionLabel release];
+				[tagsLabel release];
+				[uploadDateBackground release];
+				[usernameBackground release];
+				[locationBackground release];
+				[imageDetailsBackground release];
+				/************************MEMORY FIX HERE***************************/
+				
 				[liveStreamScrollView addSubview:photoView];
 				[visibleLiveStreamItems addObject:photoView];
 			}
 		}
 	}
+	else if (currentLiveStreamMode == kLiveStreamModeIcons) {
+		[visibleLiveStreamItems removeAllObjects];
+		
+		for (UIView *subview in liveStreamScrollView.subviews) {
+			[subview removeFromSuperview];
+		}
+		
+		int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
+		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
+		for (int i = firstIndexVisibleInStream; i <= lastIndexVisibleInStream; i++) {
+			if (![self isDisplayingItemForIndex:i]) {
+				LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
+				if (photoView == nil) {
+					photoView = [[[LGPhotoView alloc] init] autorelease];
+				}
+				photoView = [self configureItem:photoView forIndex:i];
+				[photoView setUserInteractionEnabled:YES];
+				[photoView setDelegate:self];
+				
+				LGPhoto *photo = [liveStreamObjects objectAtIndex:i];
+				
+				//Add in subviews
+				UIImageView *uploadDateBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
+				[uploadDateBackground setFrame:CGRectMake(12, 105, 100, 20)];
+				[uploadDateBackground setAlpha:0.65];
+				
+				UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
+				[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
+				[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
+				[uploadDateLabel setAdjustsFontSizeToFitWidth:YES];
+				[uploadDateLabel setMinimumFontSize:10];
+				[uploadDateLabel setTextColor:[UIColor whiteColor]];
+				[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0]];
+				[uploadDateLabel setBackgroundColor:[UIColor clearColor]];
+				[uploadDateBackground addSubview:uploadDateLabel];
+				
+				[photoView addSubview:uploadDateBackground];
+				
+				/************************MEMORY FIX HERE***************************/
+				[uploadDateLabel release];
+				[uploadDateBackground release];
+				/************************MEMORY FIX HERE***************************/
+				
+				[liveStreamScrollView addSubview:photoView];
+				[visibleLiveStreamItems addObject:photoView];
+			}
+		}
+	}
+
 }
 
 - (LGPhotoView *)dequeueRecycledLiveStreamView {
@@ -446,6 +524,10 @@
 			}
 		}
 		
+		/************************MEMORY FIX HERE***************************/
+		[arrayOfCellsInView release];
+		/************************MEMORY FIX HERE***************************/
+		
 		if ((firstIndex - 3) > 0 || (firstIndex - 3) == 0) {
 			firstIndex -= 3;
 		}
@@ -523,6 +605,10 @@
 				lastIndex = [[arrayOfCellsInView objectAtIndex:i] intValue];
 			}
 		}
+		
+		/************************MEMORY FIX HERE***************************/
+		[arrayOfCellsInView release];
+		/************************MEMORY FIX HERE***************************/
 		
 		if ((firstIndex - 1) > 0 || (firstIndex - 1) == 0) {
 			firstIndex -= 1;
@@ -638,6 +724,10 @@
 		[photoView removeFromSuperview];
 		[liveStreamScrollView addSubview:mapView];
 		[UIView commitAnimations];
+		
+		/************************MEMORY FIX HERE***************************/
+		[mapView release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 
@@ -756,6 +846,10 @@
 		
 		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
 			[networkQueue addOperation:request];
+			
+			/************************MEMORY FIX HERE***************************/
+			[fileManager release];
+			/************************MEMORY FIX HERE***************************/
 		}
 		else {
 			LGPhoto *data = [applicationAPI getPhotoForID:photo.photoID];
@@ -776,6 +870,12 @@
 			[liveStreamObjects addObject:img];
 			[liveStreamObjectViews addObject:photoView];
 			[self imageFetchComplete:nil];
+			
+			/************************MEMORY FIX HERE***************************/
+			[fileManager release];
+			[img release];
+			[photoView release];
+			/************************MEMORY FIX HERE***************************/
 		}
 	}
 	[networkQueue go];	
@@ -800,6 +900,11 @@
 			[photoView setIndex:photo.photoIndex];
 			[liveStreamObjects addObject:photo];
 			[liveStreamObjectViews addObject:photoView];
+			
+			/************************MEMORY FIX HERE***************************/
+			[photo release];
+			[photoView release];
+			/************************MEMORY FIX HERE***************************/
 		}
 		
 		[self drawItemsToLiveStream];
@@ -816,6 +921,10 @@
 		[photoView setIndex:photo.photoIndex];
 		[liveStreamObjectViews addObject:photoView];
 		[liveStreamObjects addObject:photo];
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoView release];
+		[photo release];
 	}
 }
 
@@ -860,7 +969,7 @@
 		[self redrawAllItemsToLiveStream];
 		int currentItemInView = [self liveStreamItemsCurrentlyInView:@"first"];
 		currentLiveStreamMode = kLiveStreamModeIcons;
-		[self drawItemsToLiveStream];
+		[self redrawAllItemsToLiveStream];
 		CGRect rect = [self getRectForItemInLiveStream:currentItemInView];
 		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - kLiveStreamPreviewHorizontalPadding), liveStreamScrollView.contentOffset.y) animated:YES];
 		[self redrawAllItemsToLiveStream];

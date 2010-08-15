@@ -57,11 +57,8 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	//[self presentModalViewController:uploadViewController animated:YES];
-	//[uploadViewController showUserImageControlOption];
-	
-	//[applicationAPI reverseGeocodeCoordinatesWithLatitude:[NSString stringWithFormat:@"%f", 33.729701] andLongitude:[NSString stringWithFormat:@"%f", -116.349330]];
-	NSLog(@"%@", [applicationAPI getTimeSinceMySQLDate:@"2010-08-12 05:24:38"]);
+	[self presentModalViewController:uploadViewController animated:YES];
+	[uploadViewController showUserImageControlOption];
 }
 
 - (IBAction)viewLiveStream {
@@ -86,7 +83,15 @@
 		label.frame = CGRectMake(0, 0, labelSize.width, labelSize.height);
 		currentPositionInScrollView = labelSize.width + 5;
 		[tagsScrollView setContentSize:CGSizeMake(currentPositionInScrollView, 20)];
+		
+		/************************MEMORY FIX HERE***************************/
+		[label release];
+		/************************MEMORY FIX HERE***************************/
 	}
+	
+	/************************MEMORY FIX HERE***************************/
+	[tagsArray release];
+	/************************MEMORY FIX HERE***************************/
 }
 
 - (void)drawItemsToLiveStream {	
@@ -176,6 +181,10 @@
 		}
 	}
 	
+	/************************MEMORY FIX HERE***************************/
+	[arrayOfCellsInView release];
+	/************************MEMORY FIX HERE***************************/
+	
 	if ((firstIndex - 2) > 0 || (firstIndex - 2) == 0) {
 		firstIndex -= 2;
 	}
@@ -205,9 +214,7 @@
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
 	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[liveStreamObjects objectAtIndex:index]];
 	photoView.frame = [self getRectForItemInLiveStream:index];
-	//
 	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
-	//
 	photoView.index = index;
 	return photoView;
 }
@@ -317,6 +324,10 @@
 		
 		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
 			[networkQueue addOperation:request];
+			
+			/************************MEMORY FIX HERE***************************/
+			[fileManager release];
+			/************************MEMORY FIX HERE***************************/
 		}
 		else {
 			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
@@ -327,6 +338,12 @@
 			[liveStreamObjects addObject:img];
 			[liveStreamObjectViews addObject:photoView];
 			[self imageFetchComplete:nil];
+			
+			/************************MEMORY FIX HERE***************************/
+			[fileManager release];
+			[img release];
+			[photoView release];
+			/************************MEMORY FIX HERE***************************/
 		}
 	}
 	[networkQueue go];
@@ -350,6 +367,11 @@
 			[photoView setIndex:photo.photoIndex];
 			[liveStreamObjects addObject:photo];
 			[liveStreamObjectViews addObject:photoView];
+			
+			/************************MEMORY FIX HERE***************************/
+			[photo release];
+			[photoView release];
+			/************************MEMORY FIX HERE***************************/
 		}
 		
 		[self drawItemsToLiveStream];
@@ -365,6 +387,11 @@
 		[photoView setIndex:photo.photoIndex];
 		[liveStreamObjectViews addObject:photoView];
 		[liveStreamObjects addObject:photo];
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoView release];
+		[photo release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 

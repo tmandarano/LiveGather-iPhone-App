@@ -50,6 +50,10 @@
 		[userImagePickerType addButtonWithTitle:@"Photo Library"];
 		[userImagePickerType addButtonWithTitle:@"Camera"];
 		[userImagePickerType showInView:self.view];
+		
+		/************************MEMORY FIX HERE***************************/
+		[userImagePickerType release];
+		/************************MEMORY FIX HERE***************************/
 	}
 	else {
 		UIActionSheet *userImagePickerType = [[UIActionSheet alloc] initWithTitle:@"Upload Photo From:"
@@ -59,6 +63,10 @@
 																otherButtonTitles:nil];
 		[userImagePickerType addButtonWithTitle:@"Photo Library"];
 		[userImagePickerType showInView:self.view];
+		
+		/************************MEMORY FIX HERE***************************/
+		[userImagePickerType release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 

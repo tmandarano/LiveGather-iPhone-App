@@ -204,7 +204,12 @@
         return @"Moments ago";
     } else if (ti < 3600) {
         int diff = round(ti / 60);
-        return [NSString stringWithFormat:@"%d minutes ago", diff];
+		if (diff == 1) {
+			return [NSString stringWithFormat:@"%d minute ago", diff];
+		}
+		else {
+			return [NSString stringWithFormat:@"%d minutes ago", diff];
+		}
     } else if (ti < 86400) {
         int diff = round(ti / 60 / 60);
         return[NSString stringWithFormat:@"%d hours ago", diff];

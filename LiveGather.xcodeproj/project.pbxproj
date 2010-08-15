@@ -107,8 +107,9 @@
 		11BCFFBF11F67509000FA3DD /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFB911F67509000FA3DD /* Icon-Small@2x.png */; };
 		11BCFFC011F67509000FA3DD /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFBA11F67509000FA3DD /* Icon.png */; };
 		11BCFFC111F67509000FA3DD /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFBB11F67509000FA3DD /* Icon@2x.png */; };
-		11C9212F12178A2600DE73EF /* json_cache.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 11C9212E12178A2600DE73EF /* json_cache.sqlite */; };
 		11C9213212178AC700DE73EF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C9213112178AC700DE73EF /* libsqlite3.0.dylib */; };
+		11C921AD1217A36800DE73EF /* json_image_cache.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 11C921AC1217A36800DE73EF /* json_image_cache.sqlite */; };
+		11C921AF1217A3F200DE73EF /* json_user_cache.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 11C921AE1217A3F200DE73EF /* json_user_cache.sqlite */; };
 		11D1FD0D11755BBF007B66EF /* ResourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 11D1FD0C11755BBF007B66EF /* ResourceManager.m */; };
 		11D1FD1511760E76007B66EF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD1411760E76007B66EF /* Default.png */; };
 		11D1FD591179648C007B66EF /* LiveStreamView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD581179648C007B66EF /* LiveStreamView.xib */; };
@@ -289,8 +290,9 @@
 		11BCFFB911F67509000FA3DD /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Icons/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		11BCFFBA11F67509000FA3DD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Icons/Icon.png; sourceTree = "<group>"; };
 		11BCFFBB11F67509000FA3DD /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Icons/Icon@2x.png"; sourceTree = "<group>"; };
-		11C9212E12178A2600DE73EF /* json_cache.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = json_cache.sqlite; sourceTree = "<group>"; };
 		11C9213112178AC700DE73EF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
+		11C921AC1217A36800DE73EF /* json_image_cache.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = json_image_cache.sqlite; sourceTree = "<group>"; };
+		11C921AE1217A3F200DE73EF /* json_user_cache.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = json_user_cache.sqlite; sourceTree = "<group>"; };
 		11D1FD0B11755BBF007B66EF /* ResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
 		11D1FD0C11755BBF007B66EF /* ResourceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResourceManager.m; sourceTree = "<group>"; };
 		11D1FD1411760E76007B66EF /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -754,7 +756,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				11C9212E12178A2600DE73EF /* json_cache.sqlite */,
+				11C921AC1217A36800DE73EF /* json_image_cache.sqlite */,
+				11C921AE1217A3F200DE73EF /* json_user_cache.sqlite */,
 				280E754B0DD40C5E005A515E /* MainView.xib */,
 				11D1FD581179648C007B66EF /* LiveStreamView.xib */,
 				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
@@ -934,7 +937,8 @@
 				115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */,
 				115AB40412069FB3002B4468 /* Image.png in Resources */,
 				115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */,
-				11C9212F12178A2600DE73EF /* json_cache.sqlite in Resources */,
+				11C921AD1217A36800DE73EF /* json_image_cache.sqlite in Resources */,
+				11C921AF1217A3F200DE73EF /* json_user_cache.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

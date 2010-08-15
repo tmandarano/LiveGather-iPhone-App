@@ -68,7 +68,7 @@
 	[super viewDidLoad];
 }
 
-//Custom Method
+//Custom Methods
 
 - (void)drawItemsToLiveStream {
 	if (currentLiveStreamMode == kLiveStreamModeIcons) {
@@ -98,10 +98,10 @@
 					
 					//Add in subviews
 					UIImageView *uploadDateBackground = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"single_image_location_bg.png"]];
-					[uploadDateBackground setFrame:CGRectMake(5, 105, 115, 20)];
-					[uploadDateBackground setAlpha:0.7];
+					[uploadDateBackground setFrame:CGRectMake(12, 105, 100, 20)];
+					[uploadDateBackground setAlpha:0.65];
 					
-					UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 115, 20)];
+					UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 20)];
 					[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
 					[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
 					[uploadDateLabel setAdjustsFontSizeToFitWidth:YES];

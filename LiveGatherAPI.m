@@ -135,9 +135,11 @@
 		[photoTags addObject:photoTag];
 	}
 	
+	LGUser *user = [self getUserForID:[userID intValue]];
+	
 	[photo setPhotoName:name];
 	[photo setPhotoUserID:userID];
-	//[photo setPhotoUser:[self getUserForID:[userID intValue]]];
+	[photo setPhotoUser:user];
 	[photo setPhotoLocationLatitude:latitude];
 	[photo setPhotoLocationLongitude:longitude];
 	[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];

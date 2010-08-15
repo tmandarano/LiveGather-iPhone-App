@@ -115,6 +115,10 @@
 	
 	NSDictionary *dict = [response JSONValue];
 	
+	/************************MEMORY FIX HERE***************************/
+	[response release];
+	/************************MEMORY FIX HERE***************************/
+	
 	LGPhoto *photo = [[LGPhoto alloc] init];
 	
 	NSString *name = (NSString *) [dict objectForKey:@"name"];
@@ -126,6 +130,8 @@
 	NSMutableArray *photoTags = [NSMutableArray new];
 	NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
 	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	for (NSDictionary *tag in tags) {
 		LGTag *photoTag = [[LGTag alloc] init];
 		NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
@@ -133,7 +139,13 @@
 		[photoTag setTag:tagName];
 		[photoTag setID:tag_id];
 		[photoTags addObject:photoTag];
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoTag release];
+		/************************MEMORY FIX HERE***************************/
 	}
+	
+	[pool release];
 	
 	LGUser *user = [self getUserForID:[userID intValue]];
 	
@@ -147,9 +159,11 @@
 	[photo setPhotoDateAdded:dateAdded];
 	[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
 	
-	return photo;
+	/************************MEMORY FIX HERE***************************/
+	[photoTags release];
+	/************************MEMORY FIX HERE***************************/
 	
-	[photo release];
+	return photo;
 }
 
 - (LGUser *)getUserForID:(int)userID {
@@ -166,6 +180,10 @@
 	NSLog(@"%@", response);
 	
 	NSDictionary *dict = [response JSONValue];
+	
+	/************************MEMORY FIX HERE***************************/
+	[response release];
+	/************************MEMORY FIX HERE***************************/
 	
 	LGUser *user = [[LGUser alloc] init];
 	
@@ -244,6 +262,8 @@
 		NSMutableArray *photoTags = [NSMutableArray new];
 		NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
 		
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
 		for (NSDictionary *tag in tags) {
 			LGTag *photoTag = [[LGTag alloc] init];
 			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
@@ -251,7 +271,13 @@
 			[photoTag setTag:tagName];
 			[photoTag setID:tag_id];
 			[photoTags addObject:photoTag];
+			
+			/************************MEMORY FIX HERE***************************/
+			[photoTag release];
+			/************************MEMORY FIX HERE***************************/
 		}
+		
+		[pool release];
 		
 		NSLog(@"Processing Photo: %@", ID);
 		
@@ -266,6 +292,10 @@
 		[photo setPhotoCaption:caption];
 		[photo setPhotoDateAdded:dateAdded];
 		[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoTags release];
+		/************************MEMORY FIX HERE***************************/
 		
 		[returnArray addObject:photo];
         
@@ -285,6 +315,8 @@
     
     NSArray *objects = (NSArray*)[response JSONValue];
     
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
     for(NSDictionary *dict in objects) {
 		LGTag *tag = [[LGTag alloc] init];
 		
@@ -299,7 +331,13 @@
 		[tag setDateAdded:dateAdded];
 		
 		[returnArray addObject:tag];
+		
+		/************************MEMORY FIX HERE***************************/
+		[tag release];
+		/************************MEMORY FIX HERE***************************/
     }
+	
+	[pool release];
     
     NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
     return arr;

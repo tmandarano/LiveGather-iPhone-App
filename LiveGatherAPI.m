@@ -12,12 +12,23 @@
 //Internal private methods
 - (NSArray *)parseJSONPhotoResponse:(NSString *)response;
 - (NSArray *)parseTagsResponse:(NSString *)response;
+- (NSString *)getCachedJSONForPhotoWithID:(int)photoID;
 
 @end
 
 @implementation LiveGatherAPI
 
 #define kAppUserAgent "LiveGather-for-iPhone-V0.1"
+
+- (id)init {
+	
+	if(self = [super init])
+	{
+		
+	}
+	
+	return self;
+}
 
 - (NSArray *)getLiveFeed:(int)numPhotos {
 	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
@@ -177,18 +188,18 @@
 }
 
 - (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate {
-	NSDateFormatter *df = [[NSDateFormatter alloc] init];
-    [df setFormatterBehavior:NSDateFormatterBehavior10_4];
-    [df setDateFormat:@"YYYY-MM-DD HH:MM:SS"];
-    NSDate *convertedDate = [df dateFromString:sqlDate];
-    [df release];
+	NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSDate *convertedDate = [dateFormatter dateFromString:sqlDate];
+    [dateFormatter release];
     NSDate *todayDate = [NSDate date];
     double ti = [convertedDate timeIntervalSinceDate:todayDate];
     ti = ti * -1;
     if(ti < 1) {
         return @"never";
     } else      if (ti < 60) {
-        return @"less than a minute ago";
+        return @"Moments ago";
     } else if (ti < 3600) {
         int diff = round(ti / 60);
         return [NSString stringWithFormat:@"%d minutes ago", diff];
@@ -204,18 +215,6 @@
 }
 
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude {
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%@,%@&output=json&sensor=true_or_false", latitude, longitude]]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:nil];
-	NSError *err;
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
-		
 	return @"";
 }
 
@@ -297,6 +296,10 @@
     
     NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
     return arr;
+}
+
+- (NSString *)getCachedJSONForPhotoWithID:(int)photoID {
+	
 }
 
 @end

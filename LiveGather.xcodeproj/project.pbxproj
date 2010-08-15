@@ -50,7 +50,6 @@
 		1176F49611FA0C3100CCA857 /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F48E11FA0C3000CCA857 /* ASIInputStream.m */; };
 		1176F49711FA0C3100CCA857 /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F49011FA0C3100CCA857 /* ASINetworkQueue.m */; };
 		1176F4AC11FA0E6C00CCA857 /* LGPhoto.m in Sources */ = {isa = PBXBuildFile; fileRef = 1176F4AB11FA0E6C00CCA857 /* LGPhoto.m */; };
-		117EBECB1213D98400B81279 /* json_cache.plist in Resources */ = {isa = PBXBuildFile; fileRef = 117EBECA1213D98400B81279 /* json_cache.plist */; };
 		1191BEFD11797F94003DF9B8 /* AccountLoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */; };
 		1191BEFE11797F94003DF9B8 /* UploadPhotoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */; };
 		1191BF3F11798459003DF9B8 /* UploadPhotoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1191BF3E11798459003DF9B8 /* UploadPhotoViewController.m */; };
@@ -108,6 +107,8 @@
 		11BCFFBF11F67509000FA3DD /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFB911F67509000FA3DD /* Icon-Small@2x.png */; };
 		11BCFFC011F67509000FA3DD /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFBA11F67509000FA3DD /* Icon.png */; };
 		11BCFFC111F67509000FA3DD /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11BCFFBB11F67509000FA3DD /* Icon@2x.png */; };
+		11C9212F12178A2600DE73EF /* json_cache.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 11C9212E12178A2600DE73EF /* json_cache.sqlite */; };
+		11C9213212178AC700DE73EF /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 11C9213112178AC700DE73EF /* libsqlite3.0.dylib */; };
 		11D1FD0D11755BBF007B66EF /* ResourceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 11D1FD0C11755BBF007B66EF /* ResourceManager.m */; };
 		11D1FD1511760E76007B66EF /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD1411760E76007B66EF /* Default.png */; };
 		11D1FD591179648C007B66EF /* LiveStreamView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11D1FD581179648C007B66EF /* LiveStreamView.xib */; };
@@ -222,7 +223,6 @@
 		1176F49111FA0C3100CCA857 /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		1176F4AA11FA0E6C00CCA857 /* LGPhoto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhoto.h; sourceTree = "<group>"; };
 		1176F4AB11FA0E6C00CCA857 /* LGPhoto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhoto.m; sourceTree = "<group>"; };
-		117EBECA1213D98400B81279 /* json_cache.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = json_cache.plist; sourceTree = "<group>"; };
 		1191BEFB11797F93003DF9B8 /* AccountLoginView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccountLoginView.xib; sourceTree = "<group>"; };
 		1191BEFC11797F93003DF9B8 /* UploadPhotoView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPhotoView.xib; sourceTree = "<group>"; };
 		1191BF3D11798459003DF9B8 /* UploadPhotoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UploadPhotoViewController.h; sourceTree = "<group>"; };
@@ -289,6 +289,8 @@
 		11BCFFB911F67509000FA3DD /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-Small@2x.png"; path = "Icons/Icon-Small@2x.png"; sourceTree = "<group>"; };
 		11BCFFBA11F67509000FA3DD /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Icons/Icon.png; sourceTree = "<group>"; };
 		11BCFFBB11F67509000FA3DD /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Icons/Icon@2x.png"; sourceTree = "<group>"; };
+		11C9212E12178A2600DE73EF /* json_cache.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = json_cache.sqlite; sourceTree = "<group>"; };
+		11C9213112178AC700DE73EF /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		11D1FD0B11755BBF007B66EF /* ResourceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ResourceManager.h; sourceTree = "<group>"; };
 		11D1FD0C11755BBF007B66EF /* ResourceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ResourceManager.m; sourceTree = "<group>"; };
 		11D1FD1411760E76007B66EF /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -329,6 +331,7 @@
 				1171C39A11EFC28100E69829 /* QuartzCore.framework in Frameworks */,
 				1171C3CA11EFC30400E69829 /* libz.1.2.3.dylib in Frameworks */,
 				1118553212093AF600017F31 /* CoreLocation.framework in Frameworks */,
+				11C9213212178AC700DE73EF /* libsqlite3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -751,7 +754,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				117EBECA1213D98400B81279 /* json_cache.plist */,
+				11C9212E12178A2600DE73EF /* json_cache.sqlite */,
 				280E754B0DD40C5E005A515E /* MainView.xib */,
 				11D1FD581179648C007B66EF /* LiveStreamView.xib */,
 				11BAD7B111FE512000FE4DE4 /* FollowersView.xib */,
@@ -779,6 +782,7 @@
 				11769AFE118384E30036C548 /* MobileCoreServices.framework */,
 				11769BCF118393510036C548 /* MapKit.framework */,
 				1171C39911EFC28100E69829 /* QuartzCore.framework */,
+				11C9213112178AC700DE73EF /* libsqlite3.0.dylib */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -930,7 +934,7 @@
 				115AB3D01206973B002B4468 /* single_image_location_bg.png in Resources */,
 				115AB40412069FB3002B4468 /* Image.png in Resources */,
 				115AB4A81207E3A2002B4468 /* SinglePhotoView.xib in Resources */,
-				117EBECB1213D98400B81279 /* json_cache.plist in Resources */,
+				11C9212F12178A2600DE73EF /* json_cache.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -951,11 +955,11 @@
 				1191BF99117A0A29003DF9B8 /* LiveStreamViewController.m in Sources */,
 				1191C10F117A8CB4003DF9B8 /* EGORefreshTableHeaderView.m in Sources */,
 				11769A69118382F30036C548 /* MBProgressHUD.m in Sources */,
+				1176F49211FA0C3100CCA857 /* ASIAuthenticationDialog.m in Sources */,
 				11769AE5118384810036C548 /* Reachability.m in Sources */,
 				112A018511E52ADB001B988A /* LiveGatherAPI.m in Sources */,
 				11BCFE6311F3A8E5000FA3DD /* CollageView.m in Sources */,
 				11BCFEBF11F3B017000FA3DD /* CollageItem.m in Sources */,
-				1176F49211FA0C3100CCA857 /* ASIAuthenticationDialog.m in Sources */,
 				1176F49311FA0C3100CCA857 /* ASIDownloadCache.m in Sources */,
 				1176F49411FA0C3100CCA857 /* ASIFormDataRequest.m in Sources */,
 				1176F49511FA0C3100CCA857 /* ASIHTTPRequest.m in Sources */,
@@ -986,6 +990,7 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Skarlete Nabavi-Noori (46AS96JUN4)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -999,6 +1004,7 @@
 				GCC_PREFIX_HEADER = LiveGather_Prefix.pch;
 				HEADER_SEARCH_PATHS = "/usr/include/libxml2/**";
 				INFOPLIST_FILE = "LiveGather-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = "";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/JSON/iphoneos.sdk/usr/local/lib\"",
@@ -1013,6 +1019,7 @@
 				PRODUCT_NAME = LiveGather;
 				SDKROOT = iphonesimulator4.0;
 				USER_HEADER_SEARCH_PATHS = "$(RPX)/**";
+				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
 			};
 			name = Debug;
 		};
@@ -1053,6 +1060,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ADDITIONAL_SDKS = "";
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "Don't Code Sign";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
@@ -1060,11 +1068,12 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				OTHER_LDFLAGS = (
-					"-ObjC",
 					"-all_load",
+					"-ObjC",
 				);
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1.3;
+				SDKROOT = iphoneos4.0;
+				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
 			};
 			name = Debug;
 		};

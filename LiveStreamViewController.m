@@ -146,6 +146,8 @@
 					UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 97, 18)];
 					[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
 					[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
+					[uploadDateLabel setAdjustsFontSizeToFitWidth:YES];
+					[uploadDateLabel setMinimumFontSize:10];
 					[uploadDateLabel setTextColor:[UIColor whiteColor]];
 					[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 					[uploadDateLabel setBackgroundColor:[UIColor clearColor]];
@@ -155,6 +157,8 @@
 					UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 88, 18)];
 					[usernameLabel setText:user.username];
 					[usernameLabel setTextAlignment:UITextAlignmentCenter];
+					[usernameLabel setAdjustsFontSizeToFitWidth:YES];
+					[usernameLabel setMinimumFontSize:10];
 					[usernameLabel setTextColor:[UIColor whiteColor]];
 					[usernameLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 					[usernameLabel setBackgroundColor:[UIColor clearColor]];
@@ -163,6 +167,8 @@
 					UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 155, 18)];
 					[locationLabel setText:photo.photoLocation];
 					[locationLabel setTextAlignment:UITextAlignmentCenter];
+					[locationLabel setAdjustsFontSizeToFitWidth:YES];
+					[locationLabel setMinimumFontSize:10];
 					[locationLabel setTextColor:[UIColor whiteColor]];
 					[locationLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 					[locationLabel setBackgroundColor:[UIColor clearColor]];
@@ -171,6 +177,8 @@
 					UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 2, 192, 18)];
 					[captionLabel setText:photo.photoCaption];
 					[captionLabel setTextAlignment:UITextAlignmentLeft];
+					[captionLabel setAdjustsFontSizeToFitWidth:YES];
+					[captionLabel setMinimumFontSize:10];
 					[captionLabel setTextColor:[UIColor blackColor]];
 					[captionLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 					[captionLabel setBackgroundColor:[UIColor clearColor]];
@@ -181,6 +189,8 @@
 					UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
 					[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
 					[tagsLabel setTextAlignment:UITextAlignmentRight];
+					[tagsLabel setAdjustsFontSizeToFitWidth:YES];
+					[tagsLabel setMinimumFontSize:10];
 					[tagsLabel setTextColor:[UIColor blueColor]];
 					[tagsLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 					[tagsLabel setBackgroundColor:[UIColor clearColor]];
@@ -244,6 +254,8 @@
 			UILabel *uploadDateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 97, 18)];
 			[uploadDateLabel setText:[applicationAPI getTimeSinceMySQLDate:photo.photoDateAdded]];
 			[uploadDateLabel setTextAlignment:UITextAlignmentCenter];
+			[uploadDateLabel setAdjustsFontSizeToFitWidth:YES];
+			[uploadDateLabel setMinimumFontSize:10];
 			[uploadDateLabel setTextColor:[UIColor whiteColor]];
 			[uploadDateLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 			[uploadDateLabel setBackgroundColor:[UIColor clearColor]];
@@ -253,6 +265,8 @@
 			UILabel *usernameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 88, 18)];
 			[usernameLabel setText:user.username];
 			[usernameLabel setTextAlignment:UITextAlignmentCenter];
+			[usernameLabel setAdjustsFontSizeToFitWidth:YES];
+			[usernameLabel setMinimumFontSize:10];
 			[usernameLabel setTextColor:[UIColor whiteColor]];
 			[usernameLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 			[usernameLabel setBackgroundColor:[UIColor clearColor]];
@@ -261,6 +275,8 @@
 			UILabel *locationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 155, 18)];
 			[locationLabel setText:photo.photoLocation];
 			[locationLabel setTextAlignment:UITextAlignmentCenter];
+			[locationLabel setAdjustsFontSizeToFitWidth:YES];
+			[locationLabel setMinimumFontSize:10];
 			[locationLabel setTextColor:[UIColor whiteColor]];
 			[locationLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 			[locationLabel setBackgroundColor:[UIColor clearColor]];
@@ -269,6 +285,8 @@
 			UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(15, 2, 192, 18)];
 			[captionLabel setText:photo.photoCaption];
 			[captionLabel setTextAlignment:UITextAlignmentLeft];
+			[captionLabel setAdjustsFontSizeToFitWidth:YES];
+			[captionLabel setMinimumFontSize:10];
 			[captionLabel setTextColor:[UIColor blackColor]];
 			[captionLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 			[captionLabel setBackgroundColor:[UIColor clearColor]];
@@ -277,8 +295,10 @@
 			NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
 			LGTag *tag = [photoTags lastObject];
 			UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
-			[tagsLabel setText:[NSString stringWithFormat:@"#%@",tag.tag]];
+			[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
 			[tagsLabel setTextAlignment:UITextAlignmentRight];
+			[tagsLabel setAdjustsFontSizeToFitWidth:YES];
+			[tagsLabel setMinimumFontSize:10];
 			[tagsLabel setTextColor:[UIColor blueColor]];
 			[tagsLabel setFont:[UIFont fontWithName:@"Helvetica" size:13.0]];
 			[tagsLabel setBackgroundColor:[UIColor clearColor]];
@@ -583,14 +603,19 @@
 		[self redrawAllItemsToLiveStream];
 	}
 	else if (currentLiveStreamMode == kLiveStreamModeLarge) {
-		/*LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
+		LGPhotoView *photoview = [liveStreamObjectViews objectAtIndex:imgIndex];
+		LGPhoto *photo = photoview.photo;
+		[applicationAPI reverseGeocodeCoordinatesWithLatitude:photo.photoLocationLatitude andLongitude:photo.photoLocationLongitude];
+		
+		LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
 		MKMapView *mapView = [[MKMapView alloc] init];
 		[mapView setFrame:photoView.frame];
 		[UIView beginAnimations:nil context:NULL];
 		[UIView setAnimationDuration:2.5];
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:photoView cache:YES];
 		[photoView removeFromSuperview];
 		[liveStreamScrollView addSubview:mapView];
-		[UIView commitAnimations];*/
+		[UIView commitAnimations];
 	}
 }
 

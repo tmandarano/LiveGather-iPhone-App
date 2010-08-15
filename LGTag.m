@@ -15,28 +15,4 @@
 @synthesize tag;
 @synthesize dateAdded;
 
-/*- (NSString *)tagID {
-	return ID;
-}
-
-- (void)setTagID:(NSString *)tagID {
-	ID = tagID;
-}
-
-- (NSString *)tag {
-	return tag;
-}
-
-- (void)setTag:(NSString *)tagName {
-	tag = tagName;
-}
-
-- (NSString *)dateAdded {
-	return dateAdded;
-}
-
-- (void)setDateAdded:(NSString *)dateTagAdded {
-	dateAdded = dateTagAdded;
-}*/
-
 @end

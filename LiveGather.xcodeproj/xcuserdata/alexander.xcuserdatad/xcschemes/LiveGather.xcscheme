@@ -6,8 +6,8 @@
    <TestAction>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.GDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.GDB">
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn">
       <BuildableProductRunnable>
          <BuildableProductReference
             BuildableProductIdentifier = "LiveGather.app">

@@ -10,20 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "LiveStreamViewController.h"
 
-@class LiveStreamViewController;
-
-@interface CollageItem : UIImageView {
-	int			photoID;
-	int			photoLocationInCollage;
-	NSArray		*photoTags;
-	NSString	*photoLocation;
-	NSString	*photoName;
-	NSString	*photoInfo;
-	LiveStreamViewController *liveStreamViewController;
+@interface CollageItem : UIView {
+	
 }
-
-@property(nonatomic, retain) LiveStreamViewController *liveStreamViewController;
-
-- (void)setArrayLocation:(int)num;
 
 @end

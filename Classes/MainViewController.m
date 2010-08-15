@@ -57,8 +57,11 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	[self presentModalViewController:uploadViewController animated:YES];
-	[uploadViewController showUserImageControlOption];
+	//[self presentModalViewController:uploadViewController animated:YES];
+	//[uploadViewController showUserImageControlOption];
+	
+	//[applicationAPI reverseGeocodeCoordinatesWithLatitude:[NSString stringWithFormat:@"%f", 33.729701] andLongitude:[NSString stringWithFormat:@"%f", -116.349330]];
+	NSLog(@"%@", [applicationAPI getTimeSinceMySQLDate:@"2010-08-12 05:24:38"]);
 }
 
 - (IBAction)viewLiveStream {

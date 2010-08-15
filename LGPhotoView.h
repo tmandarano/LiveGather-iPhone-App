@@ -29,31 +29,4 @@
 
 - (void)setDelegate:(id <LGPhotoDelegate>)dlg;
 
-/*- (void)setIndex:(int)newIndex;
-- (int)index;
-
-- (void)setPhoto:(LGPhoto *)newPhoto;
-- (LGPhoto *)photo;
-
-- (int)photoID;
-
-- (NSString *)photoURL;
-
-- (NSString *)photoName;
-
-- (NSString *)photoLocationLatitude;
-- (NSString *)photoLocationLongitude;
-
-- (NSString *)photoCaption;
-
-- (NSArray *)photoTags;
-
-- (NSString *)photoDateAdded;
-
-- (NSString *)photoUserID;
-
-- (UIImage *)photoImage;
-
-- (NSString *)photoPath;*/
-
 @end

@@ -7,14 +7,17 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MapKit/MapKit.h>
 #import "JSON.h"
 #import "JRAuthenticate.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
 #import "LGUser.h"
+#import <sqlite3.h>
 
 @interface LiveGatherAPI : NSObject {
-	
+	sqlite3		*imageInfoCacheDatabase;
+	NSInteger	primaryKey;
 }
 
 //Handling APIs on the server

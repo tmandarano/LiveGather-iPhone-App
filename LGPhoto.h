@@ -44,45 +44,4 @@
 @property (nonatomic, retain) NSString *photoPath;
 @property (nonatomic) int photoIndex;
 
-/*Getters and setters
-
-- (int)photoID;
-- (void)setID:(int)ID;
-
-- (void)setPhotoIndex:(int)index;
-- (int)photoIndex;
-
-- (NSString *)photoURL;
-- (void)setPhotoURL:(NSString *)url;
-
-- (NSString *)photoName;
-- (void)setPhotoName:(NSString *)name;
-
-- (NSString *)photoLocationLatitude;
-- (NSString *)photoLocationLongitude;
-- (void)setPhotoLocation:(NSString *)latitude withLong:(NSString *)longitude;
-- (NSString *)photoLocation;
-- (void)setPhotoLocation:(NSString *)location;
-
-- (NSString *)photoAddress;
-- (void)setPhotoAddress:(NSString *)address;
-
-- (NSString *)photoCaption;
-- (void)setPhotoCaption:(NSString *)caption;
-
-- (LGUser *)photoUser;
-- (void)setPhotoUser:(LGUser *)user;
-
-- (NSArray *)photoTags;
-- (void)setPhotoTags:(NSArray *)tags;
-
-- (NSString *)photoDateAdded;
-- (void)setPhotoDateAdded:(NSString *)dateAdded;
-
-- (NSString *)photoUserID;
-- (void)setPhotoUserID:(NSString *)userid;
-
-- (NSString *)photoPath;
-- (void)setPhotoPath:(NSString *)path;*/
-
 @end

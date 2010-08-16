@@ -320,6 +320,8 @@
 		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 		
+		NSLog(@"IMA FIREN MAH: %d", photo.photoID);
+		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
 		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
@@ -353,45 +355,46 @@
 	if (request == nil) {
 		[self drawItemsToLiveStream];
 	}
-	
-	if(networkQueue.requestsCount == 0)
-	{
-		if (request) {
+	else {
+		if(networkQueue.requestsCount == 0)
+		{
+			if (request) {
+				NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+				photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+				LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+				[photo setPhotoID:[photoID intValue]];
+				[photo setPhotoIndex:[liveStreamObjects count]];
+				LGPhotoView *photoView = [[LGPhotoView alloc] init];
+				[photoView setPhoto:photo];
+				[photoView setIndex:photo.photoIndex];
+				[liveStreamObjects addObject:photo];
+				[liveStreamObjectViews addObject:photoView];
+				
+				/************************MEMORY FIX HERE***************************/
+				[photo release];
+				[photoView release];
+				/************************MEMORY FIX HERE***************************/
+			}
+			
+			[self drawItemsToLiveStream];
+		}
+		else {
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 			[photo setPhotoID:[photoID intValue]];
-			[photo setPhotoIndex:[liveStreamObjects count]];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
+			[photo setPhotoIndex:[liveStreamObjects count]];
 			[photoView setIndex:photo.photoIndex];
-			[liveStreamObjects addObject:photo];
 			[liveStreamObjectViews addObject:photoView];
+			[liveStreamObjects addObject:photo];
 			
 			/************************MEMORY FIX HERE***************************/
-			[photo release];
 			[photoView release];
+			[photo release];
 			/************************MEMORY FIX HERE***************************/
 		}
-		
-		[self drawItemsToLiveStream];
-	}
-	else {
-		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
-		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
-		LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
-		[photo setPhotoID:[photoID intValue]];
-		LGPhotoView *photoView = [[LGPhotoView alloc] init];
-		[photoView setPhoto:photo];
-		[photo setPhotoIndex:[liveStreamObjects count]];
-		[photoView setIndex:photo.photoIndex];
-		[liveStreamObjectViews addObject:photoView];
-		[liveStreamObjects addObject:photo];
-		
-		/************************MEMORY FIX HERE***************************/
-		[photoView release];
-		[photo release];
-		/************************MEMORY FIX HERE***************************/
 	}
 }
 

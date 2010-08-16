@@ -210,7 +210,8 @@
 					[imageDetailsBackground addSubview:captionLabel];
 					
 					NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
-					LGTag *tag = [photoTags lastObject];
+					NSMutableSet *tagsSet = [NSMutableSet setWithArray:photoTags];
+					LGTag *tag = [tagsSet anyObject];
 					UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
 					[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
 					[tagsLabel setTextAlignment:UITextAlignmentRight];
@@ -331,7 +332,8 @@
 				[imageDetailsBackground addSubview:captionLabel];
 				
 				NSArray *photoTags = [NSArray arrayWithArray:photo.photoTags];
-				LGTag *tag = [photoTags lastObject];
+				NSMutableSet *tagsSet = [NSMutableSet setWithArray:photoTags];
+				LGTag *tag = [tagsSet anyObject];
 				UILabel *tagsLabel = [[UILabel alloc] initWithFrame:CGRectMake(200, 2, 75, 18)];
 				[tagsLabel setText:[NSString stringWithFormat:@"# %@",tag.tag]];
 				[tagsLabel setTextAlignment:UITextAlignmentRight];
@@ -825,7 +827,7 @@
 }
 
 - (void)downloadNewLiveStreamPhotos; {
-	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:25]];
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:50]];
 	
 	if(!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];
@@ -1004,6 +1006,11 @@
 
 - (void)dealloc {
     [super dealloc];
+	[visibleLiveStreamItems dealloc];
+	[recycledLiveStreamItems dealloc];
+	[liveStreamScrollView dealloc];
+	[liveStreamObjects dealloc];
+	[liveStreamObjectViews dealloc];
 }
 
 

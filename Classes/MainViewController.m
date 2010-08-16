@@ -62,7 +62,6 @@
 }
 
 - (IBAction)viewLiveStream {
-	//[applicationAPI getRecentTagsWithLimit:5];
 	[self presentModalViewController:liveStreamView animated:YES];
 }
 
@@ -303,7 +302,7 @@
 }
 
 - (void)downloadNewLiveStreamPhotos {
-	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:25]];
+	NSMutableArray *liveStreamArray = [NSMutableArray arrayWithArray:[applicationAPI getLiveFeed:50]];
 	
 	if(!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];
@@ -319,9 +318,7 @@
 		ASIHTTPRequest *request;
 		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
-		
-		NSLog(@"IMA FIREN MAH: %d", photo.photoID);
-		
+				
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
 		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {

@@ -18,7 +18,7 @@
 
 @implementation LiveGatherAPI
 
-#define kAppUserAgent "LiveGather-for-iPhone-V0.1"
+#define kAppUserAgent @"LiveGather-for-iPhone-V0.1"
 
 - (id)init {
 	
@@ -36,7 +36,7 @@
 	[request setHTTPMethod:@"GET"];
 	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
 	[request setHTTPBody:nil];
 	NSError *err;
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
@@ -66,7 +66,7 @@
     [request setHTTPMethod:@"GET"];
     [request setValue:nil forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"LivGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+    [request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
     [request setHTTPBody:nil];
     NSError *err;
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
@@ -86,7 +86,7 @@
     [request setHTTPMethod:@"GET"];
     [request setValue:nil forHTTPHeaderField:@"Content-Length"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    [request setValue:@"LivGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+    [request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
     [request setHTTPBody:nil];
     NSError *err;
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
@@ -106,7 +106,7 @@
 	[request setHTTPMethod:@"GET"];
 	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
 	[request setHTTPBody:nil];
 	NSError *err;
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
@@ -172,7 +172,7 @@
 	[request setHTTPMethod:@"GET"];
 	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
 	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:@"LiveGather-for-iPhone-V0.1" forHTTPHeaderField:@"User-Agent"];
+	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
 	[request setHTTPBody:nil];
 	NSError *err;
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];

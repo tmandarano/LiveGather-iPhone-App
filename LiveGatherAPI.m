@@ -581,7 +581,7 @@ static int imagesSQLCallback(void *context, int count, char **values, char **col
 	
 	if(sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		
-		const char* sql = [[NSString stringWithFormat:@"INSERT INTO cache(image_id, image_data) VALUES('%d', '%@');", imgID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO cache(image_id, image_data) VALUES('%d', '%@');", imgID, json] cStringUsingEncoding:NSUTF8StringEncoding];
 		
 		sqlite3_stmt *statement;
 		
@@ -614,7 +614,7 @@ static int imagesSQLCallback(void *context, int count, char **values, char **col
 	
 	if(sqlite3_open([usersSQLCache UTF8String], &usersSQLCacheDB) == SQLITE_OK) {
 		
-		const char* sql = [[NSString stringWithFormat:@"INSERT INTO cache(user_id, user_data) VALUES('%d', '%@');", userID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO cache(user_id, user_data) VALUES('%d', '%@');", userID, json] cStringUsingEncoding:NSUTF8StringEncoding];
 		
 		sqlite3_stmt *statement;
 		

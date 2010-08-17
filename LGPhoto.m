@@ -11,8 +11,11 @@
 
 @implementation LGPhoto
 
+@synthesize photoJSON;
 @synthesize photoID;
 @synthesize photoURL;
+@synthesize photoFilename;
+@synthesize photoFileID;
 @synthesize photoName;
 @synthesize photoLocationLatitude;
 @synthesize photoLocationLongitude;

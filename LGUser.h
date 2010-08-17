@@ -10,12 +10,14 @@
 
 
 @interface LGUser : NSObject {
+	NSString		*userJSON;
 	NSString		*username;
 	NSString		*emailAddress;
 	NSString		*userID;
 	NSString		*imageURL;
 }
 
+@property (nonatomic, retain) NSString *userJSON;
 @property (nonatomic, retain) NSString *username;
 @property (nonatomic, retain) NSString *emailAddress;
 @property (nonatomic, retain) NSString *userID;

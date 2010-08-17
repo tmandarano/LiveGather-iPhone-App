@@ -20,16 +20,48 @@
     return self;
 }
 
+- (void)viewDidLoad {
+	static NSString *appId = @"pefmjggfjdbdhjfibbjg";
+	static NSString *tokenUrl = @"<YOUR_TOKEN_URL>";
+	
+	jrAuthenticate = [JRAuthenticate jrAuthenticateWithAppID:appId andTokenUrl:tokenUrl delegate:self];
+	
+	[jrAuthenticate showJRAuthenticateDialog];
+}
+
+- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didReceiveToken:(NSString*)token { 
+	
+}
+
+- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didReceiveToken:(NSString*)token forProvider:(NSString*)provider
+{
+	
+}
+
+- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didReachTokenURL:(NSString*)tokenURL withPayload:(NSString*)tokenUrlPayload
+{
+	
+}
+
+- (void)jrAuthenticateDidNotCompleteAuthentication:(JRAuthenticate*)jrAuth
+{
+	
+}
+
+- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didFailWithError:(NSError*)error 
+{
+	
+}
+
+- (void)jrAuthenticate:(JRAuthenticate*)jrAuth callToTokenURL:(NSString*)tokenURL didFailWithError:(NSError*)error
+{
+	
+}
+
 //Start custom methods
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-	if(textField == emailLoginField)
-	{
-		[passwordLoginField becomeFirstResponder];
-	}
-	else {
-		[textField resignFirstResponder];
-	}
+	[textField resignFirstResponder];
 	return YES;
 }
 
@@ -46,34 +78,15 @@
 }
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.4];
-	self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y - 100, self.view.frame.size.width, self.view.frame.size.height);
-	[UIView commitAnimations];
+	
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:0.4];
-	self.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y + 100, self.view.frame.size.width, self.view.frame.size.height);
-	[UIView commitAnimations];
+	
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	if([emailLoginField isFirstResponder] || [passwordLoginField isFirstResponder])
-	{
-		[emailLoginField resignFirstResponder];
-		[passwordLoginField resignFirstResponder];
-	}
-}
-
-//<!-- End Custom Methods
-
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-	livegatherController = [[LiveGatherAPI alloc] init];
-	mainViewController = [[MainViewController alloc] init];
+	
 }
 
 /*

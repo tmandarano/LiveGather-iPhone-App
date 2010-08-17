@@ -12,9 +12,25 @@
 //Internal private methods
 - (NSArray *)parseJSONPhotoResponse:(NSString *)response;
 - (NSArray *)parseTagsResponse:(NSString *)response;
-- (NSString *)getCachedJSONForPhotoWithID:(int)photoID;
+
+- (NSString *)getCachedImageJSONFromSQL:(int)imgID;
+- (NSString *)getCachedUserJSONFromSQL:(int)userID;
+
+- (BOOL)addJSONCacheForImageID:(int)imgID andData:(NSString *)json;
+- (BOOL)addJSONCacheForUserID:(int)userID andData:(NSString *)json;
+
+- (void)createEditableUserSQLIfNeeded;
+- (void)createEditableImageSQLIfNeeded;
 
 @end
+
+static int usersSQLCallback(void *context, int count, char **values, char **columns) {
+	return 1;
+}
+
+static int imagesSQLCallback(void *context, int count, char **values, char **columns) {
+	return 1;
+}
 
 @implementation LiveGatherAPI
 
@@ -24,7 +40,8 @@
 	
 	if(self = [super init])
 	{
-		
+		[self createEditableUserSQLIfNeeded];
+		[self createEditableImageSQLIfNeeded];
 	}
 	
 	return self;
@@ -46,18 +63,18 @@
 	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONPhotoResponse:response]];
 		
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
-	
+			
 	return arr;
 }
 
 - (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius {
-    NSArray *arr;
-    return arr;
+    //NSArray *arr;
+    return nil;
 }
 
 - (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius {
-    NSArray *arr;
-    return arr;
+    //NSArray *arr;
+    return nil;
 }
 
 - (NSArray *)getTrendingTagsWithLimit:(int)limit {
@@ -101,23 +118,197 @@
 }
 
 - (LGPhoto *)getPhotoForID:(int)photoID {
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d", photoID]]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:nil];
-	NSError *err;
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
+	if ([self getCachedImageJSONFromSQL:photoID] == nil) {
+		NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+		[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d", photoID]]];
+		[request setHTTPMethod:@"GET"];
+		[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
+		[request setHTTPBody:nil];
+		NSError *err;
+		NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+		NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+		NSLog(@"%@", response);
+		
+		NSDictionary *dict = [response JSONValue];
+		
+		LGPhoto *photo = [[LGPhoto alloc] init];
+		
+		NSString *name = (NSString *) [dict objectForKey:@"name"];
+		NSString *userID = (NSString *) [dict objectForKey:@"user_id"];
+		NSString *latitude = (NSString *) [dict objectForKey:@"latitude"];
+		NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
+		NSString *caption = (NSString *) [dict objectForKey:@"caption"];
+		NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+		NSString *photoURL = (NSString *) [dict objectForKey:@"url"];
+		NSMutableArray *photoTags = [NSMutableArray new];
+		NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
+		
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		for (NSDictionary *tag in tags) {
+			LGTag *photoTag = [[LGTag alloc] init];
+			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
+			NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
+			[photoTag setTag:tagName];
+			[photoTag setID:tag_id];
+			[photoTags addObject:photoTag];
+			
+			/************************MEMORY FIX HERE***************************/
+			[photoTag release];
+			/************************MEMORY FIX HERE***************************/
+		}
+		
+		[pool release];
+		
+		LGUser *user = [self getUserForID:[userID intValue]];
+		
+		[photo setPhotoJSON:response];
+		[photo setPhotoName:name];
+		[photo setPhotoUserID:userID];
+		[photo setPhotoUser:user];
+		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+		[photo setPhotoLocationLatitude:latitude];
+		[photo setPhotoLocationLongitude:longitude];
+		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
+		[photo setPhotoCaption:caption];
+		[photo setPhotoDateAdded:dateAdded];
+		[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
+		
+		/************************INSERT CACHE TO SQL***********************/
+		[self addJSONCacheForImageID:photoID andData:response];
+		/************************INSERT CACHE TO SQL***********************/
+		
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoTags release];
+		[response release];
+		/************************MEMORY FIX HERE***************************/
+		
+		return photo;		
+	}
+	else {
+		NSString *imageJSON = [self getCachedImageJSONFromSQL:photoID];
+		
+		NSDictionary *dict = [imageJSON JSONValue];
+		
+		LGPhoto *photo = [[LGPhoto alloc] init];
+		
+		NSString *name = (NSString *) [dict objectForKey:@"name"];
+		NSString *userID = (NSString *) [dict objectForKey:@"user_id"];
+		NSString *latitude = (NSString *) [dict objectForKey:@"latitude"];
+		NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
+		NSString *caption = (NSString *) [dict objectForKey:@"caption"];
+		NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+		NSString *photoURL = (NSString *) [dict objectForKey:@"url"];
+		NSMutableArray *photoTags = [NSMutableArray new];
+		NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
+		
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		
+		for (NSDictionary *tag in tags) {
+			LGTag *photoTag = [[LGTag alloc] init];
+			NSString *tag_id = (NSString *) [tag objectForKey:@"id"];
+			NSString *tagName = (NSString *) [tag objectForKey:@"tag"];
+			[photoTag setTag:tagName];
+			[photoTag setID:tag_id];
+			[photoTags addObject:photoTag];
+			
+			/************************MEMORY FIX HERE***************************/
+			[photoTag release];
+			/************************MEMORY FIX HERE***************************/
+		}
+		
+		[pool release];
+		
+		LGUser *user = [self getUserForID:[userID intValue]];
+		
+		[photo setPhotoJSON:imageJSON];
+		[photo setPhotoName:name];
+		[photo setPhotoUserID:userID];
+		[photo setPhotoUser:user];
+		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+		[photo setPhotoLocationLatitude:latitude];
+		[photo setPhotoLocationLongitude:longitude];
+		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
+		[photo setPhotoCaption:caption];
+		[photo setPhotoDateAdded:dateAdded];
+		[photo setPhotoTags:[NSArray arrayWithArray:photoTags]];
+		
+		/************************MEMORY FIX HERE***************************/
+		[photoTags release];
+		[imageJSON release];
+		/************************MEMORY FIX HERE***************************/
+		
+		return photo;
+	}
+
+}
+
+- (LGUser *)getUserForID:(int)userID {
 	
-	NSDictionary *dict = [response JSONValue];
-	
-	/************************MEMORY FIX HERE***************************/
-	[response release];
-	/************************MEMORY FIX HERE***************************/
+	if ([self getCachedUserJSONFromSQL:userID] == nil) {
+		NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+		[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/users/%d", userID]]];
+		[request setHTTPMethod:@"GET"];
+		[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+		[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+		[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
+		[request setHTTPBody:nil];
+		NSError *err;
+		NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+		NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+		NSLog(@"%@", response);
+		
+		NSDictionary *dict = [response JSONValue];
+		
+		/************************MEMORY FIX HERE***************************/
+		[response release];
+		/************************MEMORY FIX HERE***************************/
+		
+		LGUser *user = [[LGUser alloc] init];
+		
+		NSString *ID = (NSString *) [dict objectForKey:@"id"];
+		NSString *username = (NSString *) [dict objectForKey:@"username"];
+		NSString *emailAddress = (NSString *) [dict objectForKey:@"email"];
+		NSString *imageURL = (NSString *) [dict objectForKey:@"photo_url"];
+		
+		[user setUserID:ID];
+		[user setUsername:username];
+		[user setEmailAddress:emailAddress];
+		[user setImageURL:imageURL];
+		
+		return user;
+		
+		[user release];
+	}
+	else {
+		NSString *userJSON = [self getCachedUserJSONFromSQL:userID];
+		
+		NSDictionary *dict = [userJSON JSONValue];
+		
+		LGUser *user = [[LGUser alloc] init];
+		
+		NSString *ID = (NSString *) [dict objectForKey:@"id"];
+		NSString *username = (NSString *) [dict objectForKey:@"username"];
+		NSString *emailAddress = (NSString *) [dict objectForKey:@"email"];
+		NSString *imageURL = (NSString *) [dict objectForKey:@"photo_url"];
+		
+		[user setUserID:ID];
+		[user setUsername:username];
+		[user setEmailAddress:emailAddress];
+		[user setImageURL:imageURL];
+		
+		return user;
+		
+		[user release];
+	}
+
+}
+
+- (LGPhoto *)returnPhotoObjectFromJSON:(NSString *)json {	
+	NSDictionary *dict = [json JSONValue];
 	
 	LGPhoto *photo = [[LGPhoto alloc] init];
 	
@@ -127,6 +318,7 @@
 	NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
 	NSString *caption = (NSString *) [dict objectForKey:@"caption"];
 	NSString *dateAdded = (NSString *) [dict objectForKey:@"date_added"];
+	NSString *photoURL = (NSString *) [dict objectForKey:@"url"];
 	NSMutableArray *photoTags = [NSMutableArray new];
 	NSArray *tags = (NSArray *) [dict objectForKey:@"tags"];
 	
@@ -149,9 +341,11 @@
 	
 	LGUser *user = [self getUserForID:[userID intValue]];
 	
+	[photo setPhotoJSON:json];
 	[photo setPhotoName:name];
 	[photo setPhotoUserID:userID];
 	[photo setPhotoUser:user];
+	[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 	[photo setPhotoLocationLatitude:latitude];
 	[photo setPhotoLocationLongitude:longitude];
 	[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
@@ -164,42 +358,6 @@
 	/************************MEMORY FIX HERE***************************/
 	
 	return photo;
-}
-
-- (LGUser *)getUserForID:(int)userID {
-	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
-	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/users/%d", userID]]];
-	[request setHTTPMethod:@"GET"];
-	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
-	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
-	[request setHTTPBody:nil];
-	NSError *err;
-	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
-	
-	NSDictionary *dict = [response JSONValue];
-	
-	/************************MEMORY FIX HERE***************************/
-	[response release];
-	/************************MEMORY FIX HERE***************************/
-	
-	LGUser *user = [[LGUser alloc] init];
-	
-	NSString *ID = (NSString *) [dict objectForKey:@"id"];
-	NSString *username = (NSString *) [dict objectForKey:@"username"];
-	NSString *emailAddress = (NSString *) [dict objectForKey:@"email"];
-	NSString *imageURL = (NSString *) [dict objectForKey:@"photo_url"];
-	
-	[user setUserID:ID];
-	[user setUsername:username];
-	[user setEmailAddress:emailAddress];
-	[user setImageURL:imageURL];
-	
-	return user;
-	
-	[user release];
 }
 
 - (NSArray *)getPhotosByTagID:(int)tagID {
@@ -253,7 +411,7 @@
 		
 		NSString *ID = (NSString *) [dict objectForKey:@"id"];
 		NSString *name = (NSString *) [dict objectForKey:@"name"];
-		NSString *URL = (NSString *) [dict objectForKey:@"url"];
+		NSString *photoURL = (NSString *) [dict objectForKey:@"url"];
 		NSString *userID = (NSString *) [dict objectForKey:@"userid"];
 		NSString *latitude = (NSString *) [dict objectForKey:@"latitude"];
 		NSString *longitude = (NSString *) [dict objectForKey:@"longitude"];
@@ -281,9 +439,10 @@
 		
 		NSLog(@"Processing Photo: %@", ID);
 		
+		[photo setPhotoJSON:response];
 		[photo setPhotoID:[ID intValue]];
 		[photo setPhotoName:name];
-		[photo setPhotoURL:URL];
+		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 		[photo setPhotoUserID:userID];
 		//[photo setPhotoUser:[self getUserForID:[userID intValue]]];
 		[photo setPhotoLocationLatitude:latitude];
@@ -343,8 +502,172 @@
     return arr;
 }
 
-- (NSString *)getCachedJSONForPhotoWithID:(int)photoID {
+- (NSString *)getCachedImageJSONFromSQL:(int)imgID {
+	NSLog(@"RETRIEVING IMAGE CACHE FOR IMAGE: %d", imgID);
 	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	NSMutableArray *arrayForReturn = [NSMutableArray new];
+	
+	imagesSQLCacheDB = NULL;
+	
+	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
+		NSString *queryString = [NSString stringWithFormat:@"select image_data from cache where image_id = %d", imgID];
+		const char *sqlStatement = [queryString UTF8String];
+		sqlite3_stmt *compiledStatement;
+		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+			while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
+				NSString *image_data = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 0)];
+				[arrayForReturn addObject:image_data];
+			}
+		}
+		
+		sqlite3_finalize(compiledStatement);
+	}
+	
+	sqlite3_close(imagesSQLCacheDB);
+	
+	if ([arrayForReturn count] == 1) {
+		return [arrayForReturn objectAtIndex:0];
+	}
+	else {
+		return nil;
+	}
+}
+
+- (NSString *)getCachedUserJSONFromSQL:(int)userID {
+	NSLog(@"RETRIEVING USER CACHE FOR USER: %d", userID);
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	NSMutableArray *arrayForReturn = [NSMutableArray new];
+	
+	usersSQLCacheDB = NULL;
+
+	if (sqlite3_open([usersSQLCache UTF8String], &usersSQLCacheDB) == SQLITE_OK) {
+		NSString *queryString = [NSString stringWithFormat:@"select user_data from cache where user_id = %d", userID	];
+		const char *sqlStatement = [queryString UTF8String];
+		sqlite3_stmt *compiledStatement;
+		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+			while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
+				NSString *user_data = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 0)];
+				[arrayForReturn addObject:user_data];
+			}
+		}
+		
+		sqlite3_finalize(compiledStatement);
+	}
+	
+	sqlite3_close(usersSQLCacheDB);
+	
+	if ([arrayForReturn count] == 1) {
+		return [arrayForReturn objectAtIndex:0];
+	}
+	else {
+		return nil;
+	}
+}
+
+- (BOOL)addJSONCacheForImageID:(int)imgID andData:(NSString *)json {
+	NSLog(@"ADDING IMAGE CACHE FOR IMAGE: %d", imgID);
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	
+	imagesSQLCacheDB = NULL;
+	
+	if(sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
+		
+		const char* sql = [[NSString stringWithFormat:@"INSERT INTO cache(image_id, image_data) VALUES('%d', '%@');", imgID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		
+		sqlite3_stmt *statement;
+		
+		if (sqlite3_prepare_v2(imagesSQLCacheDB, sql, -1, &statement, NULL) == SQLITE_OK)
+		{
+			int result = sqlite3_step(statement);
+			sqlite3_reset(statement);
+			NSLog(@"result %d", result);
+			
+			if(result != SQLITE_ERROR) {
+				int lastInsertId =  sqlite3_last_insert_rowid(imagesSQLCacheDB);
+				NSLog(@"x %d", lastInsertId);
+			}
+			
+		}
+	}
+	sqlite3_close(imagesSQLCacheDB);
+	
+	return YES;
+}
+
+- (BOOL)addJSONCacheForUserID:(int)userID andData:(NSString *)json {
+	NSLog(@"ADDING USER CACHE FOR USER: %d", userID);
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	
+	usersSQLCacheDB = NULL;
+	
+	if(sqlite3_open([usersSQLCache UTF8String], &usersSQLCacheDB) == SQLITE_OK) {
+		
+		const char* sql = [[NSString stringWithFormat:@"INSERT INTO cache(user_id, user_data) VALUES('%d', '%@');", userID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		
+		sqlite3_stmt *statement;
+		
+		if (sqlite3_prepare_v2(usersSQLCacheDB, sql, -1, &statement, NULL) == SQLITE_OK)
+		{
+			int result = sqlite3_step(statement);
+			sqlite3_reset(statement);
+			NSLog(@"result %d", result);
+			
+			if(result != SQLITE_ERROR) {
+				int lastInsertId =  sqlite3_last_insert_rowid(usersSQLCacheDB);
+				NSLog(@"x %d", lastInsertId);
+			}
+			
+		}
+	}
+	sqlite3_close(usersSQLCacheDB);
+	
+	return YES;
+}
+
+- (void)createEditableUserSQLIfNeeded {
+	BOOL success;
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error;
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	success = [fileManager fileExistsAtPath:writableDBPath];
+	if(success) return;
+	
+	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
+}
+
+- (void)createEditableImageSQLIfNeeded {
+	BOOL success;
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error;
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	success = [fileManager fileExistsAtPath:writableDBPath];
+	if(success) return;
+	
+	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
+}
+
+- (void)dealloc {
+	sqlite3_close(usersSQLCacheDB);
+	sqlite3_close(imagesSQLCacheDB);
+	[super dealloc];
 }
 
 @end

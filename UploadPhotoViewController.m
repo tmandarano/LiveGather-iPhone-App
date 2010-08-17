@@ -25,6 +25,11 @@
 
 - (void)viewDidLoad {
 	mainViewController = [[MainViewController alloc] init];
+	
+	[[CLController sharedInstance].locationManager startUpdatingLocation];
+	[[CLController sharedInstance].locationManager setDelegate:self];
+	[[CLController sharedInstance].locationManager setDesiredAccuracy:kCLLocationAccuracyNearestTenMeters];
+	
     [super viewDidLoad];
 }
 
@@ -135,6 +140,38 @@
 }
 
 - (IBAction)upload {
+	HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    HUD.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:HUD];
+    HUD.delegate = self;
+    HUD.labelText = @"Uploading";
+	HUD.detailsLabelText = @"Uploading image to server";
+    [HUD showWhileExecuting:@selector(doServerUpload) onTarget:self withObject:nil animated:YES];
+}
+
+- (void)doServerUpload {
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	NSURL *url = [NSURL URLWithString:@"http://projc:pr0j(@dev.livegather.com/api/photos/create"];
+	ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+	[request setRequestMethod:@"POST"];
+	[request setDelegate:self];
+	[request setPostValue:[captionTextField text] forKey:@"caption"];
+	[request setPostValue:[tagsTextField text] forKey:@"tags"];
+	[request setPostValue:fileResponseFromServer forKey:@"response"];
+	[request setPostValue:[NSString stringWithFormat:@"%f", [CLController sharedInstance].locationManager.location.coordinate.latitude] forKey:@"latitude"];
+	[request setPostValue:[NSString stringWithFormat:@"%f", [CLController sharedInstance].locationManager.location.coordinate.longitude] forKey:@"longitude"];
+	
+	[request startAsynchronous];
+	
+	[pool release];
+}
+
+- (void)newLocationUpdate:(NSString *)text {
+	
+}
+
+- (void)newError:(NSString *)text {
 	
 }
 
@@ -189,6 +226,10 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+- (void)hudWasHidden {
+	
 }
 
 

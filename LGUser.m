@@ -11,7 +11,7 @@
 
 @implementation LGUser
 
-@synthesize userID, username, emailAddress, imageURL;
+@synthesize userJSON, userID, username, emailAddress, imageURL;
 
 - (id)init {
 	

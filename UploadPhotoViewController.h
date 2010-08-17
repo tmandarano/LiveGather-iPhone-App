@@ -14,10 +14,12 @@
 #import "LGTag.h"
 #import "LGUser.h"
 #import "ASIFormDataRequest.h"
+#import "MBProgressHUD.h"
+#import "CLController.h"
 
 @class MainViewController, LiveGatherAPI, ASIFormDataRequest;
 
-@interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate> {
+@interface UploadPhotoViewController : UIViewController <UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, UIAlertViewDelegate, UIActionSheetDelegate, MBProgressHUDDelegate, CLControllerDelegate, CLLocationManagerDelegate> {
 	IBOutlet UIButton			*backButton;
 	IBOutlet UIButton			*uploadButton;
 	IBOutlet UITextField		*captionTextField;
@@ -27,6 +29,7 @@
 	IBOutlet UIButton			*sendToTwitterButton;
 	IBOutlet UIButton			*sendToFacebookButton;
 	IBOutlet UIImageView		*chosenPhotoPreviewView;
+	MBProgressHUD				*HUD;
 	
 	MainViewController			*mainViewController;
 	LiveGatherAPI				*livegatherController;
@@ -43,5 +46,6 @@
 - (void)showUserImageControlOption;
 - (void)uploadImageToServer:(UIImage *)img;
 - (void)resetUploadView;
+- (void)doServerUpload;
 
 @end

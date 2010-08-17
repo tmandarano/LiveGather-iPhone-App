@@ -10,16 +10,14 @@
 #import "ResourceManager.h"
 #import "MainViewController.h"
 #import "LiveGatherAPI.h"
+#import "JRAuthenticate.h"
 
 @class LiveGatherAPI, MainViewController;
 
-@interface AccountLoginViewController : UIViewController <UITextFieldDelegate> {
-	IBOutlet UITextField	*emailLoginField;
-	IBOutlet UITextField	*passwordLoginField;
-	IBOutlet UIButton		*loginButton;
-	IBOutlet UIButton		*signupButton;
-	LiveGatherAPI			*livegatherController;
+@interface AccountLoginViewController : UIViewController <UITextFieldDelegate, JRAuthenticateDelegate> {
+	LiveGatherAPI			*applicationAPI;
 	MainViewController		*mainViewController;
+	JRAuthenticate			*jrAuthenticate;
 }
 
 - (IBAction)login;

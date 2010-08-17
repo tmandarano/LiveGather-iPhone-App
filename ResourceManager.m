@@ -16,13 +16,13 @@
 }
 
 - (UIImage *)getImageFromBundleWithName:(NSString *)imageName {
-	UIImage *image;
-	return image;
+	//UIImage *image;
+	return nil;
 }
 
 - (UIImage *)downloadImageFromURL:(NSString *)url {
-	UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", url]]]];
-	return image;
+	//UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", url]]]];
+	return nil;
 }
 
 - (BOOL)doesFileExistInBundle:(NSString *)filename {

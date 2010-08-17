@@ -12,7 +12,7 @@
 
 @class MainViewController, AccountLoginViewController;
 
-@interface LiveGatherAppDelegate : NSObject <UIApplicationDelegate, JRAuthenticateDelegate> {
+@interface LiveGatherAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
     MainViewController *mainViewController;
 	AccountLoginViewController *accountViewController;

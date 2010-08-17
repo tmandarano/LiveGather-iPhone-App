@@ -12,31 +12,25 @@
 
 @implementation LiveGatherAppDelegate
 
-
 @synthesize window;
 @synthesize mainViewController;
 @synthesize accountViewController;
 
+
+#define kUserSettingUserUsername @"username_credential"
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	settings = [NSUserDefaults standardUserDefaults];
 	
 	/*if(![settings stringForKey:kUserSettingUserUsername])
 	{
-		/*No login information here, we're gonna have to popup the account view
 		AccountLoginViewController *aController = [[AccountLoginViewController alloc] initWithNibName:@"AccountLoginView" bundle:nil];
 		self.accountViewController = aController;
 		[aController release];
 		
 		accountViewController.view.frame = [UIScreen mainScreen].applicationFrame;
 		[window addSubview:[accountViewController view]];
-		[window makeKeyAndVisible];* /
-		
-		static NSString *authAppID = @"pefmjggfjdbdhjfibbjg";
-		static NSString *authTokenURL = @"<TOKEN_URL>";
-		
-		JRAuthenticate *jrAuthenticate = [JRAuthenticate jrAuthenticateWithAppID:authAppID andTokenUrl:authTokenURL delegate:self];
-		[jrAuthenticate showJRAuthenticateDialog];
+		[window makeKeyAndVisible];
 	}
 	else {
 		//Verify login here, and then show the main view controller
@@ -59,14 +53,6 @@
     [window makeKeyAndVisible];
 	
 	return YES;
-}
-
-- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didReceiveToken:(NSString*)token forProvider:(NSString*)provider {
-	
-}
-
-- (void)jrAuthenticate:(JRAuthenticate*)jrAuth didReachTokenURL:(NSString*)tokenURL withPayload:(NSString*)tokenUrlPayload {
-	
 }
 
 - (void)dealloc {

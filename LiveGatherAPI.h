@@ -13,11 +13,13 @@
 #import "LGPhoto.h"
 #import "LGTag.h"
 #import "LGUser.h"
-#import <sqlite3.h>
+#import "sqlite3.h"
 
 @interface LiveGatherAPI : NSObject {
-	sqlite3		*imageInfoCacheDatabase;
-	NSInteger	primaryKey;
+	
+	@private
+	sqlite3		*usersSQLCacheDB;
+	sqlite3		*imagesSQLCacheDB;
 }
 
 //Handling APIs on the server
@@ -29,6 +31,7 @@
 - (NSArray *)getPhotosByTagID:(int)tagID;
 - (LGPhoto *)getPhotoForID:(int)photoID;
 - (LGUser *)getUserForID:(int)userID;
+- (LGPhoto *)returnPhotoObjectFromJSON:(NSString *)json;
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude;
 - (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate;
 

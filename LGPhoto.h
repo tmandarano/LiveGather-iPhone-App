@@ -14,7 +14,10 @@
 
 @interface LGPhoto : UIImage {
 	int			photoID;
+	NSString	*photoJSON;
 	NSString	*photoURL;
+	NSString	*photoFilename;
+	NSString	*photoFileID;
 	NSString	*photoName;
 	NSString	*photoLocationLatitude;
 	NSString	*photoLocationLongitude;
@@ -30,7 +33,10 @@
 }
 
 @property (nonatomic) int photoID;
+@property (nonatomic, retain) NSString *photoJSON;
 @property (nonatomic, retain) NSString *photoURL;
+@property (nonatomic, retain) NSString *photoFilename;
+@property (nonatomic, retain) NSString *photoFileID;
 @property (nonatomic, retain) NSString *photoName;
 @property (nonatomic, retain) NSString *photoLocationLatitude;
 @property (nonatomic, retain) NSString *photoLocationLongitude;

@@ -24,20 +24,11 @@
 
 @end
 
-static int usersSQLCallback(void *context, int count, char **values, char **columns) {
-	return 1;
-}
-
-static int imagesSQLCallback(void *context, int count, char **values, char **columns) {
-	return 1;
-}
-
 @implementation LiveGatherAPI
 
 #define kAppUserAgent @"LiveGather-for-iPhone-V0.1"
 
 - (id)init {
-	
 	if(self = [super init])
 	{
 		[self createEditableUserSQLIfNeeded];

@@ -716,25 +716,49 @@
 		LGPhotoView *photoview = [liveStreamObjectViews objectAtIndex:imgIndex];
 		LGPhoto *photo = photoview.photo;
 		[applicationAPI reverseGeocodeCoordinatesWithLatitude:photo.photoLocationLatitude andLongitude:photo.photoLocationLongitude];
-		
-		LGPhotoView *photoView = [visibleLiveStreamItems anyObject];
-		MKMapView *mapView = [[MKMapView alloc] init];
-		[mapView setFrame:photoView.frame];
-		[UIView beginAnimations:nil context:NULL];
-		[UIView setAnimationDuration:2.5];
-		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:photoView cache:YES];
-		[photoView removeFromSuperview];
-		[liveStreamScrollView addSubview:mapView];
-		[UIView commitAnimations];
-		
-		/************************MEMORY FIX HERE***************************/
-		[mapView release];
-		/************************MEMORY FIX HERE***************************/
 	}
 }
 
 - (void)photoLocationLabelWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
+	LGPhotoView *photoViewForFlipping;
+	for (LGPhotoView *photoView in visibleLiveStreamItems) {
+		if (photoView.photo.photoID == imgID) {
+			photoViewForFlipping = photoView;
+			break;
+		}
+	}
+	LGPhoto *photoInformation = [liveStreamObjects objectAtIndex:imgIndex];
 	
+	CLLocationCoordinate2D photoCoord = CLLocationCoordinate2DMake([photoInformation.photoLocationLatitude floatValue], [photoInformation.photoLocationLongitude floatValue]);		
+	
+	MKMapView *mapView = [[MKMapView alloc] init];
+	[mapView setFrame:photoViewForFlipping.frame];
+	
+	[mapView setRegion:MKCoordinateRegionMake(photoCoord, MKCoordinateSpanMake(1, 1)) animated:NO];
+	UIButton *doneButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+	[doneButton setFrame:CGRectMake(205, 315, 72, 37)];
+	[doneButton setTitle:@"Done" forState:UIControlStateNormal];
+	[doneButton setAlpha:0.8];
+	[doneButton setUserInteractionEnabled:YES];
+	[doneButton addTarget:self action:@selector(doneViewingImageMap:) forControlEvents:UIControlEventTouchUpInside];
+	[doneButton setTag:photoViewForFlipping.photo.photoID];
+	[mapView addSubview:doneButton];
+	
+	[UIView beginAnimations:nil context:NULL];
+	[UIView setAnimationDuration:2.0];
+	[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:photoViewForFlipping cache:YES];
+	[photoViewForFlipping removeFromSuperview];
+	[liveStreamScrollView addSubview:mapView];
+	[UIView commitAnimations];
+		
+	/************************MEMORY FIX HERE***************************/
+	[mapView release];
+	/************************MEMORY FIX HERE***************************/
+}
+	 
+- (void)doneViewingImageMap:(id)sender {
+	//[self redrawAllItemsToLiveStream];
+	NSLog(@"%d", [sender tag]);
 }
 
 - (int)largeImageCurrentlyMostDisplayed {

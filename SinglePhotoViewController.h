@@ -10,7 +10,6 @@
 #import "LiveGatherAPI.h"
 #import "MBProgressHUD.h"
 #import <MapKit/MapKit.h>
-#import "CollageView.h"
 #import "CollageItem.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
@@ -22,6 +21,7 @@
 @class ASINetworkQueue, ASIHTTPRequest, LiveGatherAPI;
 
 @interface SinglePhotoViewController : UIViewController {
+	IBOutlet UIView			*imageContainerView;
 	IBOutlet UIImageView	*mainImageView;
 	IBOutlet UILabel		*imageNameLabel;
 	IBOutlet UIButton		*backButton;

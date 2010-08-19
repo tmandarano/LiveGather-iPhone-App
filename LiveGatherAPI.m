@@ -19,8 +19,8 @@
 - (BOOL)addJSONCacheForImageID:(int)imgID andData:(NSString *)json;
 - (BOOL)addJSONCacheForUserID:(int)userID andData:(NSString *)json;
 
-- (void)createEditableUserSQLIfNeeded;
-- (void)createEditableImageSQLIfNeeded;
+- (void)createEditableJSONSQLCacheIfNeeded;
+- (void)createEditableImageFilesSQLCacheIfNeeded;
 
 @end
 
@@ -31,8 +31,8 @@
 - (id)init {
 	if(self = [super init])
 	{
-		[self createEditableUserSQLIfNeeded];
-		[self createEditableImageSQLIfNeeded];
+		[self createEditableJSONSQLCacheIfNeeded];
+		[self createEditableImageFilesSQLCacheIfNeeded];
 	}
 	
 	return self;
@@ -49,7 +49,6 @@
 	NSError *err;
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);
 		
 	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONPhotoResponse:response]];
 		
@@ -79,7 +78,6 @@
     NSError *err;
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
     NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-    NSLog(@"%@", response);
 	
 	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseTagsResponse:response]];
 	
@@ -99,7 +97,6 @@
     NSError *err;
     NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
     NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-    NSLog(@"%@", response);
     
     NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseTagsResponse:response]];
 	
@@ -120,7 +117,6 @@
 		NSError *err;
 		NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 		NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-		NSLog(@"%@", response);
 		
 		NSDictionary *dict = [response JSONValue];
 		
@@ -250,7 +246,6 @@
 		NSError *err;
 		NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 		NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-		NSLog(@"%@", response);
 		
 		NSDictionary *dict = [response JSONValue];
 		
@@ -427,15 +422,12 @@
 		}
 		
 		[pool release];
-		
-		NSLog(@"Processing Photo: %@", ID);
-		
+				
 		[photo setPhotoJSON:response];
 		[photo setPhotoID:[ID intValue]];
 		[photo setPhotoName:name];
 		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 		[photo setPhotoUserID:userID];
-		//[photo setPhotoUser:[self getUserForID:[userID intValue]]];
 		[photo setPhotoLocationLatitude:latitude];
 		[photo setPhotoLocationLongitude:longitude];
 		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
@@ -498,13 +490,13 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
 	NSMutableArray *arrayForReturn = [NSMutableArray new];
 	
 	imagesSQLCacheDB = NULL;
 	
 	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
-		NSString *queryString = [NSString stringWithFormat:@"select image_data from cache where image_id = %d", imgID];
+		NSString *queryString = [NSString stringWithFormat:@"select image_data from image_cache where image_id = %d", imgID];
 		const char *sqlStatement = [queryString UTF8String];
 		sqlite3_stmt *compiledStatement;
 		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
@@ -532,13 +524,13 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
 	NSMutableArray *arrayForReturn = [NSMutableArray new];
 	
 	usersSQLCacheDB = NULL;
 
 	if (sqlite3_open([usersSQLCache UTF8String], &usersSQLCacheDB) == SQLITE_OK) {
-		NSString *queryString = [NSString stringWithFormat:@"select user_data from cache where user_id = %d", userID	];
+		NSString *queryString = [NSString stringWithFormat:@"select user_data from user_cache where user_id = %d", userID	];
 		const char *sqlStatement = [queryString UTF8String];
 		sqlite3_stmt *compiledStatement;
 		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
@@ -566,13 +558,13 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
 	
 	imagesSQLCacheDB = NULL;
 	
 	if(sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		
-		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO cache(image_id, image_data) VALUES('%d', '%@');", imgID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO image_cache(image_id, image_data) VALUES('%d', '%@');", imgID, json] cStringUsingEncoding:NSUTF8StringEncoding];
 		
 		sqlite3_stmt *statement;
 		
@@ -599,13 +591,13 @@
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	NSString *usersSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
 	
 	usersSQLCacheDB = NULL;
 	
 	if(sqlite3_open([usersSQLCache UTF8String], &usersSQLCacheDB) == SQLITE_OK) {
 		
-		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO cache(user_id, user_data) VALUES('%d', '%@');", userID, json] cStringUsingEncoding:NSUTF8StringEncoding];
+		const char* sql = [[NSString stringWithFormat:@"INSERT OR REPLACE INTO user_cache(user_id, user_data) VALUES('%d', '%@');", userID, json] cStringUsingEncoding:NSUTF8StringEncoding];
 		
 		sqlite3_stmt *statement;
 		
@@ -627,31 +619,31 @@
 	return YES;
 }
 
-- (void)createEditableUserSQLIfNeeded {
+- (void)createEditableJSONSQLCacheIfNeeded {
 	BOOL success;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
 	success = [fileManager fileExistsAtPath:writableDBPath];
 	if(success) return;
 	
-	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_user_cache.sqlite"];
+	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_cache.sqlite"];
 	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
 }
 
-- (void)createEditableImageSQLIfNeeded {
+- (void)createEditableImageFilesSQLCacheIfNeeded {
 	BOOL success;
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"image_file_cache.sqlite"];
 	success = [fileManager fileExistsAtPath:writableDBPath];
 	if(success) return;
 	
-	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_image_cache.sqlite"];
+	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"image_file_cache.sqlite"];
 	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
 }
 

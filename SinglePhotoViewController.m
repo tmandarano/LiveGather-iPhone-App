@@ -50,6 +50,38 @@
 	 [UIView commitAnimations];*/
 }
 
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+	CGPoint pt = [[touches anyObject] locationInView:self.view];
+	
+	if (CGRectContainsPoint(imageLocationLabel.frame, pt)) {
+		CLLocationCoordinate2D photoCoord = CLLocationCoordinate2DMake([imageInformation.photoLocationLatitude floatValue], [imageInformation.photoLocationLongitude floatValue]);		
+		
+		MKMapView *mapView = [[MKMapView alloc] init];
+		[mapView setFrame:mainImageView.frame];
+		
+		[mapView setRegion:MKCoordinateRegionMake(photoCoord, MKCoordinateSpanMake(1, 1)) animated:NO];
+		UIButton *doneButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+		[doneButton setFrame:CGRectMake(205, 315, 72, 37)];
+		[doneButton setTitle:@"Done" forState:UIControlStateNormal];
+		[doneButton setAlpha:0.8];
+		[doneButton setUserInteractionEnabled:YES];
+		[doneButton addTarget:self action:@selector(doneViewingImageMap:) forControlEvents:UIControlEventTouchUpInside];
+		[doneButton setTag:imageInformation.photoID];
+		[mapView addSubview:doneButton];
+		
+		[UIView beginAnimations:nil context:NULL];
+		[UIView setAnimationDuration:2.0];
+		[UIView setAnimationTransition:UIViewAnimationTransitionFlipFromRight forView:imageContainerView cache:YES];
+		[mainImageView removeFromSuperview];
+		[imageContainerView addSubview:mapView];
+		[UIView commitAnimations];
+		
+		/************************MEMORY FIX HERE***************************/
+		[mapView release];
+		/************************MEMORY FIX HERE***************************/
+	}
+}
+
 - (void)showImageWithID:(int)imgID {
 	if (!networkQueue) {
 		networkQueue = [[ASINetworkQueue alloc] init];
@@ -125,10 +157,6 @@
 		[image release];
 		/************************MEMORY FIX HERE***************************/
 	}
-}
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-	
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {

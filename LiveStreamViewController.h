@@ -10,7 +10,6 @@
 #import "LiveGatherAPI.h"
 #import "MBProgressHUD.h"
 #import <MapKit/MapKit.h>
-#import "CollageView.h"
 #import "CollageItem.h"
 #import "LGPhoto.h"
 #import "LGTag.h"
@@ -46,19 +45,20 @@ typedef enum _CurrentLiveStreamMode {
 - (IBAction)goHome;
 - (void)updateLiveStreamPhotos;
 - (void)downloadNewLiveStreamPhotos;
-- (IBAction)refreshLiveStream;
 - (IBAction)searchLiveSteam;
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request;
 - (void)imageDownloadingFinished;
 
+- (IBAction)refreshLiveStream;
 - (void)refreshComplete:(ASIHTTPRequest *)request;
 
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index;
 - (CGRect)getRectForItemInLiveStream:(int)index;
+- (int)largeImageCurrentlyMostDisplayed;
+
 
 - (void)drawItemsToLiveStream;
-
 - (void)redrawAllItemsToLiveStream;
 
 - (int)numberOfImagesForStream;
@@ -66,6 +66,6 @@ typedef enum _CurrentLiveStreamMode {
 - (LGPhotoView *)dequeueRecycledLiveStreamView;
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
 
-- (int)largeImageCurrentlyMostDisplayed;
+- (void)doneViewingImageMap:(id)sender;
 
 @end

@@ -865,7 +865,15 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
+		
+		if ([applicationAPI deviceRequiresHighResPhotos]) {
+			NSLog(@"HIGH RES");
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/m", photo.photoID]]];
+		}
+		else {
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/m", photo.photoID]]];
+		}
+		
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 		
 		NSFileManager *fileManager = [[NSFileManager alloc] init];
@@ -983,6 +991,14 @@
 	}
 }
 
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+	if (currentLiveStreamMode == kLiveStreamModeLarge) {
+		int visibleIndex = [self largeImageCurrentlyMostDisplayed];
+		CGRect visibleRect = [self getRectForItemInLiveStream:visibleIndex];
+		[liveStreamScrollView setContentOffset:CGPointMake((visibleRect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y) animated:YES];
+	}
+}
+
 - (IBAction)searchLiveSteam {
 	
 }
@@ -1008,17 +1024,15 @@
 }
 
 
- - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
  // Return YES for supported orientations
  return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
  
 
 - (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
+	NSLog(@"Received Memory Warning");
     [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
 }
 
 - (void)viewDidUnload {
@@ -1026,7 +1040,6 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
-
 
 - (void)dealloc {
     [super dealloc];

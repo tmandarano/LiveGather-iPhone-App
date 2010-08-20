@@ -316,7 +316,14 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", photo.photoID]]];
+		
+		if ([applicationAPI deviceRequiresHighResPhotos]) {
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/s", photo.photoID]]];
+		}
+		else {
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/s", photo.photoID]]];
+		}
+		
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 				
 		NSFileManager *fileManager = [[NSFileManager alloc] init];

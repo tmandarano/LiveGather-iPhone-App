@@ -32,7 +32,6 @@
 	MBProgressHUD				*HUD;
 	
 	MainViewController			*mainViewController;
-	LiveGatherAPI				*livegatherController;
 	UIImagePickerController		*imagePickerController;
 	
 	NSString					*fileResponseFromServer;

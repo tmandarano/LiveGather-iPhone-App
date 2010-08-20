@@ -34,5 +34,8 @@
 - (LGPhoto *)returnPhotoObjectFromJSON:(NSString *)json;
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude;
 - (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate;
+- (BOOL)deviceRequiresHighResPhotos;
+- (void)addImageFileToCacheWithID:(int)imgID andFilePath:(NSString *)imgPath andImageSize:(NSString *)imgSize;
+- (NSString *)getFilePathForCachedImageWithID:(int)imgID andSize:(NSString *)size;
 
 @end

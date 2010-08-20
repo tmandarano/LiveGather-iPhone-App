@@ -365,6 +365,9 @@
 			if (request) {
 				NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 				photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+				
+				[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:[request downloadDestinationPath] andImageSize:@"s"];
+				
 				LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 				[photo setPhotoID:[photoID intValue]];
 				[photo setPhotoIndex:[liveStreamObjects count]];
@@ -382,9 +385,13 @@
 			
 			[self drawItemsToLiveStream];
 		}
-		else {
+		else {			
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+			
+			NSString *photoPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", [photoID intValue]]];
+			[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:photoPath andImageSize:@"s"];
+			
 			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
 			[photo setPhotoID:[photoID intValue]];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];

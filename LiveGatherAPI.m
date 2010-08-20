@@ -508,6 +508,10 @@
 	
 	imagesSQLCacheDB = NULL;
 	
+	if (imgPath == nil) {
+		[NSException raise:@"Invalid image path value!" format:@"IMAGE PATH GIVE IS NILL!"];
+	}
+	
 	if(sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		NSString *timestamp = [NSString stringWithFormat:@"%d", (long)[[NSDate date] timeIntervalSince1970]];
 		const char* sql;

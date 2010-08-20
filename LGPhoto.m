@@ -14,7 +14,7 @@
 @synthesize photoJSON;
 @synthesize photoID;
 @synthesize photoURL;
-@synthesize photoFilename;
+@synthesize photoFilepath;
 @synthesize photoFileID;
 @synthesize photoName;
 @synthesize photoLocationLatitude;

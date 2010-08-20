@@ -158,7 +158,7 @@
 		[photo setPhotoName:name];
 		[photo setPhotoUserID:userID];
 		[photo setPhotoUser:user];
-		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+		[photo setPhotoFileID:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 		[photo setPhotoLocationLatitude:latitude];
 		[photo setPhotoLocationLongitude:longitude];
 		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
@@ -218,7 +218,7 @@
 		[photo setPhotoName:name];
 		[photo setPhotoUserID:userID];
 		[photo setPhotoUser:user];
-		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+		[photo setPhotoFileID:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 		[photo setPhotoLocationLatitude:latitude];
 		[photo setPhotoLocationLongitude:longitude];
 		[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
@@ -334,7 +334,7 @@
 	[photo setPhotoName:name];
 	[photo setPhotoUserID:userID];
 	[photo setPhotoUser:user];
-	[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+	[photo setPhotoFileID:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 	[photo setPhotoLocationLatitude:latitude];
 	[photo setPhotoLocationLongitude:longitude];
 	[photo setPhotoLocation:[NSString stringWithFormat:@"%@, %@", latitude, longitude]];
@@ -429,7 +429,7 @@
 		[photo setPhotoJSON:response];
 		[photo setPhotoID:[ID intValue]];
 		[photo setPhotoName:name];
-		[photo setPhotoFilename:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
+		[photo setPhotoFileID:[photoURL stringByReplacingOccurrencesOfString:@"/photos/" withString:@""]];
 		[photo setPhotoUserID:userID];
 		[photo setPhotoLocationLatitude:latitude];
 		[photo setPhotoLocationLongitude:longitude];

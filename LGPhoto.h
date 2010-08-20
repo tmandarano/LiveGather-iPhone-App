@@ -16,7 +16,7 @@
 	int			photoID;
 	NSString	*photoJSON;
 	NSString	*photoURL;
-	NSString	*photoFilename;
+	NSString	*photoFilepath;
 	NSString	*photoFileID;
 	NSString	*photoName;
 	NSString	*photoLocationLatitude;
@@ -35,7 +35,7 @@
 @property (nonatomic) int photoID;
 @property (nonatomic, retain) NSString *photoJSON;
 @property (nonatomic, retain) NSString *photoURL;
-@property (nonatomic, retain) NSString *photoFilename;
+@property (nonatomic, retain) NSString *photoFilepath;
 @property (nonatomic, retain) NSString *photoFileID;
 @property (nonatomic, retain) NSString *photoName;
 @property (nonatomic, retain) NSString *photoLocationLatitude;

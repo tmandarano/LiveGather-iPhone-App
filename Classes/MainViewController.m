@@ -106,6 +106,8 @@
 		[visibleLiveStreamItems minusSet:recycledLiveStreamItems];
 		
 		for (int i = firstIndexVisibleInStream; i <= lastIndexVisibleInStream; i++) {
+			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+			
 			if (![self isDisplayingItemForIndex:i]) {
 				LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
 				if (photoView == nil) {
@@ -117,6 +119,8 @@
 				[liveStreamPreviewScrollView addSubview:photoView];
 				[visibleLiveStreamItems addObject:photoView];
 			}
+			
+			[pool release];
 		}
 	}
 	else {
@@ -211,10 +215,12 @@
 }
 
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
-	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[liveStreamObjects objectAtIndex:index]];
+	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
+	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
 	photoView.frame = [self getRectForItemInLiveStream:index];
-	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
+	[photoView setPhoto:photo];
 	photoView.index = index;
+	[photo release];
 	return photoView;
 }
 
@@ -336,13 +342,18 @@
 			/************************MEMORY FIX HERE***************************/
 		}
 		else {
-			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+			LGPhoto *img = [[LGPhoto alloc] init];
+			
+			[img setPhotoFilepath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setPhotoID:photo.photoID];
+			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photoView setIndex:photo.photoIndex];
+			
 			[liveStreamObjects addObject:img];
 			[liveStreamObjectViews addObject:photoView];
+			
 			[self imageFetchComplete:nil];
 			
 			/************************MEMORY FIX HERE***************************/
@@ -368,12 +379,16 @@
 				
 				[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:[request downloadDestinationPath] andImageSize:@"s"];
 				
-				LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+				LGPhoto *photo = [[LGPhoto alloc] init];
+				
+				[photo setPhotoFilepath:[request downloadDestinationPath]];
 				[photo setPhotoID:[photoID intValue]];
 				[photo setPhotoIndex:[liveStreamObjects count]];
+				
 				LGPhotoView *photoView = [[LGPhotoView alloc] init];
 				[photoView setPhoto:photo];
 				[photoView setIndex:photo.photoIndex];
+				
 				[liveStreamObjects addObject:photo];
 				[liveStreamObjectViews addObject:photoView];
 				
@@ -392,12 +407,16 @@
 			NSString *photoPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", [photoID intValue]]];
 			[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:photoPath andImageSize:@"s"];
 			
-			LGPhoto *photo = [[LGPhoto alloc] initWithContentsOfFile:[request downloadDestinationPath]];
+			LGPhoto *photo = [[LGPhoto alloc] init];
+			
+			[photo setPhotoFilepath:[request downloadDestinationPath]];
 			[photo setPhotoID:[photoID intValue]];
+			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photo setPhotoIndex:[liveStreamObjects count]];
 			[photoView setIndex:photo.photoIndex];
+			
 			[liveStreamObjectViews addObject:photoView];
 			[liveStreamObjects addObject:photo];
 			

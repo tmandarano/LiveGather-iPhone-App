@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LiveGatherAPI.h"
 #import "MBProgressHUD.h"
+#import "MainViewController.h"
 #import <MapKit/MapKit.h>
 #import "CollageItem.h"
 #import "LGPhoto.h"
@@ -23,7 +24,7 @@ typedef enum _CurrentLiveStreamMode {
 	kLiveStreamModeLarge
 } CurrentLiveStreamMode;
 
-@class ASINetworkQueue;
+@class ASINetworkQueue, MainViewController;
 
 @interface LiveStreamViewController : UIViewController <MBProgressHUDDelegate, UIScrollViewDelegate, LGPhotoDelegate> {
 	IBOutlet UIButton			*backButton;
@@ -35,6 +36,7 @@ typedef enum _CurrentLiveStreamMode {
 	UIScrollView				*liveStreamScrollView;
 	ASINetworkQueue				*networkQueue;
 	CurrentLiveStreamMode		currentLiveStreamMode;
+	MainViewController			*mainViewController;
 	
 	NSMutableArray				*liveStreamObjects;
 	NSMutableArray				*liveStreamObjectViews;

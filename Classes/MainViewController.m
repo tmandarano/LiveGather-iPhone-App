@@ -63,6 +63,8 @@
 
 - (IBAction)viewLiveStream {
 	[self presentModalViewController:liveStreamView animated:YES];
+	[visibleLiveStreamItems removeAllObjects];
+	[recycledLiveStreamItems removeAllObjects];
 }
 
 - (void)updateTags {
@@ -333,7 +335,7 @@
 			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/s", photo.photoID]]];
 		}
 		
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.jpg", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
 			LGPhoto *img = [[LGPhoto alloc] init];
@@ -355,7 +357,7 @@
 			/************************MEMORY FIX HERE***************************/
 		}
 		else {
-			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]] andImageSize:@"s"];
+			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.jpg", photo.photoID]] andImageSize:@"s"];
 			[networkQueue addOperation:request];
 		}
 	}
@@ -367,7 +369,6 @@
 	{
 		if (request) {
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
-			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 			
 			LGPhoto *photo = [[LGPhoto alloc] init];
 			
@@ -392,7 +393,6 @@
 	}
 	else {			
 		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
-		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 		
 		LGPhoto *photo = [[LGPhoto alloc] init];
 		

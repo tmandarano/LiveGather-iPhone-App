@@ -508,10 +508,8 @@
 		const char* sql;
 		
 		if (![self imageFileCacheExistsInSQLWithID:imgID forSize:imgSize]) {
-			NSLog(@"INSERTING");
 			if ([imgSize isEqualToString:@"s"]) {
 				sql = [[NSString stringWithFormat:@"INSERT INTO small_preview_file(image_id, image_file_path, last_access_date) VALUES('%d', '%@', '%d');", imgID, imgPath, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
-				printf("%s", sql);
 			}
 			else if([imgSize isEqualToString:@"m"]) {
 				sql = [[NSString stringWithFormat:@"INSERT INTO medium_preview_file(image_id, image_file_path, last_access_date) VALUES('%d', '%@', '%d');", imgID, imgPath, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
@@ -524,7 +522,6 @@
 			}
 		}
 		else {
-			NSLog(@"UPDATING");
 			if ([imgSize isEqualToString:@"s"]) {
 				sql = [[NSString stringWithFormat:@"UPDATE small_preview_file SET last_access_date = '%d' WHERE image_id = '%d'", imgID, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
 			}
@@ -594,6 +591,7 @@
 	sqlite3_close(imagesSQLCacheDB);
 	
 	if ([arrayForReturn count] > 0) {
+		NSLog(@"Wir haben %d", [arrayForReturn count]);
 		[arrayForReturn release];
 		return YES;
 	}

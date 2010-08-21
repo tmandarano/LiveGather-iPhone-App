@@ -591,7 +591,6 @@
 	sqlite3_close(imagesSQLCacheDB);
 	
 	if ([arrayForReturn count] > 0) {
-		NSLog(@"Wir haben %d", [arrayForReturn count]);
 		[arrayForReturn release];
 		return YES;
 	}

@@ -877,7 +877,6 @@
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dM.jpg", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"m"]) {
-			NSLog(@"EXISTING IS HAPPENING WHAT THE WHAAAA?");
 			LGPhoto *img = [[LGPhoto alloc] init];
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"m"]];

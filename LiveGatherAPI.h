@@ -37,5 +37,6 @@
 - (BOOL)deviceRequiresHighResPhotos;
 - (void)addImageFileToCacheWithID:(int)imgID andFilePath:(NSString *)imgPath andImageSize:(NSString *)imgSize;
 - (NSString *)getFilePathForCachedImageWithID:(int)imgID andSize:(NSString *)size;
+- (BOOL)imageFileCacheExistsInSQLWithID:(int)imgID forSize:(NSString *)imgSize;
 
 @end

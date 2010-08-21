@@ -57,8 +57,9 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	[self presentModalViewController:uploadViewController animated:YES];
-	[uploadViewController showUserImageControlOption];
+	[applicationAPI imageFileCacheExistsInSQLWithID:33 forSize:@"s"];
+	//[self presentModalViewController:uploadViewController animated:YES];
+	//[uploadViewController showUserImageControlOption];
 }
 
 - (IBAction)viewLiveStream {

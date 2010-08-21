@@ -22,8 +22,6 @@
 - (void)createEditableJSONSQLCacheIfNeeded;
 - (void)createEditableImageFilesSQLCacheIfNeeded;
 
-- (BOOL)imageFileCacheExistsInSQLWithID:(int)imgID forSize:(NSString *)imgSize;
-
 @end
 
 @implementation LiveGatherAPI
@@ -540,13 +538,14 @@
 		
 		if (sqlite3_prepare_v2(imagesSQLCacheDB, sql, -1, &statement, NULL) == SQLITE_OK)
 		{
+			NSLog(@"OK SQL");
 			int result = sqlite3_step(statement);
 			sqlite3_reset(statement);
-			//NSLog(@"result %d", result);
+			NSLog(@"result %d", result);
 			
 			if(result != SQLITE_ERROR) {
-				//int lastInsertId =  sqlite3_last_insert_rowid(imagesSQLCacheDB);
-				//NSLog(@"x %d", lastInsertId);
+				int lastInsertId =  sqlite3_last_insert_rowid(imagesSQLCacheDB);
+				NSLog(@"x %d", lastInsertId);
 			}
 		}
 
@@ -578,6 +577,7 @@
 		const char *sqlStatement = [queryString UTF8String];
 		sqlite3_stmt *compiledStatement;
 		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+			NSLog(@"OK SQL");
 			while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
 				NSString *image_data = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 0)];
 				[arrayForReturn addObject:image_data];
@@ -590,10 +590,12 @@
 	sqlite3_close(imagesSQLCacheDB);
 	
 	if ([arrayForReturn count] > 0) {
+		NSLog(@"YEP");
 		[arrayForReturn release];
 		return YES;
 	}
 	else {
+		NSLog(@"NOPE");
 		[arrayForReturn release];
 		return NO;
 	}

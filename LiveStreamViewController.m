@@ -1003,7 +1003,7 @@
 		currentLiveStreamMode = kLiveStreamModeIcons;
 		[self redrawAllItemsToLiveStream];
 		CGRect rect = [self getRectForItemInLiveStream:currentItemInView];
-		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - kLiveStreamPreviewHorizontalPadding), liveStreamScrollView.contentOffset.y) animated:YES];
+		[liveStreamScrollView setContentOffset:CGPointMake((rect.origin.x - kLiveStreamPreviewHorizontalPadding), liveStreamScrollView.contentOffset.y) animated:NO];
 		[self redrawAllItemsToLiveStream];
 	}
 

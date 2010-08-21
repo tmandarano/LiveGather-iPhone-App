@@ -641,7 +641,9 @@
 	[self updateLastAccessDateOnImageWithID:imgID forSize:imgSize];
 	
 	if ([arrayForReturn count] == 1) {
-		return [arrayForReturn objectAtIndex:0];
+		NSString *returnString = [[NSString alloc] initWithString:[arrayForReturn objectAtIndex:0]];
+		[arrayForReturn release];
+		return [returnString autorelease];
 	}
 	else {
 		[arrayForReturn release];
@@ -718,7 +720,9 @@
 	sqlite3_close(imagesSQLCacheDB);
 	
 	if ([arrayForReturn count] == 1) {
-		return [arrayForReturn objectAtIndex:0];
+		NSString *returnString = [[NSString alloc] initWithString:[arrayForReturn objectAtIndex:0]];
+		[arrayForReturn release];
+		return [returnString autorelease];
 	}
 	else {
 		[arrayForReturn release];
@@ -751,7 +755,9 @@
 	sqlite3_close(usersSQLCacheDB);
 	
 	if ([arrayForReturn count] == 1) {
-		return [arrayForReturn objectAtIndex:0];
+		NSString *returnString = [[NSString alloc] initWithString:[arrayForReturn objectAtIndex:0]];
+		[arrayForReturn release];
+		return [returnString autorelease];
 	}
 	else {
 		[arrayForReturn release];

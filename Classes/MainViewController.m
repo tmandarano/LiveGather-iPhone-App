@@ -193,10 +193,7 @@
 		firstIndex -= 2;
 	}
 	
-	if ((lastIndex + 4) <= ([self numberOfImagesForStream] - 1)) {
-		lastIndex += 4;
-	}
-	else if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
+	if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
 		lastIndex += 3;
 	}
 	else if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {

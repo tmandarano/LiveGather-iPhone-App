@@ -993,11 +993,7 @@
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	if (currentLiveStreamMode == kLiveStreamModeLarge) {
-		int visibleIndex = [self largeImageCurrentlyMostDisplayed];
-		CGRect visibleRect = [self getRectForItemInLiveStream:visibleIndex];
-		[liveStreamScrollView setContentOffset:CGPointMake((visibleRect.origin.x - (2 * kLiveStreamHorizontalPadding)), liveStreamScrollView.contentOffset.y) animated:YES];
-	}
+	
 }
 
 - (IBAction)searchLiveSteam {

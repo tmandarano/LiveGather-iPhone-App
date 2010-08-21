@@ -57,7 +57,6 @@
 //Custom Methods for this Class
 
 - (IBAction)uploadPhoto {
-	[applicationAPI imageFileCacheExistsInSQLWithID:33 forSize:@"s"];
 	//[self presentModalViewController:uploadViewController animated:YES];
 	//[uploadViewController showUserImageControlOption];
 }
@@ -194,7 +193,13 @@
 		firstIndex -= 2;
 	}
 	
-	if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
+	if ((lastIndex + 4) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 4;
+	}
+	else if ((lastIndex + 3) <= ([self numberOfImagesForStream] - 1)) {
+		lastIndex += 3;
+	}
+	else if ((lastIndex + 2) <= ([self numberOfImagesForStream] - 1)) {
 		lastIndex += 2;
 	}
 	else if ((lastIndex + 1) <= ([self numberOfImagesForStream] - 1)) {
@@ -332,24 +337,12 @@
 		}
 		
 		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
-				
-		NSFileManager *fileManager = [[NSFileManager alloc] init];
 		
-		if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]]) {
-			[networkQueue addOperation:request];
-			
-			/************************MEMORY FIX HERE***************************/
-			[fileManager release];
-			/************************MEMORY FIX HERE***************************/
-		}
-		else {
+		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
 			LGPhoto *img = [[LGPhoto alloc] init];
 			
-			NSLog(@"%@",[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]);
-			
-			[img setPhotoFilepath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
+			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
 			[img setPhotoID:photo.photoID];
-			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photoView setIndex:photo.photoIndex];
@@ -357,75 +350,70 @@
 			[liveStreamObjects addObject:img];
 			[liveStreamObjectViews addObject:photoView];
 			
-			[self imageFetchComplete:nil];
+			[self drawItemsToLiveStream];
 			
 			/************************MEMORY FIX HERE***************************/
-			[fileManager release];
 			[img release];
 			[photoView release];
 			/************************MEMORY FIX HERE***************************/
+		}
+		else {
+			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]] andImageSize:@"s"];
+			[networkQueue addOperation:request];
 		}
 	}
 	[networkQueue go];
 }
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
-	if (request == nil) {
-		[self drawItemsToLiveStream];
-	}
-	else {
-		if(networkQueue.requestsCount == 0)
-		{
-			if (request) {
-				NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
-				photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
-								
-				LGPhoto *photo = [[LGPhoto alloc] init];
-				
-				[photo setPhotoFilepath:[request downloadDestinationPath]];
-				[photo setPhotoID:[photoID intValue]];
-				[photo setPhotoIndex:[liveStreamObjects count]];
-				
-				LGPhotoView *photoView = [[LGPhotoView alloc] init];
-				[photoView setPhoto:photo];
-				[photoView setIndex:photo.photoIndex];
-				
-				[liveStreamObjects addObject:photo];
-				[liveStreamObjectViews addObject:photoView];
-				
-				/************************MEMORY FIX HERE***************************/
-				[photo release];
-				[photoView release];
-				/************************MEMORY FIX HERE***************************/
-			}
-			
-			[self drawItemsToLiveStream];
-		}
-		else {			
+	if(networkQueue.requestsCount == 0)
+	{
+		if (request) {
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
 			
-			NSString *photoPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", [photoID intValue]]];
-			[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:photoPath andImageSize:@"s"];
-			
 			LGPhoto *photo = [[LGPhoto alloc] init];
 			
-			[photo setPhotoFilepath:[request downloadDestinationPath]];
+			[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
 			[photo setPhotoID:[photoID intValue]];
-			
+			[photo setPhotoIndex:[liveStreamObjects count]];
+				
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
-			[photo setPhotoIndex:[liveStreamObjects count]];
 			[photoView setIndex:photo.photoIndex];
-			
-			[liveStreamObjectViews addObject:photoView];
+				
 			[liveStreamObjects addObject:photo];
-			
+			[liveStreamObjectViews addObject:photoView];
+				
 			/************************MEMORY FIX HERE***************************/
-			[photoView release];
 			[photo release];
+			[photoView release];
 			/************************MEMORY FIX HERE***************************/
 		}
+		
+		[self drawItemsToLiveStream];
+	}
+	else {			
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
+		
+		LGPhoto *photo = [[LGPhoto alloc] init];
+		
+		[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
+		[photo setPhotoID:[photoID intValue]];
+			
+		LGPhotoView *photoView = [[LGPhotoView alloc] init];
+		[photoView setPhoto:photo];
+		[photo setPhotoIndex:[liveStreamObjects count]];
+		[photoView setIndex:photo.photoIndex];
+		
+		[liveStreamObjectViews addObject:photoView];
+		[liveStreamObjects addObject:photo];
+			
+		/************************MEMORY FIX HERE***************************/
+		[photoView release];
+		[photo release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 

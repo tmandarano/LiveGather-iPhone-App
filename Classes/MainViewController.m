@@ -92,7 +92,7 @@
 	
 	/************************MEMORY FIX HERE***************************/
 	[tagsArray release];
-	/************************MEMORY FIX HERE***************************/
+	/************************MEMORY FIX HERE**************************/
 }
 
 - (void)drawItemsToLiveStream {	

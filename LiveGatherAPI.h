@@ -17,9 +17,6 @@
 
 @interface LiveGatherAPI : NSObject {
 	
-	@private
-	sqlite3		*usersSQLCacheDB;
-	sqlite3		*imagesSQLCacheDB;
 }
 
 //Handling APIs on the server

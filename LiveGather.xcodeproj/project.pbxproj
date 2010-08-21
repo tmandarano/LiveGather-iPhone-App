@@ -994,7 +994,7 @@
 			buildSettings = {
 				ADDITIONAL_SDKS = "";
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CODE_SIGN_IDENTITY = "iPhone Developer: Skarlete Nabavi-Noori (46AS96JUN4)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Skarlete Nabavi-Noori (6MW28G95HD)";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1021,7 +1021,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = LiveGather;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphoneos4.0;
 				USER_HEADER_SEARCH_PATHS = "$(RPX)/**";
 				VALID_ARCHS = "i386 ppc ppc64 ppc7400 ppc970 x86_64";
 			};

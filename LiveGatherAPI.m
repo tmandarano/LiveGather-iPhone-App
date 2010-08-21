@@ -51,13 +51,12 @@
 	NSError *err;
 	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
 	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
-	NSLog(@"%@", response);	
 	
 	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONPhotoResponse:response]];
 		
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 			
-	return arr;
+	return [arr autorelease];
 }
 
 - (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius {
@@ -86,7 +85,7 @@
 	
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 	
-	return arr;
+	return [arr autorelease];
 }
 
 - (NSArray *)getRecentTagsWithLimit:(int)limit {
@@ -105,7 +104,7 @@
 	
 	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
 	
-	return arr;
+	return [arr autorelease];
 }
 
 - (LGPhoto *)getPhotoForID:(int)photoID {
@@ -176,7 +175,7 @@
 		[response release];
 		/************************MEMORY FIX HERE***************************/
 		
-		return photo;		
+		return [photo autorelease];		
 	}
 	else {
 		NSString *imageJSON = [self getCachedImageJSONFromSQL:photoID];
@@ -228,10 +227,9 @@
 		
 		/************************MEMORY FIX HERE***************************/
 		[photoTags release];
-		[imageJSON release];
 		/************************MEMORY FIX HERE***************************/
 		
-		return photo;
+		return [photo autorelease];
 	}
 
 }
@@ -268,9 +266,7 @@
 		[user setEmailAddress:emailAddress];
 		[user setImageURL:imageURL];
 		
-		return user;
-		
-		[user release];
+		return [user autorelease];
 	}
 	else {
 		NSString *userJSON = [self getCachedUserJSONFromSQL:userID];
@@ -289,9 +285,7 @@
 		[user setEmailAddress:emailAddress];
 		[user setImageURL:imageURL];
 		
-		return user;
-		
-		[user release];
+		return [user autorelease];
 	}
 
 }
@@ -346,12 +340,12 @@
 	[photoTags release];
 	/************************MEMORY FIX HERE***************************/
 	
-	return photo;
+	return [photo autorelease];
 }
 
 - (NSArray *)getPhotosByTagID:(int)tagID {
-    NSArray *arr;
-    return arr;
+    //NSArray *arr;
+    return nil;
 }
 
 - (NSString *)getTimeSinceMySQLDate:(NSString *)sqlDate {
@@ -452,7 +446,7 @@
 	
     [returnArray release];
     
-	return arr;
+	return [arr autorelease];
 }
 
 - (NSArray *)parseTagsResponse:(NSString *)response {
@@ -485,7 +479,8 @@
 	[pool release];
     
     NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
-    return arr;
+	[returnArray release];
+    return [arr autorelease];
 }
 
 - (BOOL)deviceRequiresHighResPhotos {
@@ -507,10 +502,6 @@
 	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"image_files_cache.sqlite"];
 	
 	imagesSQLCacheDB = NULL;
-	
-	if (imgPath == nil) {
-		[NSException raise:@"Invalid image path value!" format:@"IMAGE PATH GIVE IS NILL!"];
-	}
 	
 	if(sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		NSString *timestamp = [NSString stringWithFormat:@"%d", (long)[[NSDate date] timeIntervalSince1970]];
@@ -544,7 +535,7 @@
 				return;
 			}
 		}
-		
+				
 		sqlite3_stmt *statement;
 		
 		if (sqlite3_prepare_v2(imagesSQLCacheDB, sql, -1, &statement, NULL) == SQLITE_OK)
@@ -557,62 +548,16 @@
 				//int lastInsertId =  sqlite3_last_insert_rowid(imagesSQLCacheDB);
 				//NSLog(@"x %d", lastInsertId);
 			}
-			
 		}
-	}
-	sqlite3_close(imagesSQLCacheDB);
-}
 
-- (NSString *)getFilePathForCachedImageWithID:(int)imgID andSize:(NSString *)imgSize {
-	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"json_cache.sqlite"];
-	NSMutableArray *arrayForReturn = [NSMutableArray new];
-	
-	imagesSQLCacheDB = NULL;
-	
-	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
-		NSString *queryString;
-		
-		if ([imgSize isEqualToString:@"s"]) {
-			queryString = [NSString stringWithFormat:@"select image_file_path from image_cache where image_id = %d", imgID];
-		}
-		else if([imgSize isEqualToString:@"m"]) {
-			queryString = [NSString stringWithFormat:@"select image_file_path from image_cache where image_id = %d", imgID];
-		}
-		else if([imgSize isEqualToString:@"f"]) {
-			queryString = [NSString stringWithFormat:@"select image_file_path from image_cache where image_id = %d", imgID];
-		}
-		else {
-			return nil;
-		}
-		
-		const char *sqlStatement = [queryString UTF8String];
-		sqlite3_stmt *compiledStatement;
-		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
-			while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
-				NSString *image_data = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 0)];
-				[arrayForReturn addObject:image_data];
-			}
-		}
-		
-		sqlite3_finalize(compiledStatement);
 	}
-	
 	sqlite3_close(imagesSQLCacheDB);
-	
-	if ([arrayForReturn count] == 1) {
-		return [arrayForReturn objectAtIndex:0];
-	}
-	else {
-		return nil;
-	}
 }
 
 - (BOOL)imageFileCacheExistsInSQLWithID:(int)imgID forSize:(NSString *)imgSize {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"image_file_cache.sqlite"];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"image_files_cache.sqlite"];
 	NSMutableArray *arrayForReturn = [NSMutableArray new];
 	
 	imagesSQLCacheDB = NULL;
@@ -644,11 +589,57 @@
 	
 	sqlite3_close(imagesSQLCacheDB);
 	
-	if ([arrayForReturn count] == 1) {
+	if ([arrayForReturn count] > 0) {
+		[arrayForReturn release];
 		return YES;
 	}
 	else {
+		[arrayForReturn release];
 		return NO;
+	}
+}
+
+- (NSString *)getFilePathForCachedImageWithID:(int)imgID andSize:(NSString *)imgSize {
+	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+	NSString *documentsDirectory = [paths objectAtIndex:0];
+	NSString *imagesSQLCache = [documentsDirectory stringByAppendingPathComponent:@"image_files_cache.sqlite"];
+	NSMutableArray *arrayForReturn = [NSMutableArray new];
+	
+	imagesSQLCacheDB = NULL;
+	
+	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
+		NSString *queryString;
+		
+		if ([imgSize isEqualToString:@"s"]) {
+			queryString = [NSString stringWithFormat:@"select image_file_path from small_preview_file where image_id = %d", imgID];
+		}
+		else if([imgSize isEqualToString:@"m"]) {
+			queryString = [NSString stringWithFormat:@"select image_file_path from medium_preview_file where image_id = %d", imgID];
+		}
+		else if([imgSize isEqualToString:@"f"]) {
+			queryString = [NSString stringWithFormat:@"select image_file_path from full_resolution_file where image_id = %d", imgID];
+		}
+				
+		const char *sqlStatement = [queryString UTF8String];
+		sqlite3_stmt *compiledStatement;
+		if (sqlite3_prepare(imagesSQLCacheDB, sqlStatement, -1, &compiledStatement, NULL) == SQLITE_OK) {
+			while (sqlite3_step(compiledStatement) == SQLITE_ROW) {
+				NSString *image_path = [NSString stringWithUTF8String:(char *)sqlite3_column_text(compiledStatement, 0)];
+				[arrayForReturn addObject:image_path];
+			}
+		}
+		
+		sqlite3_finalize(compiledStatement);
+	}
+	
+	sqlite3_close(imagesSQLCacheDB);
+	
+	if ([arrayForReturn count] == 1) {
+		return [arrayForReturn objectAtIndex:0];
+	}
+	else {
+		[arrayForReturn release];
+		return nil;
 	}
 }
 
@@ -681,6 +672,7 @@
 		return [arrayForReturn objectAtIndex:0];
 	}
 	else {
+		[arrayForReturn release];
 		return nil;
 	}
 }
@@ -713,6 +705,7 @@
 		return [arrayForReturn objectAtIndex:0];
 	}
 	else {
+		[arrayForReturn release];
 		return nil;
 	}
 }
@@ -791,6 +784,9 @@
 	
 	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"json_cache.sqlite"];
 	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
+	if (success) {
+		
+	}
 }
 
 - (void)createEditableImageFilesSQLCacheIfNeeded {
@@ -799,12 +795,15 @@
 	NSError *error;
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"image_file_cache.sqlite"];
+	NSString *writableDBPath = [documentsDirectory stringByAppendingPathComponent:@"image_files_cache.sqlite"];
 	success = [fileManager fileExistsAtPath:writableDBPath];
 	if(success) return;
 	
-	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"image_file_cache.sqlite"];
+	NSString *defaultDBPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"image_files_cache.sqlite"];
 	success = [fileManager copyItemAtPath:defaultDBPath toPath:writableDBPath error:&error];
+	if (success) {
+		
+	}
 }
 
 - (void)dealloc {

@@ -433,7 +433,7 @@
 	[photoView setPhoto:[liveStreamObjects objectAtIndex:index]];
 	photoView.index = index;
 	
-	return photoView;
+	return [photoView autorelease];
 }
 
 - (void)updateLiveStreamPhotos {
@@ -743,6 +743,7 @@
 	[doneButton addTarget:self action:@selector(doneViewingImageMap:) forControlEvents:UIControlEventTouchUpInside];
 	[doneButton setTag:photoViewForFlipping.photo.photoID];
 	[mapView addSubview:doneButton];
+	[doneButton release];
 	
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:2.0];

@@ -99,6 +99,7 @@
 		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 		for (LGPhotoView *photoView in visibleLiveStreamItems) {
 			if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
+				[photoView setImage:nil];
 				[recycledLiveStreamItems addObject:photoView];
 				[photoView removeFromSuperview];
 			}
@@ -220,8 +221,7 @@
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];
 	photoView.index = index;
-	[photo release];
-	return photoView;
+	return [photoView autorelease];
 }
 
 - (int)numberOfImagesForStream {
@@ -344,6 +344,8 @@
 		else {
 			LGPhoto *img = [[LGPhoto alloc] init];
 			
+			NSLog(@"%@",[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]);
+			
 			[img setPhotoFilepath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", photo.photoID]]];
 			[img setPhotoID:photo.photoID];
 			
@@ -376,9 +378,7 @@
 			if (request) {
 				NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 				photoID = [[NSString stringWithFormat:@"%@", photoID] stringByReplacingOccurrencesOfString:@"/3" withString:@""];
-				
-				[applicationAPI addImageFileToCacheWithID:[photoID intValue] andFilePath:[request downloadDestinationPath] andImageSize:@"s"];
-				
+								
 				LGPhoto *photo = [[LGPhoto alloc] init];
 				
 				[photo setPhotoFilepath:[request downloadDestinationPath]];

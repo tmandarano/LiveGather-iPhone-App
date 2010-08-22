@@ -868,7 +868,7 @@
 		ASIHTTPRequest *request;
 		
 		if ([applicationAPI deviceRequiresHighResPhotos]) {
-			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/m", photo.photoID]]];
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/m", photo.photoID]]];
 		}
 		else {
 			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/m", photo.photoID]]];

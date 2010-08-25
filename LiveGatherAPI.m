@@ -29,6 +29,7 @@
 @implementation LiveGatherAPI
 
 #define kAppUserAgent @"LiveGather-for-iPhone-V0.1"
+#define kDefaultLocalRadius 10000
 
 - (id)init {
 	if(self = [super init])
@@ -59,14 +60,34 @@
 	return [arr autorelease];
 }
 
-- (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius {
+- (NSArray *)getPhotosNearCurrentLocationWithRadius:(int)radius orUseDefaultRadius:(BOOL)defaultRadius withLimit:(int)numPhotos {
     //NSArray *arr;
     return nil;
 }
 
-- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius {
-    //NSArray *arr;
-    return nil;
+- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(int)radius withLimit:(int)numPhotos {
+    NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	if (!defaultRadius) {
+		[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/circle/%d/%d/%@", numPhotos, radius, [NSString stringWithFormat:@"%f,%f", latitude, longitude]]]];
+	}
+	else {
+		[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/circle/%d/%d/%@", numPhotos, kDefaultLocalRadius, [NSString stringWithFormat:@"%f,%f", latitude, longitude]]]];
+	}
+
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	
+	NSMutableArray *returnArray = [NSMutableArray arrayWithArray:[self parseJSONPhotoResponse:response]];
+	
+	NSArray *arr = [[NSArray alloc] initWithArray:returnArray];
+	
+	return [arr autorelease];
 }
 
 - (NSArray *)getTrendingTagsWithLimit:(int)limit {
@@ -508,7 +529,10 @@
 		const char* sql;
 		
 		if (![self imageFileCacheExistsInSQLWithID:imgID forSize:imgSize]) {
-			if ([imgSize isEqualToString:@"s"]) {
+			if ([imgSize isEqualToString:@"t"]) {
+				sql = [[NSString stringWithFormat:@"INSERT INTO tiny_preview_file(image_id, image_file_path, last_access_date) VALUES('%d', '%@', '%d');", imgID, imgPath, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
+			}
+			else if ([imgSize isEqualToString:@"s"]) {
 				sql = [[NSString stringWithFormat:@"INSERT INTO small_preview_file(image_id, image_file_path, last_access_date) VALUES('%d', '%@', '%d');", imgID, imgPath, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
 			}
 			else if([imgSize isEqualToString:@"m"]) {
@@ -522,7 +546,10 @@
 			}
 		}
 		else {
-			if ([imgSize isEqualToString:@"s"]) {
+			if ([imgSize isEqualToString:@"t"]) {
+				sql = [[NSString stringWithFormat:@"UPDATE tiny_preview_file SET last_access_date = '%d' WHERE image_id = '%d'", imgID, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
+			}
+			else if ([imgSize isEqualToString:@"s"]) {
 				sql = [[NSString stringWithFormat:@"UPDATE small_preview_file SET last_access_date = '%d' WHERE image_id = '%d'", imgID, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
 			}
 			else if([imgSize isEqualToString:@"m"]) {
@@ -566,7 +593,10 @@
 	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		NSString *queryString;
 		
-		if ([imgSize isEqualToString:@"s"]) {
+		if ([imgSize isEqualToString:@"t"]) {
+			queryString = [NSString stringWithFormat:@"select image_id from tiny_preview_file where image_id = %d", imgID];
+		}
+		else if ([imgSize isEqualToString:@"s"]) {
 			queryString = [NSString stringWithFormat:@"select image_id from small_preview_file where image_id = %d", imgID];
 		}
 		else if([imgSize isEqualToString:@"m"]) {
@@ -611,7 +641,10 @@
 	if (sqlite3_open([imagesSQLCache UTF8String], &imagesSQLCacheDB) == SQLITE_OK) {
 		NSString *queryString;
 		
-		if ([imgSize isEqualToString:@"s"]) {
+		if ([imgSize isEqualToString:@"t"]) {
+			queryString = [NSString stringWithFormat:@"select image_file_path from tiny_preview_file where image_id = %d", imgID];
+		}
+		else if ([imgSize isEqualToString:@"s"]) {
 			queryString = [NSString stringWithFormat:@"select image_file_path from small_preview_file where image_id = %d", imgID];
 		}
 		else if([imgSize isEqualToString:@"m"]) {
@@ -648,6 +681,10 @@
 	}
 }
 
+- (int)getImageIDForCachedFilePath:(NSString *)imgPath {
+	return 1;
+}
+
 - (void)updateLastAccessDateOnImageWithID:(int)imgID forSize:(NSString *)imgSize {
 	NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 	NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -659,7 +696,10 @@
 		NSString *timestamp = [NSString stringWithFormat:@"%d", (long)[[NSDate date] timeIntervalSince1970]];
 		const char* sql;
 		
-		if ([imgSize isEqualToString:@"s"]) {
+		if ([imgSize isEqualToString:@"t"]) {
+			sql = [[NSString stringWithFormat:@"UPDATE tiny_preview_file SET last_access_date = '%d' WHERE image_id = '%d'", imgID, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
+		}
+		else if ([imgSize isEqualToString:@"s"]) {
 			sql = [[NSString stringWithFormat:@"UPDATE small_preview_file SET last_access_date = '%d' WHERE image_id = '%d'", imgID, [timestamp intValue]] cStringUsingEncoding:NSUTF8StringEncoding];
 		}
 		else if([imgSize isEqualToString:@"m"]) {

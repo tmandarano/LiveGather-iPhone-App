@@ -10,6 +10,8 @@
 
 @implementation MainViewController
 
+@synthesize imagesInMemoryDictionary;
+
 #define miniPhotoIndex(row, col) ((2 * col) + row)
 #define kLiveStreamPreviewStartPoint_X 10
 #define kLiveStreamPreviewStartPoint_Y 5
@@ -40,6 +42,9 @@
 	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
 	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
+	if(!imagesInMemoryDictionary) [self initImageDictionaryWithCapacity:15];
+	
+	if(!imageFetchingQueue) imageFetchingQueue = [[NSOperationQueue alloc] init];
 	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
@@ -222,11 +227,30 @@
 
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
 	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
-	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
+	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
+	
+	LGPhotoView *photoView;
+	if ([imagesInMemoryDictionary objectForKey:[NSString stringWithFormat:@"%d", photo.photoID]] != nil) {
+		photoView = [[LGPhotoView alloc] initWithImage:[imagesInMemoryDictionary objectForKey:[NSString stringWithFormat:@"%d", photo.photoID]]];
+	}
+	else {
+		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"t"]]];
+		if (!isLiveStreamScrolling) {
+			LGImageLoadOperation *op = [[LGImageLoadOperation alloc] initWithImageID:photo.photoID andSize:@"s"];
+			[imageFetchingQueue addOperation:op];
+		}
+	}
+	
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];
 	photoView.index = index;
 	return [photoView autorelease];
+}
+
+- (void)imageLoaderLoadedImage:(NSDictionary *)dict {
+	UIImage *image = [dict objectForKey:@"IMAGE"];
+	NSString *imageID = [dict valueForKey:@"IMAGE_ID"];
+	[self setImageDictionaryObject:image forKey:imageID];
 }
 
 - (int)numberOfImagesForStream {
@@ -299,7 +323,12 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+	isLiveStreamScrolling = YES;
 	[self drawItemsToLiveStream];
+}
+
+- (void) scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	isLiveStreamScrolling = NO;
 }
 
 - (IBAction)updateLiveStreamPhotos {	
@@ -327,17 +356,15 @@
 		LGPhoto *photo = [liveStreamArray objectAtIndex:i];
 		
 		ASIHTTPRequest *request;
-		ASIHTTPRequest *tinyRequest = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/t", photo.photoID]]];
 		
 		if ([applicationAPI deviceRequiresHighResPhotos]) {
-			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/s", photo.photoID]]];
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/s", photo.photoID]]];
 		}
 		else {
 			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/s", photo.photoID]]];
 		}
 		
-		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.gif", photo.photoID]]];
-		[tinyRequest setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
+		[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.jpg", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
 			LGPhoto *img = [[LGPhoto alloc] init];
@@ -359,80 +386,94 @@
 			/************************MEMORY FIX HERE***************************/
 		}
 		else {
-			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.gif", photo.photoID]] andImageSize:@"s"];
+			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.jpg", photo.photoID]] andImageSize:@"s"];
 			[networkQueue addOperation:request];
 		}
-		
-		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"t"]) {
-			//We already have the tiny image, don't do anything
-		}
-		else {
-			[networkQueue addOperation:tinyRequest];
-		}
-
 	}
 	[networkQueue go];
 }
 
 - (void)imageFetchComplete:(ASIHTTPRequest *)request {
-	NSString *searchString = @"T.gif";
-	NSRange range = [[request downloadDestinationPath] rangeOfString:searchString];
-	if (range.location != NSNotFound) {
-		//Tiny image...don't really care about it right now
-	}
-	else {
-		if(networkQueue.requestsCount == 0)
-		{
-			if (request) {
-				NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
-				
-				LGPhoto *photo = [[LGPhoto alloc] init];
-				
-				[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
-				[photo setPhotoID:[photoID intValue]];
-				[photo setPhotoIndex:[liveStreamObjects count]];
-				
-				LGPhotoView *photoView = [[LGPhotoView alloc] init];
-				[photoView setPhoto:photo];
-				[photoView setIndex:photo.photoIndex];
-				
-				[liveStreamObjects addObject:photo];
-				[liveStreamObjectViews addObject:photoView];
-				
-				/************************MEMORY FIX HERE***************************/
-				[photo release];
-				[photoView release];
-				/************************MEMORY FIX HERE***************************/
-			}
-			
-			[self drawItemsToLiveStream];
-		}
-		else {			
+	if(networkQueue.requestsCount == 0)
+	{
+		if (request) {
 			NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
 			
 			LGPhoto *photo = [[LGPhoto alloc] init];
 			
 			[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
 			[photo setPhotoID:[photoID intValue]];
-			
+			[photo setPhotoIndex:[liveStreamObjects count]];
+				
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
-			[photo setPhotoIndex:[liveStreamObjects count]];
 			[photoView setIndex:photo.photoIndex];
-			
-			[liveStreamObjectViews addObject:photoView];
+				
 			[liveStreamObjects addObject:photo];
-			
+			[liveStreamObjectViews addObject:photoView];
+				
 			/************************MEMORY FIX HERE***************************/
-			[photoView release];
 			[photo release];
+			[photoView release];
 			/************************MEMORY FIX HERE***************************/
 		}
+		
+		[self drawItemsToLiveStream];
+	}
+	else {			
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		
+		LGPhoto *photo = [[LGPhoto alloc] init];
+		
+		[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
+		[photo setPhotoID:[photoID intValue]];
+			
+		LGPhotoView *photoView = [[LGPhotoView alloc] init];
+		[photoView setPhoto:photo];
+		[photo setPhotoIndex:[liveStreamObjects count]];
+		[photoView setIndex:photo.photoIndex];
+		
+		[liveStreamObjectViews addObject:photoView];
+		[liveStreamObjects addObject:photo];
+			
+		/************************MEMORY FIX HERE***************************/
+		[photoView release];
+		[photo release];
+		/************************MEMORY FIX HERE***************************/
 	}
 }
 
 - (void)imageDownloadingFinished {
 	
+}
+
+- (void)setImageDictionaryValue:(id)value forKey:(NSString *)key {
+	if ([imagesInMemoryDictionary count] < dictionaryLimit) {
+		[imagesInMemoryDictionary setValue:value forKey:key];
+		[arrayOfImageDictionaryItems addObject:[NSString stringWithString:key]];
+	}
+	else {
+		[imagesInMemoryDictionary removeObjectForKey:[NSString stringWithString:[arrayOfImageDictionaryItems objectAtIndex:0]]];
+		[arrayOfImageDictionaryItems removeObjectAtIndex:0];
+		[imagesInMemoryDictionary setValue:value forKey:key];
+	}
+}
+
+- (void)setImageDictionaryObject:(id)object forKey:(id)key {
+	if ([imagesInMemoryDictionary count] < dictionaryLimit) {
+		[imagesInMemoryDictionary setValue:object forKey:key];
+		[arrayOfImageDictionaryItems addObject:[NSString stringWithString:key]];
+	}
+	else {
+		[imagesInMemoryDictionary removeObjectForKey:[NSString stringWithString:[arrayOfImageDictionaryItems objectAtIndex:0]]];
+		[arrayOfImageDictionaryItems removeObjectAtIndex:0];
+		[imagesInMemoryDictionary setObject:object forKey:key];
+	}
+}
+
+- (void)initImageDictionaryWithCapacity:(int)capacity {
+	dictionaryLimit = capacity;
+	[imagesInMemoryDictionary initWithCapacity:capacity];
 }
 
 - (void)hudWasHidden {

@@ -21,8 +21,8 @@
 
 //Handling APIs on the server
 - (NSArray *)getLiveFeed:(int)numPhotos;
-- (NSArray *)getPhotosNearCurrentLocationWithRadius:(float)radius orUseDefaultRadius:(BOOL)defaultRadius;
-- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(float)radius;
+- (NSArray *)getPhotosNearCurrentLocationWithRadius:(int)radius orUseDefaultRadius:(BOOL)defaultRadius withLimit:(int)numPhotos;
+- (NSArray *)getPhotosNearLocationWithLatitude:(float)latitude andLongitude:(float)longitude usingDefaultRadius:(BOOL)defaultRadius orUsingRadius:(int)radius withLimit:(int)numPhotos;
 - (NSArray *)getTrendingTagsWithLimit:(int)limit;
 - (NSArray *)getRecentTagsWithLimit:(int)limit;
 - (NSArray *)getPhotosByTagID:(int)tagID;
@@ -35,5 +35,6 @@
 - (void)addImageFileToCacheWithID:(int)imgID andFilePath:(NSString *)imgPath andImageSize:(NSString *)imgSize;
 - (NSString *)getFilePathForCachedImageWithID:(int)imgID andSize:(NSString *)size;
 - (BOOL)imageFileCacheExistsInSQLWithID:(int)imgID forSize:(NSString *)imgSize;
+- (int)getImageIDForCachedFilePath:(NSString *)imgPath;
 
 @end

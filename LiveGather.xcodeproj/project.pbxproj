@@ -74,6 +74,7 @@
 		119597B311F27004006BD793 /* top_toolbar.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597AB11F27004006BD793 /* top_toolbar.png */; };
 		119597B711F270A5006BD793 /* top_bar_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B611F270A5006BD793 /* top_bar_logo@2x.png */; };
 		119597B911F270AD006BD793 /* top_bar_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 119597B811F270AD006BD793 /* top_bar_logo.png */; };
+		1197776B1222203B0031D979 /* LGImageLoadOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1197776A1222203B0031D979 /* LGImageLoadOperation.m */; };
 		11B19E4D1203C658006E4CDF /* LGPhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 11B19E4C1203C658006E4CDF /* LGPhotoView.m */; };
 		11B19FA71203FB7D006E4CDF /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 11B19FA61203FB7D006E4CDF /* Default@2x.png */; };
 		11BAD6D311FD5D1700FE4DE4 /* LGTag.m in Sources */ = {isa = PBXBuildFile; fileRef = 11BAD6D211FD5D1700FE4DE4 /* LGTag.m */; };
@@ -252,6 +253,8 @@
 		119597AB11F27004006BD793 /* top_toolbar.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_toolbar.png; sourceTree = "<group>"; };
 		119597B611F270A5006BD793 /* top_bar_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "top_bar_logo@2x.png"; sourceTree = "<group>"; };
 		119597B811F270AD006BD793 /* top_bar_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = top_bar_logo.png; sourceTree = "<group>"; };
+		119777691222203B0031D979 /* LGImageLoadOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGImageLoadOperation.h; sourceTree = "<group>"; };
+		1197776A1222203B0031D979 /* LGImageLoadOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGImageLoadOperation.m; sourceTree = "<group>"; };
 		11B19E4B1203C658006E4CDF /* LGPhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGPhotoView.h; sourceTree = "<group>"; };
 		11B19E4C1203C658006E4CDF /* LGPhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGPhotoView.m; sourceTree = "<group>"; };
 		11B19FA61203FB7D006E4CDF /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
@@ -667,6 +670,8 @@
 				11BAD6D211FD5D1700FE4DE4 /* LGTag.m */,
 				111854AD120934B900017F31 /* LGUser.h */,
 				111854AE120934B900017F31 /* LGUser.m */,
+				119777691222203B0031D979 /* LGImageLoadOperation.h */,
+				1197776A1222203B0031D979 /* LGImageLoadOperation.m */,
 				11BCFEBD11F3B017000FA3DD /* CollageItem.h */,
 				11BCFEBE11F3B017000FA3DD /* CollageItem.m */,
 				11D1FD0B11755BBF007B66EF /* ResourceManager.h */,
@@ -975,6 +980,7 @@
 				115AB4AC1207E6FC002B4468 /* SinglePhotoViewController.m in Sources */,
 				111854AF120934B900017F31 /* LGUser.m in Sources */,
 				11DCE9781219163100158434 /* CLController.m in Sources */,
+				1197776B1222203B0031D979 /* LGImageLoadOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

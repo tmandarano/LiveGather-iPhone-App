@@ -18,8 +18,11 @@
 #import "LGPhotoView.h"
 #import "SinglePhotoViewController.h"
 #import "LGUser.h"
+#import "LGImageLoadOperation.h"
 
-@class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, ASINetworkQueue, SinglePhotoViewController;
+@class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, SinglePhotoViewController;
+@class ASINetworkQueue;
+@class LGImageLoadOperation;
 
 @interface MainViewController : UIViewController <UIScrollViewDelegate, UINavigationControllerDelegate, MBProgressHUDDelegate, LGPhotoDelegate> {
 	IBOutlet UIButton			*viewLiveStreamButton;
@@ -40,6 +43,7 @@
 	ASINetworkQueue				*networkQueue;
 	NSMutableArray				*liveStreamObjects;
 	NSMutableArray				*liveStreamObjectViews;
+	BOOL						isLiveStreamScrolling;
 	
 	NSMutableSet				*visibleLiveStreamItems;
 	NSMutableSet				*recycledLiveStreamItems;
@@ -48,7 +52,10 @@
 	NSMutableDictionary			*imagesInMemoryDictionary;
 	int							dictionaryLimit;
 	NSMutableArray				*arrayOfImageDictionaryKeys;
+	NSMutableDictionary			*imageFilePathsDictionary;
 }
+
+@property (nonatomic, retain) NSMutableDictionary *imagesInMemoryDictionary;
 
 - (IBAction)viewLiveStream;
 - (IBAction)uploadPhoto;
@@ -70,5 +77,7 @@
 - (BOOL)isDisplayingItemForIndex:(int)index;
 - (LGPhotoView *)dequeueRecycledLiveStreamView;
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
+
+- (void)imageLoaderLoadedImage:(NSDictionary *)dict;
 
 @end

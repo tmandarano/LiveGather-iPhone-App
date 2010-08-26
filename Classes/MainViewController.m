@@ -10,6 +10,8 @@
 
 @implementation MainViewController
 
+@synthesize imagesInMemoryDictionary;
+
 #define miniPhotoIndex(row, col) ((2 * col) + row)
 #define kLiveStreamPreviewStartPoint_X 10
 #define kLiveStreamPreviewStartPoint_Y 5
@@ -40,6 +42,14 @@
 	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
 	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
+	
+	/************************THREADING SUPPORT***************************/
+	if(!imageFetchingQueue) imageFetchingQueue = [[NSOperationQueue alloc] init];
+	if(!imagesInMemoryDictionary) imagesInMemoryDictionary = [[NSMutableDictionary alloc] initWithCapacity:17];
+	dictionaryLimit = 15;
+	if(!arrayOfImageDictionaryKeys) arrayOfImageDictionaryKeys = [[NSMutableArray alloc] init];
+	if(!imageFilePathsDictionary) imageFilePathsDictionary = [[NSMutableDictionary alloc] initWithCapacity:100];
+	/************************THREADING SUPPORT***************************/
 	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
@@ -222,11 +232,49 @@
 
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
 	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
-	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
+
+	LGPhotoView *photoView;
+	if (isLiveStreamScrolling) {
+		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
+	}
+	else {
+		if ([imagesInMemoryDictionary objectForKey:[NSString stringWithFormat:@"%d", photo.photoID]]) {
+			photoView = [[LGPhotoView alloc] initWithImage:[imagesInMemoryDictionary objectForKey:[NSString stringWithFormat:@"%d", photo.photoID]]];
+		}
+		else {
+			photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
+			LGImageLoadOperation *operation = [[LGImageLoadOperation alloc] initWithImageID:photo.photoID andSize:@"s"];
+			[imageFetchingQueue addOperation:operation];
+			[operation release];
+		}
+	}
+		
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];
 	photoView.index = index;
 	return [photoView autorelease];
+}
+
+- (void)imageLoaderLoadedImage:(NSDictionary *)dict {
+	UIImage *image = [dict objectForKey:@"IMAGE"];
+	NSString *imageID = [dict valueForKey:@"IMAGE_ID"];
+	
+	[imagesInMemoryDictionary setObject:image forKey:imageID];
+	
+	NSLog(@"%d", [imagesInMemoryDictionary count]);
+	NSLog(@"%x", imagesInMemoryDictionary);
+	
+	/*if ([imagesInMemoryDictionary count] < dictionaryLimit) {
+		NSLog(@"Under limit, but are we adding?");
+		[imagesInMemoryDictionary setObject:image forKey:imageID];
+		[arrayOfImageDictionaryKeys addObject:imageID];
+	}
+	else {
+		NSLog(@"Over limit, but are we adding?");
+		[imagesInMemoryDictionary removeObjectForKey:[NSString stringWithFormat:@"%@", [arrayOfImageDictionaryKeys objectAtIndex:0]]];
+		[arrayOfImageDictionaryKeys removeObjectAtIndex:0];
+		[imagesInMemoryDictionary setObject:image forKey:imageID];
+	}*/
 }
 
 - (int)numberOfImagesForStream {
@@ -300,6 +348,14 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	[self drawItemsToLiveStream];
+	isLiveStreamScrolling = YES;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+	isLiveStreamScrolling = NO;
+	[self drawItemsToLiveStream];
+	int i = [imagesInMemoryDictionary count];
+	NSLog(@"test");
 }
 
 - (IBAction)updateLiveStreamPhotos {	
@@ -343,6 +399,7 @@
 			LGPhoto *img = [[LGPhoto alloc] init];
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", photo.photoID]];
 			[img setPhotoID:photo.photoID];
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
@@ -365,8 +422,10 @@
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"t"]) {
 			//We already have the tiny image, don't do anything
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"t"] forKey:[NSString stringWithFormat:@"%dT", photo.photoID]];
 		}
 		else {
+			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]] andImageSize:@"t"];
 			[networkQueue addOperation:tinyRequest];
 		}
 
@@ -378,7 +437,8 @@
 	NSString *searchString = @"T.gif";
 	NSRange range = [[request downloadDestinationPath] rangeOfString:searchString];
 	if (range.location != NSNotFound) {
-		//Tiny image...don't really care about it right now
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"t"] forKey:[NSString stringWithFormat:@"%dT", [photoID intValue]]];
 	}
 	else {
 		if(networkQueue.requestsCount == 0)
@@ -389,6 +449,7 @@
 				LGPhoto *photo = [[LGPhoto alloc] init];
 				
 				[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
+				[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", [photoID intValue]]];
 				[photo setPhotoID:[photoID intValue]];
 				[photo setPhotoIndex:[liveStreamObjects count]];
 				
@@ -413,6 +474,7 @@
 			LGPhoto *photo = [[LGPhoto alloc] init];
 			
 			[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", [photoID intValue]]];
 			[photo setPhotoID:[photoID intValue]];
 			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];

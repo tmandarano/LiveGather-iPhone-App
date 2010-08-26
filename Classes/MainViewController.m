@@ -233,8 +233,9 @@
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
 	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
 
-	LGPhotoView *photoView;
-	if (isLiveStreamScrolling) {
+	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
+	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]]];
+	/*if (isLiveStreamScrolling) {
 		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
 	}
 	else {
@@ -247,7 +248,7 @@
 			[imageFetchingQueue addOperation:operation];
 			[operation release];
 		}
-	}
+	}*/
 		
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];

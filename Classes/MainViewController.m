@@ -234,7 +234,7 @@
 	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
 
 	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
-	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]]];
+	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:photo];
 	/*if (isLiveStreamScrolling) {
 		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
 	}
@@ -397,7 +397,7 @@
 		[tinyRequest setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
-			LGPhoto *img = [[LGPhoto alloc] init];
+			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.gif", photo.photoID]]];
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
 			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", photo.photoID]];

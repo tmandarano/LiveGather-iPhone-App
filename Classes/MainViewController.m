@@ -122,7 +122,6 @@
 		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 		for (LGPhotoView *photoView in visibleLiveStreamItems) {
 			if (photoView.index < firstIndexVisibleInStream || photoView.index > lastIndexVisibleInStream) {
-				NSLog(@"Removing %d", photoView.photo.photoIndex);
 				[photoView setImage:nil];
 				[recycledLiveStreamItems addObject:photoView];
 				[photoView removeFromSuperview];
@@ -151,7 +150,6 @@
 	else {
 		[self downloadNewLiveStreamPhotos];
 	}
-
 }
 
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index {
@@ -383,7 +381,7 @@
 		[tinyRequest setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
-			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.gif", photo.photoID]]];
+			LGPhoto *img = [[LGPhoto alloc] init];
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
 			[img setPhotoID:photo.photoID];

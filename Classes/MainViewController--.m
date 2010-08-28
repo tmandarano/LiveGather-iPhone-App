@@ -29,6 +29,7 @@
     return self;
 }
 
+
 - (void)viewDidLoad {
 	uploadViewController = [[UploadPhotoViewController alloc] init];
 	liveStreamView = [[LiveStreamViewController alloc] init];
@@ -39,11 +40,6 @@
 	
 	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
 	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
-	
-	
-	
-	//Temp test items
-	staticimage = [UIImage imageNamed:@"gray.jpg"];
 	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
@@ -63,23 +59,6 @@
 - (IBAction)uploadPhoto {
 	//[self presentModalViewController:uploadViewController animated:YES];
 	//[uploadViewController showUserImageControlOption];
-	
-	int numViews = 0;
-	for (UIView *subview in liveStreamPreviewScrollView.subviews) {
-		numViews++;
-	}
-	NSLog(@"Num Subviews: %d", numViews);
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		if ([self isDisplayingItemForIndex:i]) {
-			NSLog(@"Displaying %d", i);
-		}
-		else {
-			NSLog(@"No Displaying %d", i);
-		}
-	}
-	
-	[self drawItemsToLiveStream];
 }
 
 - (IBAction)viewLiveStream {
@@ -121,8 +100,7 @@
 		int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
 		int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 		for (LGPhotoView *photoView in visibleLiveStreamItems) {
-			if (photoView.index < firstIndexVisibleInStream || photoView.index > lastIndexVisibleInStream) {
-				NSLog(@"Removing %d", photoView.photo.photoIndex);
+			if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
 				[photoView setImage:nil];
 				[recycledLiveStreamItems addObject:photoView];
 				[photoView removeFromSuperview];
@@ -132,7 +110,7 @@
 		
 		for (int i = firstIndexVisibleInStream; i <= lastIndexVisibleInStream; i++) {
 			NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-						
+			
 			if (![self isDisplayingItemForIndex:i]) {
 				LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
 				if (photoView == nil) {
@@ -243,17 +221,8 @@
 }
 
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
-	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];	
+	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
 	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
-	
-	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]]];
-	
-	//NSLog(@"loading image for id: %d", photo.photoID);
-	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:staticimage];
-	//NSLog(@"%x", photoView.image);
-	
-	NSLog(@"%d", index);
-	
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];
 	photoView.index = index;
@@ -324,25 +293,13 @@
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
-	//[singlePhotoView setImageID:imgID];
-	//[self presentModalViewController:singlePhotoView animated:YES];
-	//[singlePhotoView initializeResources];
+	[singlePhotoView setImageID:imgID];
+	[self presentModalViewController:singlePhotoView animated:YES];
+	[singlePhotoView initializeResources];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
 	[self drawItemsToLiveStream];
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	[self drawItemsToLiveStream];
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	[self drawItemsToLiveStream];
-}
-
-- (BOOL)isScrollViewScrolling {
-	return (liveStreamPreviewScrollView.dragging || liveStreamPreviewScrollView.decelerating);
 }
 
 - (IBAction)updateLiveStreamPhotos {	
@@ -383,7 +340,7 @@
 		[tinyRequest setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]];
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"s"]) {
-			LGPhoto *img = [[LGPhoto alloc] initWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dS.gif", photo.photoID]]];
+			LGPhoto *img = [[LGPhoto alloc] init];
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
 			[img setPhotoID:photo.photoID];
@@ -410,7 +367,6 @@
 			//We already have the tiny image, don't do anything
 		}
 		else {
-			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]] andImageSize:@"t"];
 			[networkQueue addOperation:tinyRequest];
 		}
 
@@ -422,7 +378,7 @@
 	NSString *searchString = @"T.gif";
 	NSRange range = [[request downloadDestinationPath] rangeOfString:searchString];
 	if (range.location != NSNotFound) {
-		//NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		//Tiny image...don't really care about it right now
 	}
 	else {
 		if(networkQueue.requestsCount == 0)

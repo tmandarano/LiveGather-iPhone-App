@@ -59,11 +59,11 @@
 - (void)imageFetchComplete:(ASIHTTPRequest *)request;
 - (void)imageDownloadingFinished;
 
-
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index;
 - (CGRect)getRectForItemInLiveStream:(int)index;
 
 - (void)drawItemsToLiveStream;
+- (void)redrawVisibleItems;
 - (int)numberOfImagesForStream;
 - (BOOL)isDisplayingItemForIndex:(int)index;
 - (LGPhotoView *)dequeueRecycledLiveStreamView;

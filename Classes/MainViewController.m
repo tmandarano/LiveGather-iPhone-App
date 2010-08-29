@@ -132,6 +132,24 @@
 	}
 }
 
+- (void)redrawVisibleItems {
+	for (int i = [self liveStreamItemsCurrentlyInView:@"first"]; i <= [self liveStreamItemsCurrentlyInView:@"last"]; i++) {
+		NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+		if ([self isDisplayingItemForIndex:i]) {
+			LGPhotoView *photoView = [self dequeueRecycledLiveStreamView];
+			if (photoView == nil) {
+				photoView = [[[LGPhotoView alloc] init] autorelease];
+			}
+			photoView = [self configureItem:photoView forIndex:i];
+			[photoView setUserInteractionEnabled:YES];
+			[photoView setDelegate:self];
+			[liveStreamPreviewScrollView addSubview:photoView];
+			[visibleLiveStreamItems addObject:photoView];
+		}
+		[pool release];
+	}
+}
+
 - (int)liveStreamItemsCurrentlyInView:(NSString *)index {
 	NSMutableArray *arrayOfCellsInView = [NSMutableArray new];
 	int firstIndex = 0;
@@ -225,11 +243,9 @@
 	LGPhotoView *photoView;
 	
 	if ([self isScrollViewScrolling]) {
-		NSLog(@"Scorlling");
 		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
 	}
 	else {
-		NSLog(@"Not Scorlling");
 		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
 	}
 
@@ -313,11 +329,12 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	[self drawItemsToLiveStream];
+	NSLog(@"Scroll View Ended Decelerating");
+	[self redrawVisibleItems];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	[self drawItemsToLiveStream];
+	
 }
 
 - (BOOL)isScrollViewScrolling {

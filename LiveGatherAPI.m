@@ -396,12 +396,35 @@
     } else if (ti < 2629743) {
         int diff = round(ti / 60 / 60 / 24);
         return[NSString stringWithFormat:@"%d days ago", diff];
-    } else {
+    } else if (ti < 31622400) {
+		int diff = round(ti / 60 / 60 / 24 / 30);
+		return[NSString stringWithFormat:@"%d months ago", diff];
+	}
+	else if (ti > 31622400) {
+		int diff = round(ti / 60 / 60 / 24 / 30 / 31622400);
+		return[NSString stringWithFormat:@"%d years ago", diff];
+	} else {
         return @"never";
     }
 }
 
 - (NSString *)reverseGeocodeCoordinatesWithLatitude:(NSString *)latitude andLongitude:(NSString *)longitude {
+	NSMutableURLRequest *request = [[[NSMutableURLRequest alloc] init] autorelease];
+	[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://maps.google.com/maps/geo?q=%f,%f&output=json", [latitude floatValue], [longitude floatValue]]]];
+	[request setHTTPMethod:@"GET"];
+	[request setValue:nil forHTTPHeaderField:@"Content-Length"];
+	[request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+	[request setValue:kAppUserAgent forHTTPHeaderField:@"User-Agent"];
+	[request setHTTPBody:nil];
+	NSError *err;
+	NSData *urlData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
+	NSString *response = [[NSString alloc] initWithData:urlData encoding:NSASCIIStringEncoding];
+	
+	NSArray *objects = (NSArray*)[response JSONValue];
+	for (NSDictionary *dict in objects) {
+		
+	}
+	NSLog(@"%d", [objects count]);
 	return @"";
 }
 
@@ -679,10 +702,6 @@
 		[arrayForReturn release];
 		return nil;
 	}
-}
-
-- (int)getImageIDForCachedFilePath:(NSString *)imgPath {
-	return 1;
 }
 
 - (void)updateLastAccessDateOnImageWithID:(int)imgID forSize:(NSString *)imgSize {

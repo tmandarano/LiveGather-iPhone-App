@@ -92,20 +92,27 @@
 	[networkQueue setDelegate:self];
 	
 	ASIHTTPRequest *request;
-	request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/3", imgID]]];
-	[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", imgID]]];
+	
+	if ([applicationAPI deviceRequiresHighResPhotos]) {
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/f", imgID]]];
+	}
+	else {
+		request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/f", imgID]]];
+	}
+	
+	[request setDownloadDestinationPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dF.jpg", imgID]]];
 	
 	NSFileManager *fileManager = [[NSFileManager alloc] init];
 	
-	if (![fileManager fileExistsAtPath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%d.jpg", imgID]]]) {
-		[networkQueue addOperation:request];
+	if ([applicationAPI imageFileCacheExistsInSQLWithID:imgID forSize:@"f"]) {
+		[self imageAlreadyExists:imgID];
 		
 		/************************MEMORY FIX HERE***************************/
 		[fileManager release];
 		/************************MEMORY FIX HERE***************************/
 	}
 	else {
-		[self imageAlreadyExists:imgID];\
+		[networkQueue addOperation:request];
 		
 		/************************MEMORY FIX HERE***************************/
 		[fileManager release];

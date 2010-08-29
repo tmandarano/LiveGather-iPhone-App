@@ -18,7 +18,6 @@
 #import "LGPhotoView.h"
 #import "SinglePhotoViewController.h"
 #import "LGUser.h"
-#import "LGImageLoadOperation.h"
 
 @class UploadPhotoViewController, AccountLoginViewController, LiveStreamViewController, SinglePhotoViewController;
 @class ASINetworkQueue;
@@ -46,10 +45,7 @@
 	NSMutableSet				*visibleLiveStreamItems;
 	NSMutableSet				*recycledLiveStreamItems;
 	
-	NSMutableDictionary			*imageFilepathsDictionary;
-	
-	//Temp test items
-	UIImage						*staticimage;
+	NSMutableDictionary			*imageFilePathsDictionary;
 }
 
 - (IBAction)viewLiveStream;
@@ -72,7 +68,6 @@
 - (BOOL)isDisplayingItemForIndex:(int)index;
 - (LGPhotoView *)dequeueRecycledLiveStreamView;
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index;
-
 - (BOOL)isScrollViewScrolling;
 
 @end

@@ -37,13 +37,9 @@
 	
 	[tagsScrollView setShowsHorizontalScrollIndicator:NO];
 	
-	if(!liveStreamObjects) liveStreamObjects = [NSMutableArray new];
-	if(!liveStreamObjectViews) liveStreamObjectViews = [NSMutableArray new];
-	
-	
-	
-	//Temp test items
-	staticimage = [UIImage imageNamed:@"gray.jpg"];
+	if(!liveStreamObjects) liveStreamObjects = [[NSMutableArray alloc] init];
+	if(!liveStreamObjectViews) liveStreamObjectViews = [[NSMutableArray alloc] init];
+	if(!imageFilePathsDictionary) imageFilePathsDictionary = [[NSMutableDictionary alloc] init];
 	
 	[self updateLiveStreamPhotos];
 	[self updateTags];
@@ -63,23 +59,7 @@
 - (IBAction)uploadPhoto {
 	//[self presentModalViewController:uploadViewController animated:YES];
 	//[uploadViewController showUserImageControlOption];
-	
-	int numViews = 0;
-	for (UIView *subview in liveStreamPreviewScrollView.subviews) {
-		numViews++;
-	}
-	NSLog(@"Num Subviews: %d", numViews);
-	
-	for (int i = 0; i < [self numberOfImagesForStream]; i++) {
-		if ([self isDisplayingItemForIndex:i]) {
-			NSLog(@"Displaying %d", i);
-		}
-		else {
-			NSLog(@"No Displaying %d", i);
-		}
-	}
-	
-	[self drawItemsToLiveStream];
+	//[applicationAPI reverseGeocodeCoordinatesWithLatitude:@"48.862158" andLongitude:@"2.373357"];
 }
 
 - (IBAction)viewLiveStream {
@@ -241,17 +221,18 @@
 }
 
 - (LGPhotoView *)configureItem:(LGPhotoView *)item forIndex:(int)index {
-	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];	
-	LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
+	LGPhoto *photo = [liveStreamObjects objectAtIndex:index];
+	LGPhotoView *photoView;
 	
-	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]]]];
-	
-	//NSLog(@"loading image for id: %d", photo.photoID);
-	//LGPhotoView *photoView = [[LGPhotoView alloc] initWithImage:staticimage];
-	//NSLog(@"%x", photoView.image);
-	
-	NSLog(@"%d", index);
-	
+	if ([self isScrollViewScrolling]) {
+		NSLog(@"Scorlling");
+		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:[imageFilePathsDictionary valueForKey:[NSString stringWithFormat:@"%dT", photo.photoID]]]];
+	}
+	else {
+		NSLog(@"Not Scorlling");
+		photoView = [[LGPhotoView alloc] initWithImage:[UIImage imageWithContentsOfFile:photo.photoFilepath]];
+	}
+
 	photoView.frame = [self getRectForItemInLiveStream:index];
 	[photoView setPhoto:photo];
 	photoView.index = index;
@@ -322,9 +303,9 @@
 }
 
 - (void)photoViewWasTouchedWithID:(int)imgID andIndex:(int)imgIndex {
-	//[singlePhotoView setImageID:imgID];
-	//[self presentModalViewController:singlePhotoView animated:YES];
-	//[singlePhotoView initializeResources];
+	[singlePhotoView setImageID:imgID];
+	[self presentModalViewController:singlePhotoView animated:YES];
+	[singlePhotoView initializeResources];
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -385,6 +366,9 @@
 			
 			[img setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"]];
 			[img setPhotoID:photo.photoID];
+			
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", photo.photoID]];
+			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];
 			[photoView setIndex:photo.photoIndex];
@@ -406,6 +390,7 @@
 		
 		if ([applicationAPI imageFileCacheExistsInSQLWithID:photo.photoID forSize:@"t"]) {
 			//We already have the tiny image, don't do anything
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:photo.photoID andSize:@"t"] forKey:[NSString stringWithFormat:@"%dT", photo.photoID]];
 		}
 		else {
 			[applicationAPI addImageFileToCacheWithID:photo.photoID andFilePath:[[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:[NSString stringWithFormat:@"%dT.gif", photo.photoID]] andImageSize:@"t"];
@@ -420,7 +405,8 @@
 	NSString *searchString = @"T.gif";
 	NSRange range = [[request downloadDestinationPath] rangeOfString:searchString];
 	if (range.location != NSNotFound) {
-		//NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		NSString *photoID = [[NSString stringWithFormat:@"%@", [request originalURL]] stringByReplacingOccurrencesOfString:@"http://projc:pr0j(@dev.livegather.com/api/photos/" withString:@""];
+		[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"t"] forKey:[NSString stringWithFormat:@"%dT", [photoID intValue]]];
 	}
 	else {
 		if(networkQueue.requestsCount == 0)
@@ -433,6 +419,8 @@
 				[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
 				[photo setPhotoID:[photoID intValue]];
 				[photo setPhotoIndex:[liveStreamObjects count]];
+				
+				[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", [photoID intValue]]];
 				
 				LGPhotoView *photoView = [[LGPhotoView alloc] init];
 				[photoView setPhoto:photo];
@@ -456,6 +444,8 @@
 			
 			[photo setPhotoFilepath:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"]];
 			[photo setPhotoID:[photoID intValue]];
+			
+			[imageFilePathsDictionary setValue:[applicationAPI getFilePathForCachedImageWithID:[photoID intValue] andSize:@"s"] forKey:[NSString stringWithFormat:@"%dS", [photoID intValue]]];
 			
 			LGPhotoView *photoView = [[LGPhotoView alloc] init];
 			[photoView setPhoto:photo];

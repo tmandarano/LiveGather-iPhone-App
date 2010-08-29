@@ -76,7 +76,7 @@
 			int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
 			int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 			for (LGPhotoView *photoView in visibleLiveStreamItems) {
-				if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
+				if (photoView.index < firstIndexVisibleInStream || photoView.index > lastIndexVisibleInStream) {
 					[recycledLiveStreamItems addObject:photoView];
 					[photoView removeFromSuperview];
 				}
@@ -132,7 +132,7 @@
 			int firstIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"first"];
 			int lastIndexVisibleInStream = [self liveStreamItemsCurrentlyInView:@"last"];
 			for (LGPhotoView *photoView in visibleLiveStreamItems) {
-				if (photoView.photo.photoIndex < firstIndexVisibleInStream || photoView.photo.photoIndex > lastIndexVisibleInStream) {
+				if (photoView.index < firstIndexVisibleInStream || photoView.index > lastIndexVisibleInStream) {
 					[recycledLiveStreamItems addObject:photoView];
 					[photoView removeFromSuperview];
 				}
@@ -868,7 +868,7 @@
 		ASIHTTPRequest *request;
 		
 		if ([applicationAPI deviceRequiresHighResPhotos]) {
-			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/m", photo.photoID]]];
+			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS_retina/m", photo.photoID]]];
 		}
 		else {
 			request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://projc:pr0j(@dev.livegather.com/api/photos/%d/iOS/m", photo.photoID]]];

@@ -329,12 +329,13 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-	NSLog(@"Scroll View Ended Decelerating");
 	[self redrawVisibleItems];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-	
+	if (![self isScrollViewScrolling]) {
+		[self redrawVisibleItems];
+	}
 }
 
 - (BOOL)isScrollViewScrolling {
